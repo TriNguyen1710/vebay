@@ -1,7 +1,9 @@
 <!DOCTYPE html>
+
 <html lang="vi">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -699,6 +701,21 @@
             </a>
 
             <a
+                href="{{ route('admin.baggage.index') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="5" y="7" width="14" height="13" rx="2"/>
+                        <path d="M9 7V5a3 3 0 0 1 6 0v2"/>
+                        <path d="M8 11h8"/>
+                    </svg>
+                </span>
+
+                Quản lý hành lý
+            </a>
+
+            <a
                 href="{{ route('admin.statistics.index') }}"
                 class="menu-link"
             >
@@ -733,6 +750,21 @@
                 </span>
 
                 Quản lý đổi giá vé
+            </a>
+
+            <a
+                href="{{ route('admin.refund-settings.edit') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 7h16v10H4z"/>
+                        <path d="M8 11h8"/>
+                        <path d="M12 8v6"/>
+                    </svg>
+                </span>
+
+                Quản lý hoàn vé
             </a>
 
         </nav>

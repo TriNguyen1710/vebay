@@ -101,6 +101,7 @@
             border-radius: 7px;
             display: flex;
             align-items: center;
+            gap: 12px;
             color: #cad9e4;
             font-size: 12px;
             font-weight: 600;
@@ -115,6 +116,23 @@
 
         .menu-link.active {
             color: var(--secondary);
+        }
+
+        .menu-icon {
+            width: 17px;
+            height: 17px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .menu-icon svg {
+            width: 17px;
+            height: 17px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
         }
 
         .sidebar-bottom {
@@ -433,6 +451,14 @@
                 href="{{ route('admin.trang-chu') }}"
                 class="menu-link"
             >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="3" y="3" width="7" height="7"/>
+                        <rect x="14" y="3" width="7" height="7"/>
+                        <rect x="3" y="14" width="7" height="7"/>
+                        <rect x="14" y="14" width="7" height="7"/>
+                    </svg>
+                </span>
                 Tổng quan
             </a>
 
@@ -440,6 +466,13 @@
                 href="{{ route('admin.airports.index') }}"
                 class="menu-link"
             >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 21h18"/>
+                        <path d="M6 21V9l6-4 6 4v12"/>
+                        <path d="M9 13h6"/>
+                    </svg>
+                </span>
                 Quản lý sân bay
             </a>
 
@@ -447,6 +480,11 @@
                 href="{{ route('admin.aircraft.index') }}"
                 class="menu-link"
             >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M2 16l20-5-20-5 3 5-3 5z"/>
+                    </svg>
+                </span>
                 Quản lý máy bay
             </a>
 
@@ -454,6 +492,12 @@
                 href="{{ route('admin.flights.index') }}"
                 class="menu-link"
             >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="3" y="5" width="18" height="16" rx="2"/>
+                        <path d="M8 3v4M16 3v4M3 10h18"/>
+                    </svg>
+                </span>
                 Quản lý chuyến bay
             </a>
 
@@ -461,6 +505,12 @@
                 href="{{ route('admin.bookings.index') }}"
                 class="menu-link"
             >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 4h16v16H4z"/>
+                        <path d="M8 8h8M8 12h8M8 16h5"/>
+                    </svg>
+                </span>
                 Quản lý vé
             </a>
 
@@ -468,13 +518,42 @@
                 href="{{ route('admin.users.index') }}"
                 class="menu-link"
             >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="9" cy="8" r="4"/>
+                        <path d="M3 21v-2a6 6 0 0 1 12 0v2"/>
+                        <path d="M16 11a4 4 0 0 1 5 4"/>
+                    </svg>
+                </span>
                 Quản lý người dùng
+            </a>
+
+            <a
+                href="{{ route('admin.baggage.index') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="5" y="7" width="14" height="13" rx="2"/>
+                        <path d="M9 7V5a3 3 0 0 1 6 0v2"/>
+                        <path d="M8 11h8"/>
+                    </svg>
+                </span>
+                Quản lý hành lý
             </a>
 
             <a
                 href="{{ route('admin.statistics.index') }}"
                 class="menu-link"
             >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 20V10"/>
+                        <path d="M10 20V4"/>
+                        <path d="M16 20v-7"/>
+                        <path d="M22 20V7"/>
+                    </svg>
+                </span>
                 Thống kê chi tiết
             </a>
 
@@ -482,6 +561,19 @@
                 href="{{ route('admin.settings.edit') }}"
                 class="menu-link"
             >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 7h10"/>
+                        <path d="M18 7h2"/>
+                        <circle cx="16" cy="7" r="2"/>
+                        <path d="M4 12h2"/>
+                        <path d="M10 12h10"/>
+                        <circle cx="8" cy="12" r="2"/>
+                        <path d="M4 17h7"/>
+                        <path d="M15 17h5"/>
+                        <circle cx="13" cy="17" r="2"/>
+                    </svg>
+                </span>
                 Quản lý đổi giá vé
             </a>
 
@@ -489,6 +581,13 @@
                 href="{{ route('admin.refund-settings.edit') }}"
                 class="menu-link active"
             >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 7h16v10H4z"/>
+                        <path d="M8 11h8"/>
+                        <path d="M12 8v6"/>
+                    </svg>
+                </span>
                 Quản lý hoàn vé
             </a>
 
@@ -592,6 +691,7 @@
                 <div class="card-body">
 
                     <div class="current-box">
+
                         <span>
                             Tỷ lệ hoàn hiện tại
                         </span>
@@ -610,6 +710,7 @@
                                 '.'
                             ) }}%
                         </strong>
+
                     </div>
 
                     <form

@@ -2,7 +2,6 @@
 <html lang="vi">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -10,10 +9,9 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Sửa tài khoản - SkyGo Admin</title>
+    <title>Sửa tài khoản - Vietjet Admin</title>
 
     <style>
-
         * {
             margin: 0;
             padding: 0;
@@ -748,7 +746,6 @@
             }
 
         }
-
     </style>
 
 </head>
@@ -764,7 +761,7 @@
             href="{{ route('admin.trang-chu') }}"
             class="logo"
         >
-            Sky<span>Go</span>
+            Viet<span>jet</span>
         </a>
 
         <div class="menu-title">
@@ -867,6 +864,21 @@
             </a>
 
             <a
+                href="{{ route('admin.baggage.index') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="5" y="7" width="14" height="13" rx="2"/>
+                        <path d="M9 7V5a3 3 0 0 1 6 0v2"/>
+                        <path d="M8 11h8"/>
+                    </svg>
+                </span>
+
+                Quản lý hành lý
+            </a>
+
+            <a
                 href="{{ route('admin.statistics.index') }}"
                 class="menu-link"
             >
@@ -880,6 +892,42 @@
                 </span>
 
                 Thống kê chi tiết
+            </a>
+
+            <a
+                href="{{ route('admin.settings.edit') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 7h10"/>
+                        <path d="M18 7h2"/>
+                        <circle cx="16" cy="7" r="2"/>
+                        <path d="M4 12h2"/>
+                        <path d="M10 12h10"/>
+                        <circle cx="8" cy="12" r="2"/>
+                        <path d="M4 17h7"/>
+                        <path d="M15 17h5"/>
+                        <circle cx="13" cy="17" r="2"/>
+                    </svg>
+                </span>
+
+                Quản lý đổi giá vé
+            </a>
+
+            <a
+                href="{{ route('admin.refund-settings.edit') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 7h16v10H4z"/>
+                        <path d="M8 11h8"/>
+                        <path d="M12 8v6"/>
+                    </svg>
+                </span>
+
+                Quản lý hoàn vé
             </a>
 
         </nav>
@@ -925,7 +973,7 @@
             <div class="topbar-left">
 
                 <h2>
-                    SkyGo Administration
+                    Vietjet Administration
                 </h2>
 
                 <p>
@@ -1063,12 +1111,10 @@
                                     type="text"
                                     id="name"
                                     name="name"
-
                                     value="{{ old(
                                         'name',
                                         $user->name
                                     ) }}"
-
                                     required
                                 >
 
@@ -1086,12 +1132,10 @@
                                     type="email"
                                     id="email"
                                     name="email"
-
                                     value="{{ old(
                                         'email',
                                         $user->email
                                     ) }}"
-
                                     required
                                 >
 
@@ -1114,9 +1158,7 @@
                                     <select
                                         id="role"
                                         name="role"
-
                                         required
-
                                         {{ auth()->id() === $user->id
                                             ? 'disabled'
                                             : '' }}
@@ -1124,7 +1166,6 @@
 
                                         <option
                                             value="user"
-
                                             {{ old(
                                                 'role',
                                                 $user->role
@@ -1137,7 +1178,6 @@
 
                                         <option
                                             value="nhanvien"
-
                                             {{ old(
                                                 'role',
                                                 $user->role
@@ -1150,7 +1190,6 @@
 
                                         <option
                                             value="admin"
-
                                             {{ old(
                                                 'role',
                                                 $user->role
@@ -1215,7 +1254,6 @@
                                             type="password"
                                             id="password"
                                             name="password"
-
                                             placeholder="Nhập mật khẩu mới"
                                         >
 
@@ -1231,7 +1269,6 @@
                                             type="password"
                                             id="password_confirmation"
                                             name="password_confirmation"
-
                                             placeholder="Nhập lại mật khẩu mới"
                                         >
 
@@ -1279,7 +1316,7 @@
             <footer class="footer">
 
                 <span>
-                    SkyGo Administration
+                    Vietjet Administration
                 </span>
 
                 <span>

@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Quản lý đổi giá vé - Vietjet Admin</title>
 
     <style>
@@ -466,6 +468,7 @@
                     <svg viewBox="0 0 24 24">
                         <path d="M3 21h18"/>
                         <path d="M6 21V9l6-4 6 4v12"/>
+                        <path d="M9 13h6"/>
                     </svg>
                 </span>
                 Quản lý sân bay
@@ -505,9 +508,21 @@
                     <svg viewBox="0 0 24 24">
                         <circle cx="9" cy="8" r="4"/>
                         <path d="M3 21v-2a6 6 0 0 1 12 0v2"/>
+                        <path d="M16 11a4 4 0 0 1 5 4"/>
                     </svg>
                 </span>
                 Quản lý người dùng
+            </a>
+
+            <a href="{{ route('admin.baggage.index') }}" class="menu-link">
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="5" y="7" width="14" height="13" rx="2"/>
+                        <path d="M9 7V5a3 3 0 0 1 6 0v2"/>
+                        <path d="M8 11h8"/>
+                    </svg>
+                </span>
+                Quản lý hành lý
             </a>
 
             <a href="{{ route('admin.statistics.index') }}" class="menu-link">
@@ -531,9 +546,23 @@
                         <path d="M4 12h2"/>
                         <path d="M10 12h10"/>
                         <circle cx="8" cy="12" r="2"/>
+                        <path d="M4 17h7"/>
+                        <path d="M15 17h5"/>
+                        <circle cx="13" cy="17" r="2"/>
                     </svg>
                 </span>
                 Quản lý đổi giá vé
+            </a>
+
+            <a href="{{ route('admin.refund-settings.edit') }}" class="menu-link">
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 7h16v10H4z"/>
+                        <path d="M8 11h8"/>
+                        <path d="M12 8v6"/>
+                    </svg>
+                </span>
+                Quản lý hoàn vé
             </a>
 
         </nav>
@@ -578,6 +607,7 @@
 
                 <div>
                     <h1>Quản lý đổi giá vé</h1>
+
                     <p>
                         Thiết lập phí áp dụng khi khách hàng thực hiện đổi chuyến bay.
                     </p>
@@ -605,6 +635,7 @@
 
                 <div class="card-header">
                     <h2>Phí đổi vé</h2>
+
                     <p>
                         Khoản phí được cộng vào phần chênh lệch giá vé khi khách hàng đổi chuyến.
                     </p>
@@ -705,8 +736,10 @@
     }
 
     input.addEventListener('input', updatePreview);
+
     updatePreview();
 </script>
 
 </body>
+
 </html>

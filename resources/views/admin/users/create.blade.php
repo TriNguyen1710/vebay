@@ -2,18 +2,15 @@
 <html lang="vi">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Thêm tài khoản - SkyGo Admin</title>
+    <title>Thêm tài khoản - Vietjet Admin</title>
 
     <style>
-
         * {
             margin: 0;
             padding: 0;
@@ -24,24 +21,18 @@
             --primary: #003b70;
             --primary-dark: #00294f;
             --primary-light: #edf5fb;
-
             --secondary: #f4b400;
-
             --background: #f3f6f9;
             --white: #ffffff;
-
             --text: #243746;
             --muted: #74818c;
             --border: #dfe6eb;
-
             --danger: #dc3545;
         }
 
         body {
             min-height: 100vh;
-
             font-family: Arial, Helvetica, sans-serif;
-
             background: var(--background);
             color: var(--text);
         }
@@ -62,7 +53,6 @@
 
         .admin-layout {
             min-height: 100vh;
-
             display: grid;
             grid-template-columns: 245px 1fr;
         }
@@ -73,30 +63,22 @@
 
         .sidebar {
             position: fixed;
-
             top: 0;
             left: 0;
             bottom: 0;
-
             width: 245px;
-
             padding: 26px 16px;
-
             display: flex;
             flex-direction: column;
-
             background: var(--primary-dark);
             color: white;
         }
 
         .logo {
             display: block;
-
             padding: 0 10px;
             margin-bottom: 34px;
-
             color: white;
-
             font-size: 29px;
             font-weight: 800;
             letter-spacing: -1px;
@@ -109,9 +91,7 @@
         .menu-title {
             padding: 0 11px;
             margin-bottom: 10px;
-
             color: #7895aa;
-
             font-size: 9px;
             font-weight: bold;
             letter-spacing: 1.3px;
@@ -124,21 +104,14 @@
 
         .menu-link {
             min-height: 44px;
-
             padding: 0 13px;
-
             border-radius: 7px;
-
             display: flex;
             align-items: center;
-
             gap: 12px;
-
             color: #cad9e4;
-
             font-size: 12px;
             font-weight: 600;
-
             transition: 0.2s;
         }
 
@@ -151,18 +124,15 @@
         .menu-icon {
             width: 17px;
             height: 17px;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             flex-shrink: 0;
         }
 
         .menu-icon svg {
             width: 17px;
             height: 17px;
-
             fill: none;
             stroke: currentColor;
             stroke-width: 1.8;
@@ -178,9 +148,7 @@
 
         .sidebar-bottom {
             margin-top: auto;
-
             padding-top: 22px;
-
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
@@ -190,9 +158,7 @@
 
         .admin-info strong {
             display: block;
-
             margin-bottom: 4px;
-
             font-size: 12px;
         }
 
@@ -203,18 +169,12 @@
 
         .logout-btn {
             width: 100%;
-
             padding: 10px;
-
             border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 6px;
-
             background: rgba(255, 255, 255, 0.06);
-
             color: white;
-
             cursor: pointer;
-
             font-size: 11px;
             font-weight: bold;
         }
@@ -235,13 +195,9 @@
 
         .topbar {
             height: 70px;
-
             padding: 0 30px;
-
             background: white;
-
             border-bottom: 1px solid var(--border);
-
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -249,28 +205,21 @@
 
         .topbar-left h2 {
             margin-bottom: 3px;
-
             color: var(--primary);
-
             font-size: 19px;
         }
 
         .topbar-left p {
             color: var(--muted);
-
             font-size: 10px;
         }
 
         .admin-badge {
             padding: 7px 11px;
-
             border: 1px solid #cbdce7;
             border-radius: 5px;
-
             background: var(--primary-light);
-
             color: var(--primary);
-
             font-size: 10px;
             font-weight: bold;
         }
@@ -281,52 +230,39 @@
 
         .content {
             max-width: 1250px;
-
             margin: auto;
-
             padding: 30px;
         }
 
         .page-heading {
             margin-bottom: 22px;
-
             display: flex;
             justify-content: space-between;
             align-items: center;
-
             gap: 20px;
         }
 
         .page-heading h1 {
             margin-bottom: 6px;
-
             color: var(--text);
-
             font-size: 24px;
         }
 
         .page-heading p {
             color: var(--muted);
-
             font-size: 11px;
         }
 
         .back-btn {
             min-height: 38px;
-
             padding: 0 15px;
-
             display: inline-flex;
             align-items: center;
             justify-content: center;
-
             border: 1px solid var(--border);
             border-radius: 6px;
-
             background: white;
-
             color: var(--primary);
-
             font-size: 11px;
             font-weight: bold;
         }
@@ -341,48 +277,35 @@
 
         .form-card {
             max-width: 900px;
-
             margin: auto;
-
             background: white;
-
             border: 1px solid var(--border);
             border-radius: 12px;
-
-            box-shadow:
-                0 6px 24px rgba(20, 45, 65, 0.07);
-
+            box-shadow: 0 6px 24px rgba(20, 45, 65, 0.07);
             overflow: hidden;
         }
 
         .form-header {
             padding: 24px 28px 20px;
-
             border-bottom: 1px solid #e8edf1;
         }
 
         .form-accent {
             width: 44px;
             height: 4px;
-
             margin-bottom: 13px;
-
             border-radius: 10px;
-
             background: var(--secondary);
         }
 
         .form-header h2 {
             margin-bottom: 6px;
-
             color: var(--primary);
-
             font-size: 19px;
         }
 
         .form-header p {
             color: var(--muted);
-
             font-size: 10px;
             line-height: 1.6;
         }
@@ -397,25 +320,18 @@
 
         .error-box {
             margin-bottom: 22px;
-
             padding: 13px 15px;
-
             border-radius: 7px;
-
             background: #fff2f3;
-
             border: 1px solid #f0c1c6;
             border-left: 4px solid var(--danger);
-
             color: #8b2732;
-
             font-size: 11px;
             line-height: 1.7;
         }
 
         .error-box strong {
             display: block;
-
             margin-bottom: 5px;
         }
 
@@ -425,10 +341,7 @@
 
         .form-grid {
             display: grid;
-
-            grid-template-columns:
-                1fr 1fr;
-
+            grid-template-columns: 1fr 1fr;
             gap: 18px;
         }
 
@@ -442,11 +355,8 @@
 
         label {
             display: block;
-
             margin-bottom: 8px;
-
             color: #425361;
-
             font-size: 11px;
             font-weight: bold;
         }
@@ -459,17 +369,12 @@
         select {
             width: 100%;
             height: 45px;
-
             padding: 0 13px;
-
             border: 1px solid #d5dee5;
             border-radius: 7px;
-
             background: white;
             color: #344653;
-
             font-size: 12px;
-
             transition: 0.2s;
         }
 
@@ -480,18 +385,13 @@
         input:focus,
         select:focus {
             outline: none;
-
             border-color: var(--primary);
-
-            box-shadow:
-                0 0 0 3px rgba(0, 59, 112, 0.07);
+            box-shadow: 0 0 0 3px rgba(0, 59, 112, 0.07);
         }
 
         .field-note {
             margin-top: 6px;
-
             color: #929ca4;
-
             font-size: 9px;
             line-height: 1.5;
         }
@@ -502,20 +402,15 @@
 
         .role-box {
             grid-column: 1 / -1;
-
             padding: 18px;
-
             border: 1px solid #e2e8ed;
             border-radius: 8px;
-
             background: #f9fbfc;
         }
 
         .role-box-title {
             margin-bottom: 15px;
-
             color: var(--primary);
-
             font-size: 11px;
             font-weight: 800;
         }
@@ -526,30 +421,22 @@
 
         .password-box {
             grid-column: 1 / -1;
-
             padding: 18px;
-
             border: 1px solid #e2e8ed;
             border-radius: 8px;
-
             background: #f9fbfc;
         }
 
         .password-title {
             margin-bottom: 15px;
-
             color: var(--primary);
-
             font-size: 11px;
             font-weight: 800;
         }
 
         .password-grid {
             display: grid;
-
-            grid-template-columns:
-                1fr 1fr;
-
+            grid-template-columns: 1fr 1fr;
             gap: 18px;
         }
 
@@ -559,34 +446,24 @@
 
         .form-actions {
             margin-top: 28px;
-
             padding-top: 22px;
-
             border-top: 1px solid #e8edf1;
-
             display: flex;
             justify-content: flex-end;
             align-items: center;
-
             gap: 10px;
         }
 
         .cancel-btn {
             min-height: 42px;
-
             padding: 0 18px;
-
             display: inline-flex;
             align-items: center;
             justify-content: center;
-
             border: 1px solid var(--border);
             border-radius: 6px;
-
             background: white;
-
             color: #596874;
-
             font-size: 11px;
             font-weight: bold;
         }
@@ -597,18 +474,12 @@
 
         .save-btn {
             min-height: 42px;
-
             padding: 0 22px;
-
             border: none;
             border-radius: 6px;
-
             background: var(--secondary);
-
             color: var(--primary-dark);
-
             cursor: pointer;
-
             font-size: 11px;
             font-weight: 800;
         }
@@ -623,13 +494,11 @@
 
         .bottom-back {
             max-width: 900px;
-
             margin: 20px auto 0;
         }
 
         .bottom-back a {
             color: var(--primary);
-
             font-size: 11px;
             font-weight: bold;
         }
@@ -640,18 +509,12 @@
 
         .footer {
             max-width: 900px;
-
             margin: 28px auto 0;
-
             padding-top: 18px;
-
             border-top: 1px solid var(--border);
-
             display: flex;
             justify-content: space-between;
-
             color: #919ca4;
-
             font-size: 9px;
         }
 
@@ -660,31 +523,26 @@
         ================================= */
 
         @media (max-width: 900px) {
-
             .admin-layout {
                 display: block;
             }
 
             .sidebar {
                 position: relative;
-
                 width: 100%;
                 height: auto;
             }
 
             .menu {
-                grid-template-columns:
-                    repeat(2, 1fr);
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .main {
                 margin-left: 0;
             }
-
         }
 
         @media (max-width: 650px) {
-
             .content {
                 padding: 20px 15px;
             }
@@ -718,11 +576,8 @@
             .menu {
                 grid-template-columns: 1fr;
             }
-
         }
-
     </style>
-
 </head>
 
 <body>
@@ -736,7 +591,7 @@
             href="{{ route('admin.trang-chu') }}"
             class="logo"
         >
-            Sky<span>Go</span>
+            Viet<span>jet</span>
         </a>
 
         <div class="menu-title">
@@ -839,6 +694,27 @@
             </a>
 
             <a
+                href="{{ route('admin.baggage.index') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <rect
+                            x="5"
+                            y="7"
+                            width="14"
+                            height="13"
+                            rx="2"
+                        />
+                        <path d="M9 7V5a3 3 0 0 1 6 0v2"/>
+                        <path d="M8 11h8"/>
+                    </svg>
+                </span>
+
+                Quản lý hành lý
+            </a>
+
+            <a
                 href="{{ route('admin.statistics.index') }}"
                 class="menu-link"
             >
@@ -852,6 +728,42 @@
                 </span>
 
                 Thống kê chi tiết
+            </a>
+
+            <a
+                href="{{ route('admin.settings.edit') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 7h10"/>
+                        <path d="M18 7h2"/>
+                        <circle cx="16" cy="7" r="2"/>
+                        <path d="M4 12h2"/>
+                        <path d="M10 12h10"/>
+                        <circle cx="8" cy="12" r="2"/>
+                        <path d="M4 17h7"/>
+                        <path d="M15 17h5"/>
+                        <circle cx="13" cy="17" r="2"/>
+                    </svg>
+                </span>
+
+                Quản lý đổi giá vé
+            </a>
+
+            <a
+                href="{{ route('admin.refund-settings.edit') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 7h16v10H4z"/>
+                        <path d="M8 11h8"/>
+                        <path d="M12 8v6"/>
+                    </svg>
+                </span>
+
+                Quản lý hoàn vé
             </a>
 
         </nav>
@@ -897,7 +809,7 @@
             <div class="topbar-left">
 
                 <h2>
-                    SkyGo Administration
+                    Vietjet Administration
                 </h2>
 
                 <p>
@@ -1001,11 +913,8 @@
                                     type="text"
                                     id="name"
                                     name="name"
-
                                     value="{{ old('name') }}"
-
                                     placeholder="Nhập họ và tên"
-
                                     required
                                 >
 
@@ -1023,11 +932,8 @@
                                     type="email"
                                     id="email"
                                     name="email"
-
                                     value="{{ old('email') }}"
-
                                     placeholder="Ví dụ: user@gmail.com"
-
                                     required
                                 >
 
@@ -1050,7 +956,6 @@
                                     <select
                                         id="role"
                                         name="role"
-
                                         required
                                     >
 
@@ -1060,7 +965,6 @@
 
                                         <option
                                             value="user"
-
                                             {{ old('role') === 'user'
                                                 ? 'selected'
                                                 : '' }}
@@ -1070,7 +974,6 @@
 
                                         <option
                                             value="nhanvien"
-
                                             {{ old('role') === 'nhanvien'
                                                 ? 'selected'
                                                 : '' }}
@@ -1110,9 +1013,7 @@
                                             type="password"
                                             id="password"
                                             name="password"
-
                                             placeholder="Nhập mật khẩu"
-
                                             required
                                         >
 
@@ -1129,9 +1030,7 @@
                                             type="password"
                                             id="password_confirmation"
                                             name="password_confirmation"
-
                                             placeholder="Nhập lại mật khẩu"
-
                                             required
                                         >
 
@@ -1179,7 +1078,7 @@
             <footer class="footer">
 
                 <span>
-                    SkyGo Administration
+                    Vietjet Administration
                 </span>
 
                 <span>
@@ -1195,5 +1094,4 @@
 </div>
 
 </body>
-
 </html>
