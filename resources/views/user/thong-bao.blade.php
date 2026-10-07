@@ -1045,7 +1045,7 @@
 <footer>
 
     <div class="footer-logo">
-        Sky<span>Go</span>
+        Viet<span>Jet</span>
     </div>
 
     <p>

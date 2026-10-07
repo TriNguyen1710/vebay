@@ -1341,7 +1341,7 @@
                 </a>
             @endauth
 
-            <a href="#lien-he" class="nav-link">
+           <a href="{{ route('contact') }}" class="nav-link">
                 Liên hệ
             </a>
         </div>

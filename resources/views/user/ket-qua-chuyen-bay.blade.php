@@ -883,7 +883,7 @@
             href="{{ route('trang-chu') }}"
             class="logo"
         >
-            Sky<span>Go</span>
+            Viet<span>Jet</span>
         </a>
 
 
@@ -1611,7 +1611,7 @@
 <footer>
 
     <div class="footer-logo">
-        Sky<span>Go</span>
+        Viet<span>Jet</span>
     </div>
 
     <p>
