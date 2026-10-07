@@ -1,7 +1,9 @@
 <!DOCTYPE html>
+
 <html lang="vi">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -777,6 +779,21 @@
             </a>
 
             <a
+                href="{{ route('admin.baggage.index') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="5" y="7" width="14" height="13" rx="2"/>
+                        <path d="M9 7V5a3 3 0 0 1 6 0v2"/>
+                        <path d="M8 11h8"/>
+                    </svg>
+                </span>
+
+                Quản lý hành lý
+            </a>
+
+            <a
                 href="{{ route('admin.statistics.index') }}"
                 class="menu-link"
             >
@@ -811,6 +828,21 @@
                 </span>
 
                 Quản lý đổi giá vé
+            </a>
+
+            <a
+                href="{{ route('admin.refund-settings.edit') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 7h16v10H4z"/>
+                        <path d="M8 11h8"/>
+                        <path d="M12 8v6"/>
+                    </svg>
+                </span>
+
+                Quản lý hoàn vé
             </a>
 
         </nav>
@@ -1005,11 +1037,9 @@
                                 </td>
 
                                 <td>
-
                                     <span class="flight-code">
                                         {{ $flight->flight_code }}
                                     </span>
-
                                 </td>
 
                                 <td>
@@ -1031,23 +1061,15 @@
                                 <td>
 
                                     <div class="route-main">
-
                                         {{ $flight->departureAirport->code }}
-
                                         →
-
                                         {{ $flight->arrivalAirport->code }}
-
                                     </div>
 
                                     <div class="route-city">
-
                                         {{ $flight->departureAirport->city }}
-
                                         →
-
                                         {{ $flight->arrivalAirport->city }}
-
                                     </div>
 
                                 </td>
@@ -1055,11 +1077,9 @@
                                 <td>
 
                                     <span class="date-value">
-
                                         {{ \Carbon\Carbon::parse(
                                             $flight->flight_date
                                         )->format('d/m/Y') }}
-
                                     </span>
 
                                 </td>
@@ -1067,7 +1087,6 @@
                                 <td>
 
                                     <span class="time-value">
-
                                         {{ substr(
                                             $flight->departure_time,
                                             0,
@@ -1081,7 +1100,6 @@
                                             0,
                                             5
                                         ) }}
-
                                     </span>
 
                                 </td>
@@ -1097,14 +1115,12 @@
                                             </span>
 
                                             <strong>
-
                                                 {{ number_format(
                                                     $flight->price,
                                                     0,
                                                     ',',
                                                     '.'
                                                 ) }}đ
-
                                             </strong>
 
                                         </div>
@@ -1116,14 +1132,12 @@
                                             </span>
 
                                             <strong>
-
                                                 {{ number_format(
                                                     $flight->vip_price,
                                                     0,
                                                     ',',
                                                     '.'
                                                 ) }}đ
-
                                             </strong>
 
                                         </div>

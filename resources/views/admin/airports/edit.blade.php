@@ -1,7 +1,9 @@
 <!DOCTYPE html>
+
 <html lang="vi">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -12,6 +14,7 @@
     <title>Sửa sân bay - SkyGo Admin</title>
 
     <style>
+
         * {
             margin: 0;
             padding: 0;
@@ -628,6 +631,7 @@
         ================================= */
 
         @media (max-width: 900px) {
+
             .admin-layout {
                 display: block;
             }
@@ -649,6 +653,7 @@
         }
 
         @media (max-width: 650px) {
+
             .content {
                 padding: 20px 15px;
             }
@@ -680,10 +685,10 @@
                 grid-template-columns: 1fr;
             }
         }
+
     </style>
 
 </head>
-
 
 <body>
 
@@ -696,14 +701,12 @@
             href="{{ route('admin.trang-chu') }}"
             class="logo"
         >
-            Sky<span>Go</span>
+            Viet<span>Jet</span>
         </a>
-
 
         <div class="menu-title">
             QUẢN LÝ HỆ THỐNG
         </div>
-
 
         <nav class="menu">
 
@@ -723,7 +726,6 @@
                 Tổng quan
             </a>
 
-
             <a
                 href="{{ route('admin.airports.index') }}"
                 class="menu-link active"
@@ -739,7 +741,6 @@
                 Quản lý sân bay
             </a>
 
-
             <a
                 href="{{ route('admin.aircraft.index') }}"
                 class="menu-link"
@@ -752,7 +753,6 @@
 
                 Quản lý máy bay
             </a>
-
 
             <a
                 href="{{ route('admin.flights.index') }}"
@@ -767,14 +767,12 @@
                             height="16"
                             rx="2"
                         />
-
                         <path d="M8 3v4M16 3v4M3 10h18" />
                     </svg>
                 </span>
 
                 Quản lý chuyến bay
             </a>
-
 
             <a
                 href="{{ route('admin.bookings.index') }}"
@@ -789,7 +787,6 @@
 
                 Quản lý vé
             </a>
-
 
             <a
                 href="{{ route('admin.users.index') }}"
@@ -806,6 +803,20 @@
                 Quản lý người dùng
             </a>
 
+            <a
+                href="{{ route('admin.baggage.index') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="5" y="7" width="14" height="13" rx="2" />
+                        <path d="M9 7V5a3 3 0 0 1 6 0v2" />
+                        <path d="M8 11h8" />
+                    </svg>
+                </span>
+
+                Quản lý hành lý
+            </a>
 
             <a
                 href="{{ route('admin.statistics.index') }}"
@@ -823,8 +834,43 @@
                 Thống kê chi tiết
             </a>
 
-        </nav>
+            <a
+                href="{{ route('admin.settings.edit') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 7h10" />
+                        <path d="M18 7h2" />
+                        <circle cx="16" cy="7" r="2" />
+                        <path d="M4 12h2" />
+                        <path d="M10 12h10" />
+                        <circle cx="8" cy="12" r="2" />
+                        <path d="M4 17h7" />
+                        <path d="M15 17h5" />
+                        <circle cx="13" cy="17" r="2" />
+                    </svg>
+                </span>
 
+                Quản lý đổi giá vé
+            </a>
+
+            <a
+                href="{{ route('admin.refund-settings.edit') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 7h16v10H4z" />
+                        <path d="M8 11h8" />
+                        <path d="M12 8v6" />
+                    </svg>
+                </span>
+
+                Quản lý hoàn vé
+            </a>
+
+        </nav>
 
         <div class="sidebar-bottom">
 
@@ -840,7 +886,6 @@
 
             </div>
 
-
             <form
                 action="{{ route('dang-xuat') }}"
                 method="POST"
@@ -853,12 +898,12 @@
                 >
                     Đăng xuất
                 </button>
+
             </form>
 
         </div>
 
     </aside>
-
 
     {{-- MAIN --}}
     <main class="main">
@@ -868,7 +913,7 @@
             <div class="topbar-left">
 
                 <h2>
-                    SkyGo Administration
+                    VietJet Administration
                 </h2>
 
                 <p>
@@ -877,13 +922,11 @@
 
             </div>
 
-
             <span class="admin-badge">
                 ADMIN
             </span>
 
         </header>
-
 
         <div class="content">
 
@@ -902,7 +945,6 @@
 
                 </div>
 
-
                 <a
                     href="{{ route('admin.airports.index') }}"
                     class="back-btn"
@@ -911,7 +953,6 @@
                 </a>
 
             </div>
-
 
             <section class="form-card">
 
@@ -930,7 +971,6 @@
 
                 </div>
 
-
                 <div class="form-body">
 
                     <div class="current-info">
@@ -944,7 +984,6 @@
                         </strong>
 
                     </div>
-
 
                     @if($errors->any())
 
@@ -966,7 +1005,6 @@
 
                     @endif
 
-
                     <form
                         action="{{ route(
                             'admin.airports.update',
@@ -978,7 +1016,6 @@
                         @csrf
 
                         @method('PUT')
-
 
                         <div class="form-grid">
 
@@ -1009,7 +1046,6 @@
 
                             </div>
 
-
                             {{-- THÀNH PHỐ --}}
                             <div class="form-group">
 
@@ -1037,7 +1073,6 @@
 
                             </div>
 
-
                             {{-- TÊN SÂN BAY --}}
                             <div class="form-group full">
 
@@ -1060,7 +1095,6 @@
                                 >
 
                             </div>
-
 
                             {{-- TRẠNG THÁI --}}
                             <div class="form-group full">
@@ -1087,7 +1121,6 @@
                                             Hoạt động
                                         </option>
 
-
                                         <option
                                             value="0"
 
@@ -1101,7 +1134,6 @@
 
                                     </select>
 
-
                                     <div class="field-note">
                                         Sân bay đang hoạt động có thể
                                         được sử dụng khi tạo chuyến bay.
@@ -1113,7 +1145,6 @@
 
                         </div>
 
-
                         <div class="form-actions">
 
                             <a
@@ -1122,7 +1153,6 @@
                             >
                                 Hủy
                             </a>
-
 
                             <button
                                 type="submit"
@@ -1139,7 +1169,6 @@
 
             </section>
 
-
             <div class="bottom-back">
 
                 <a href="{{ route('admin.airports.index') }}">
@@ -1148,11 +1177,10 @@
 
             </div>
 
-
             <footer class="footer">
 
                 <span>
-                    SkyGo Administration
+                   VietJet Administration
                 </span>
 
                 <span>

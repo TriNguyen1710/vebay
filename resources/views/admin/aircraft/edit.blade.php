@@ -12,7 +12,6 @@
     <title>Sửa máy bay - SkyGo Admin</title>
 
     <style>
-
         * {
             margin: 0;
             padding: 0;
@@ -38,9 +37,7 @@
 
         body {
             min-height: 100vh;
-
             font-family: Arial, Helvetica, sans-serif;
-
             background: var(--background);
             color: var(--text);
         }
@@ -61,7 +58,6 @@
 
         .admin-layout {
             min-height: 100vh;
-
             display: grid;
             grid-template-columns: 245px 1fr;
         }
@@ -72,7 +68,6 @@
 
         .sidebar {
             position: fixed;
-
             top: 0;
             left: 0;
             bottom: 0;
@@ -90,7 +85,6 @@
 
         .logo {
             display: block;
-
             padding: 0 10px;
             margin-bottom: 34px;
 
@@ -123,7 +117,6 @@
 
         .menu-link {
             min-height: 44px;
-
             padding: 0 13px;
 
             border-radius: 7px;
@@ -177,7 +170,6 @@
 
         .sidebar-bottom {
             margin-top: auto;
-
             padding-top: 22px;
 
             border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -189,9 +181,7 @@
 
         .admin-info strong {
             display: block;
-
             margin-bottom: 4px;
-
             font-size: 12px;
         }
 
@@ -202,7 +192,6 @@
 
         .logout-btn {
             width: 100%;
-
             padding: 10px;
 
             border: 1px solid rgba(255, 255, 255, 0.12);
@@ -234,7 +223,6 @@
 
         .topbar {
             height: 70px;
-
             padding: 0 30px;
 
             background: white;
@@ -248,7 +236,6 @@
 
         .topbar-left h2 {
             color: var(--primary);
-
             font-size: 19px;
             margin-bottom: 3px;
         }
@@ -278,9 +265,7 @@
 
         .content {
             max-width: 1250px;
-
             margin: auto;
-
             padding: 30px;
         }
 
@@ -297,7 +282,6 @@
         .page-heading h1 {
             font-size: 24px;
             color: var(--text);
-
             margin-bottom: 6px;
         }
 
@@ -308,7 +292,6 @@
 
         .back-btn {
             min-height: 38px;
-
             padding: 0 15px;
 
             display: inline-flex;
@@ -319,7 +302,6 @@
             border-radius: 6px;
 
             background: white;
-
             color: var(--primary);
 
             font-size: 11px;
@@ -336,7 +318,6 @@
 
         .form-card {
             max-width: 920px;
-
             margin: auto;
 
             background: white;
@@ -352,7 +333,6 @@
 
         .form-header {
             padding: 24px 28px 20px;
-
             border-bottom: 1px solid #e8edf1;
         }
 
@@ -369,15 +349,12 @@
 
         .form-header h2 {
             color: var(--primary);
-
             font-size: 19px;
-
             margin-bottom: 6px;
         }
 
         .form-header p {
             color: var(--muted);
-
             font-size: 10px;
             line-height: 1.6;
         }
@@ -392,7 +369,6 @@
 
         .current-aircraft {
             margin-bottom: 22px;
-
             padding: 14px 16px;
 
             border: 1px solid #d4e4ee;
@@ -418,7 +394,6 @@
 
         .error-box {
             margin-bottom: 22px;
-
             padding: 13px 15px;
 
             border-radius: 7px;
@@ -446,7 +421,6 @@
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-
             gap: 19px;
         }
 
@@ -456,7 +430,6 @@
 
         label {
             display: block;
-
             margin-bottom: 8px;
 
             color: #425361;
@@ -533,7 +506,6 @@
         .seat-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-
             gap: 18px;
         }
 
@@ -558,7 +530,6 @@
 
         .preview {
             margin-top: 22px;
-
             padding: 16px 18px;
 
             border: 1px solid #d5e4ee;
@@ -579,7 +550,6 @@
             color: var(--primary);
 
             font-size: 11px;
-
             margin-bottom: 4px;
         }
 
@@ -608,7 +578,6 @@
 
         .seat-warning {
             margin-top: 13px;
-
             padding: 11px 13px;
 
             border-radius: 6px;
@@ -629,7 +598,6 @@
 
         .form-actions {
             margin-top: 28px;
-
             padding-top: 22px;
 
             border-top: 1px solid #e8edf1;
@@ -643,7 +611,6 @@
 
         .cancel-btn {
             min-height: 42px;
-
             padding: 0 18px;
 
             display: inline-flex;
@@ -667,7 +634,6 @@
 
         .save-btn {
             min-height: 42px;
-
             padding: 0 22px;
 
             border: none;
@@ -693,7 +659,6 @@
 
         .bottom-back {
             max-width: 920px;
-
             margin: 20px auto 0;
         }
 
@@ -712,7 +677,6 @@
             max-width: 920px;
 
             margin: 28px auto 0;
-
             padding-top: 18px;
 
             border-top: 1px solid var(--border);
@@ -749,7 +713,6 @@
             .main {
                 margin-left: 0;
             }
-
         }
 
         @media (max-width: 650px) {
@@ -791,13 +754,9 @@
             .menu {
                 grid-template-columns: 1fr;
             }
-
         }
-
     </style>
-
 </head>
-
 
 <body>
 
@@ -810,14 +769,12 @@
             href="{{ route('admin.trang-chu') }}"
             class="logo"
         >
-            Sky<span>Go</span>
+            Viet<span>Jet</span>
         </a>
-
 
         <div class="menu-title">
             QUẢN LÝ HỆ THỐNG
         </div>
-
 
         <nav class="menu">
 
@@ -837,7 +794,6 @@
                 Tổng quan
             </a>
 
-
             <a
                 href="{{ route('admin.airports.index') }}"
                 class="menu-link"
@@ -853,7 +809,6 @@
                 Quản lý sân bay
             </a>
 
-
             <a
                 href="{{ route('admin.aircraft.index') }}"
                 class="menu-link active"
@@ -866,7 +821,6 @@
 
                 Quản lý máy bay
             </a>
-
 
             <a
                 href="{{ route('admin.flights.index') }}"
@@ -888,7 +842,6 @@
                 Quản lý chuyến bay
             </a>
 
-
             <a
                 href="{{ route('admin.bookings.index') }}"
                 class="menu-link"
@@ -902,7 +855,6 @@
 
                 Quản lý vé
             </a>
-
 
             <a
                 href="{{ route('admin.users.index') }}"
@@ -919,6 +871,21 @@
                 Quản lý người dùng
             </a>
 
+            {{-- QUẢN LÝ HÀNH LÝ --}}
+            <a
+                href="{{ route('admin.baggage.index') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="5" y="7" width="14" height="13" rx="2"/>
+                        <path d="M9 7V5a3 3 0 0 1 6 0v2"/>
+                        <path d="M8 11h8"/>
+                    </svg>
+                </span>
+
+                Quản lý hành lý
+            </a>
 
             <a
                 href="{{ route('admin.statistics.index') }}"
@@ -936,8 +903,23 @@
                 Thống kê chi tiết
             </a>
 
-        </nav>
+            {{-- QUẢN LÝ HOÀN VÉ --}}
+            <a
+                href="{{ route('admin.refund-settings.edit') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 7h16v10H4z"/>
+                        <path d="M8 11h8"/>
+                        <path d="M12 8v6"/>
+                    </svg>
+                </span>
 
+                Quản lý hoàn vé
+            </a>
+
+        </nav>
 
         <div class="sidebar-bottom">
 
@@ -952,7 +934,6 @@
                 </span>
 
             </div>
-
 
             <form
                 action="{{ route('dang-xuat') }}"
@@ -973,7 +954,6 @@
 
     </aside>
 
-
     {{-- MAIN --}}
     <main class="main">
 
@@ -982,7 +962,7 @@
             <div class="topbar-left">
 
                 <h2>
-                    SkyGo Administration
+                    
                 </h2>
 
                 <p>
@@ -991,13 +971,11 @@
 
             </div>
 
-
             <span class="admin-badge">
                 ADMIN
             </span>
 
         </header>
-
 
         <div class="content">
 
@@ -1016,7 +994,6 @@
 
                 </div>
 
-
                 <a
                     href="{{ route('admin.aircraft.index') }}"
                     class="back-btn"
@@ -1025,7 +1002,6 @@
                 </a>
 
             </div>
-
 
             <section class="form-card">
 
@@ -1044,7 +1020,6 @@
 
                 </div>
 
-
                 <div class="form-body">
 
                     <div class="current-aircraft">
@@ -1058,7 +1033,6 @@
                         </strong>
 
                     </div>
-
 
                     @if($errors->any())
 
@@ -1080,7 +1054,6 @@
 
                     @endif
 
-
                     <form
                         action="{{ route(
                             'admin.aircraft.update',
@@ -1090,9 +1063,7 @@
                     >
 
                         @csrf
-
                         @method('PUT')
-
 
                         <div class="form-grid">
 
@@ -1123,7 +1094,6 @@
 
                             </div>
 
-
                             {{-- TÊN / LOẠI --}}
                             <div class="form-group">
 
@@ -1151,14 +1121,12 @@
 
                             </div>
 
-
                             {{-- CẤU HÌNH GHẾ --}}
                             <div class="seat-config">
 
                                 <div class="seat-config-title">
                                     Cấu hình ghế
                                 </div>
-
 
                                 <div class="seat-grid">
 
@@ -1185,7 +1153,6 @@
                                         >
 
                                     </div>
-
 
                                     <div class="form-group">
 
@@ -1218,14 +1185,12 @@
 
                                 </div>
 
-
                                 <div class="seat-warning">
                                     Khi thay đổi số hàng hoặc số ghế mỗi hàng,
                                     cấu hình tổng số ghế của máy bay cũng sẽ thay đổi.
                                 </div>
 
                             </div>
-
 
                             {{-- TRẠNG THÁI --}}
                             <div class="status-box">
@@ -1242,7 +1207,6 @@
 
                                     <option
                                         value="1"
-
                                         {{ old(
                                             'status',
                                             $aircraft->status
@@ -1251,10 +1215,8 @@
                                         Hoạt động
                                     </option>
 
-
                                     <option
                                         value="0"
-
                                         {{ old(
                                             'status',
                                             $aircraft->status
@@ -1265,7 +1227,6 @@
 
                                 </select>
 
-
                                 <div class="field-note">
                                     Máy bay đang hoạt động có thể
                                     được sử dụng khi tạo chuyến bay.
@@ -1274,7 +1235,6 @@
                             </div>
 
                         </div>
-
 
                         {{-- TOTAL PREVIEW --}}
                         <div class="preview">
@@ -1291,7 +1251,6 @@
 
                             </div>
 
-
                             <div class="preview-total">
 
                                 <span id="totalSeatsPreview">
@@ -1306,7 +1265,6 @@
 
                         </div>
 
-
                         <div class="form-actions">
 
                             <a
@@ -1315,7 +1273,6 @@
                             >
                                 Hủy
                             </a>
-
 
                             <button
                                 type="submit"
@@ -1332,7 +1289,6 @@
 
             </section>
 
-
             <div class="bottom-back">
 
                 <a href="{{ route('admin.aircraft.index') }}">
@@ -1341,11 +1297,10 @@
 
             </div>
 
-
             <footer class="footer">
 
                 <span>
-                    SkyGo Administration
+                   
                 </span>
 
                 <span>
@@ -1360,7 +1315,6 @@
 
 </div>
 
-
 <script>
 
     const rowsInput =
@@ -1372,7 +1326,6 @@
     const totalSeatsPreview =
         document.getElementById('totalSeatsPreview');
 
-
     function updateTotalSeats() {
 
         const rows =
@@ -1383,26 +1336,21 @@
 
         totalSeatsPreview.textContent =
             rows * seatsPerRow;
-
     }
-
 
     rowsInput.addEventListener(
         'input',
         updateTotalSeats
     );
 
-
     seatsPerRowInput.addEventListener(
         'input',
         updateTotalSeats
     );
-
 
     updateTotalSeats();
 
 </script>
 
 </body>
-
 </html>

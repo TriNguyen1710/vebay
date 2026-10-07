@@ -3,7 +3,6 @@
 
 <head>
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
@@ -746,6 +745,21 @@
             </a>
 
             <a
+                href="{{ route('admin.baggage.index') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="5" y="7" width="14" height="13" rx="2"/>
+                        <path d="M9 7V5a3 3 0 0 1 6 0v2"/>
+                        <path d="M8 11h8"/>
+                    </svg>
+                </span>
+
+                Quản lý hành lý
+            </a>
+
+            <a
                 href="{{ route('admin.statistics.index') }}"
                 class="menu-link"
             >
@@ -782,12 +796,26 @@
                 Quản lý đổi giá vé
             </a>
 
+            <a
+                href="{{ route('admin.refund-settings.edit') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 7h16v10H4z"/>
+                        <path d="M8 11h8"/>
+                        <path d="M12 8v6"/>
+                    </svg>
+                </span>
+
+                Quản lý hoàn vé
+            </a>
+
         </nav>
 
         <div class="sidebar-bottom">
 
             <div class="admin-info">
-
                 <strong>
                     {{ auth()->user()->name }}
                 </strong>
@@ -795,7 +823,6 @@
                 <span>
                     Quản trị viên hệ thống
                 </span>
-
             </div>
 
             <form
@@ -810,7 +837,6 @@
                 >
                     Đăng xuất
                 </button>
-
             </form>
 
         </div>
@@ -822,7 +848,6 @@
         <header class="topbar">
 
             <div class="topbar-left">
-
                 <h2>
                     Vietjet Administration
                 </h2>
@@ -830,7 +855,6 @@
                 <p>
                     Quản lý vé hành khách
                 </p>
-
             </div>
 
             <span class="admin-badge">
@@ -844,7 +868,6 @@
             <div class="page-heading">
 
                 <div>
-
                     <h1>
                         Quản lý vé
                     </h1>
@@ -853,7 +876,6 @@
                         Tìm kiếm, lọc và theo dõi từng vé
                         khách hàng đã đặt trong hệ thống.
                     </p>
-
                 </div>
 
                 <a
@@ -870,7 +892,6 @@
                 <div class="panel-header">
 
                     <div>
-
                         <h3>
                             Tìm kiếm và lọc vé
                         </h3>
@@ -879,7 +900,6 @@
                             Có thể kết hợp nhiều điều kiện
                             để tìm đúng vé cần quản lý.
                         </p>
-
                     </div>
 
                     <span class="count-box">
@@ -1113,7 +1133,6 @@
                 <div class="panel-header">
 
                     <div>
-
                         <h3>
                             Danh sách vé
                         </h3>
@@ -1121,7 +1140,6 @@
                         <p>
                             Mỗi dòng tương ứng với một vé hành khách.
                         </p>
-
                     </div>
 
                     <span class="count-box">
@@ -1135,7 +1153,6 @@
                     <table>
 
                         <thead>
-
                             <tr>
                                 <th>Mã đặt vé</th>
                                 <th>Khách đặt</th>
@@ -1154,7 +1171,6 @@
                                 <th>Ngày đặt</th>
                                 <th>Thao tác</th>
                             </tr>
-
                         </thead>
 
                         <tbody>
@@ -1169,15 +1185,12 @@
                             <tr>
 
                                 <td>
-
                                     <span class="booking-code">
                                         {{ $booking->booking_code ?? '-' }}
                                     </span>
-
                                 </td>
 
                                 <td>
-
                                     <span class="user-name">
                                         {{ $booking?->user?->name ?? 'Không xác định' }}
                                     </span>
@@ -1185,15 +1198,12 @@
                                     <span class="user-email">
                                         {{ $booking?->user?->email ?? '' }}
                                     </span>
-
                                 </td>
 
                                 <td>
-
                                     <span class="ticket-code">
                                         {{ $ticket->ticket_code }}
                                     </span>
-
                                 </td>
 
                                 <td>
@@ -1201,11 +1211,9 @@
                                 </td>
 
                                 <td>
-
                                     <span class="flight-code">
                                         {{ $flight?->flight_code ?? '-' }}
                                     </span>
-
                                 </td>
 
                                 <td>
@@ -1217,13 +1225,9 @@
                                     )
 
                                         <span class="route-text">
-
                                             {{ $flight->departureAirport->city }}
-
                                             →
-
                                             {{ $flight->arrivalAirport->city }}
-
                                         </span>
 
                                     @else
@@ -1269,22 +1273,17 @@
                                 </td>
 
                                 <td>
-
                                     <span class="price">
-
                                         {{ number_format(
                                             $ticket->price,
                                             0,
                                             ',',
                                             '.'
                                         ) }} đ
-
                                     </span>
-
                                 </td>
 
                                 <td>
-
                                     <span class="baggage-text">
 
                                         @if((int) $ticket->baggage_weight > 0)
@@ -1294,37 +1293,28 @@
                                         @endif
 
                                     </span>
-
                                 </td>
 
                                 <td>
-
                                     <span class="baggage-price">
-
                                         {{ number_format(
                                             (float) $ticket->baggage_price,
                                             0,
                                             ',',
                                             '.'
                                         ) }} đ
-
                                     </span>
-
                                 </td>
 
                                 <td>
-
                                     <span class="order-total">
-
                                         {{ number_format(
                                             (float) ($booking?->total_amount ?? 0),
                                             0,
                                             ',',
                                             '.'
                                         ) }} đ
-
                                     </span>
-
                                 </td>
 
                                 <td>
@@ -1382,7 +1372,6 @@
                                 </td>
 
                                 <td>
-
                                     <span class="date-text">
 
                                         @if($booking?->created_at)
@@ -1398,7 +1387,6 @@
                                         @endif
 
                                     </span>
-
                                 </td>
 
                                 <td>
@@ -1428,14 +1416,12 @@
                         @empty
 
                             <tr>
-
                                 <td
                                     colspan="16"
                                     class="empty"
                                 >
                                     Không tìm thấy vé phù hợp.
                                 </td>
-
                             </tr>
 
                         @endforelse
@@ -1478,5 +1464,4 @@
 </div>
 
 </body>
-
 </html>

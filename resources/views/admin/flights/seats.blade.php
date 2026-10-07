@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="vi">
 
 <head>
@@ -10,7 +11,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Sơ đồ ghế chuyến bay - SkyGo Admin</title>
+    <title>Sơ đồ ghế chuyến bay - Vietjet Admin</title>
 
     <style>
 
@@ -876,7 +877,6 @@
 
 </head>
 
-
 <body>
 
 <div class="admin-layout">
@@ -888,14 +888,12 @@
             href="{{ route('admin.trang-chu') }}"
             class="logo"
         >
-            Sky<span>Go</span>
+            Viet<span>jet</span>
         </a>
-
 
         <div class="menu-title">
             QUẢN LÝ HỆ THỐNG
         </div>
-
 
         <nav class="menu">
 
@@ -904,60 +902,50 @@
                 class="menu-link"
             >
                 <span class="menu-icon">
-
                     <svg viewBox="0 0 24 24">
                         <rect x="3" y="3" width="7" height="7"/>
                         <rect x="14" y="3" width="7" height="7"/>
                         <rect x="3" y="14" width="7" height="7"/>
                         <rect x="14" y="14" width="7" height="7"/>
                     </svg>
-
                 </span>
 
                 Tổng quan
             </a>
-
 
             <a
                 href="{{ route('admin.airports.index') }}"
                 class="menu-link"
             >
                 <span class="menu-icon">
-
                     <svg viewBox="0 0 24 24">
                         <path d="M3 21h18"/>
                         <path d="M6 21V9l6-4 6 4v12"/>
                         <path d="M9 13h6"/>
                     </svg>
-
                 </span>
 
                 Quản lý sân bay
             </a>
-
 
             <a
                 href="{{ route('admin.aircraft.index') }}"
                 class="menu-link"
             >
                 <span class="menu-icon">
-
                     <svg viewBox="0 0 24 24">
                         <path d="M2 16l20-5-20-5 3 5-3 5z"/>
                     </svg>
-
                 </span>
 
                 Quản lý máy bay
             </a>
-
 
             <a
                 href="{{ route('admin.flights.index') }}"
                 class="menu-link active"
             >
                 <span class="menu-icon">
-
                     <svg viewBox="0 0 24 24">
                         <rect
                             x="3"
@@ -968,68 +956,108 @@
                         />
                         <path d="M8 3v4M16 3v4M3 10h18"/>
                     </svg>
-
                 </span>
 
                 Quản lý chuyến bay
             </a>
-
 
             <a
                 href="{{ route('admin.bookings.index') }}"
                 class="menu-link"
             >
                 <span class="menu-icon">
-
                     <svg viewBox="0 0 24 24">
                         <path d="M4 4h16v16H4z"/>
                         <path d="M8 8h8M8 12h8M8 16h5"/>
                     </svg>
-
                 </span>
 
                 Quản lý vé
             </a>
-
 
             <a
                 href="{{ route('admin.users.index') }}"
                 class="menu-link"
             >
                 <span class="menu-icon">
-
                     <svg viewBox="0 0 24 24">
                         <circle cx="9" cy="8" r="4"/>
                         <path d="M3 21v-2a6 6 0 0 1 12 0v2"/>
                         <path d="M16 11a4 4 0 0 1 5 4"/>
                     </svg>
-
                 </span>
 
                 Quản lý người dùng
             </a>
 
+            <a
+                href="{{ route('admin.baggage.index') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="5" y="7" width="14" height="13" rx="2"/>
+                        <path d="M9 7V5a3 3 0 0 1 6 0v2"/>
+                        <path d="M8 11h8"/>
+                    </svg>
+                </span>
+
+                Quản lý hành lý
+            </a>
 
             <a
                 href="{{ route('admin.statistics.index') }}"
                 class="menu-link"
             >
                 <span class="menu-icon">
-
                     <svg viewBox="0 0 24 24">
                         <path d="M4 20V10"/>
                         <path d="M10 20V4"/>
                         <path d="M16 20v-7"/>
                         <path d="M22 20V7"/>
                     </svg>
-
                 </span>
 
                 Thống kê chi tiết
             </a>
 
-        </nav>
+            <a
+                href="{{ route('admin.settings.edit') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 7h10"/>
+                        <path d="M18 7h2"/>
+                        <circle cx="16" cy="7" r="2"/>
+                        <path d="M4 12h2"/>
+                        <path d="M10 12h10"/>
+                        <circle cx="8" cy="12" r="2"/>
+                        <path d="M4 17h7"/>
+                        <path d="M15 17h5"/>
+                        <circle cx="13" cy="17" r="2"/>
+                    </svg>
+                </span>
 
+                Quản lý đổi giá vé
+            </a>
+
+            <a
+                href="{{ route('admin.refund-settings.edit') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 7h16v10H4z"/>
+                        <path d="M8 11h8"/>
+                        <path d="M12 8v6"/>
+                    </svg>
+                </span>
+
+                Quản lý hoàn vé
+            </a>
+
+        </nav>
 
         <div class="sidebar-bottom">
 
@@ -1044,7 +1072,6 @@
                 </span>
 
             </div>
-
 
             <form
                 action="{{ route('dang-xuat') }}"
@@ -1066,7 +1093,6 @@
 
     </aside>
 
-
     {{-- MAIN --}}
     <main class="main">
 
@@ -1075,7 +1101,7 @@
             <div class="topbar-left">
 
                 <h2>
-                    SkyGo Administration
+                    Vietjet Administration
                 </h2>
 
                 <p>
@@ -1084,13 +1110,11 @@
 
             </div>
 
-
             <span class="admin-badge">
                 ADMIN
             </span>
 
         </header>
-
 
         <div class="content">
 
@@ -1110,7 +1134,6 @@
 
                 </div>
 
-
                 <a
                     href="{{ route('admin.flights.index') }}"
                     class="back-btn"
@@ -1120,7 +1143,6 @@
 
             </div>
 
-
             {{-- FLIGHT --}}
             <section class="flight-card">
 
@@ -1129,7 +1151,6 @@
                     <div class="flight-code">
                         Chuyến bay {{ $flight->flight_code }}
                     </div>
-
 
                     <div class="flight-aircraft">
 
@@ -1145,7 +1166,6 @@
 
                 </div>
 
-
                 <div class="route">
 
                     <div class="airport">
@@ -1159,7 +1179,6 @@
                         </span>
 
                     </div>
-
 
                     <div class="route-line">
 
@@ -1177,7 +1196,6 @@
 
                     </div>
 
-
                     <div class="airport">
 
                         <span class="airport-code">
@@ -1194,7 +1212,6 @@
 
             </section>
 
-
             {{-- STATISTICS --}}
             <div class="stats-grid">
 
@@ -1210,7 +1227,6 @@
 
                 </div>
 
-
                 <div class="stat-card available">
 
                     <div class="stat-label">
@@ -1222,7 +1238,6 @@
                     </div>
 
                 </div>
-
 
                 <div class="stat-card booked">
 
@@ -1237,7 +1252,6 @@
                 </div>
 
             </div>
-
 
             {{-- SEAT PANEL --}}
             <section class="seat-panel">
@@ -1257,7 +1271,6 @@
 
                     </div>
 
-
                     <div class="legend">
 
                         <div class="legend-item">
@@ -1269,7 +1282,6 @@
                             Còn trống
 
                         </div>
-
 
                         <div class="legend-item">
 
@@ -1285,7 +1297,6 @@
 
                 </div>
 
-
                 <div class="seat-panel-body">
 
                     @php
@@ -1300,7 +1311,6 @@
 
                     @endphp
 
-
                     @if($groupedSeats->count() > 0)
 
                         <div class="aircraft-cabin">
@@ -1308,7 +1318,6 @@
                             <div class="cockpit">
                                 PHÍA TRƯỚC MÁY BAY
                             </div>
-
 
                             {{-- COLUMN LABELS --}}
                             <div class="seat-columns">
@@ -1347,7 +1356,6 @@
 
                             </div>
 
-
                             @foreach(
                                 $groupedSeats as $row => $rowSeats
                             )
@@ -1371,7 +1379,6 @@
 
                                 @endphp
 
-
                                 <div class="seat-row">
 
                                     {{-- LEFT --}}
@@ -1386,7 +1393,6 @@
                                                         : 'seat-available'
                                                 }}
                                             "
-
                                             title="
                                                 @if($seat->seat_type === 'window')
                                                     Ghế cửa sổ
@@ -1401,7 +1407,6 @@
                                         </div>
 
                                     @endforeach
-
 
                                     {{-- BỔ SUNG Ô TRỐNG
                                          NẾU HÀNG ÍT HƠN 3 GHẾ TRÁI --}}
@@ -1415,21 +1420,17 @@
 
                                     @endfor
 
-
                                     <div class="aisle-space">
                                         Lối đi
                                     </div>
-
 
                                     <div class="seat-number-row">
                                         {{ $row }}
                                     </div>
 
-
                                     <div class="aisle-space">
                                         Lối đi
                                     </div>
-
 
                                     {{-- RIGHT --}}
                                     @foreach($rightSeats as $seat)
@@ -1443,7 +1444,6 @@
                                                         : 'seat-available'
                                                 }}
                                             "
-
                                             title="
                                                 @if($seat->seat_type === 'window')
                                                     Ghế cửa sổ
@@ -1458,7 +1458,6 @@
                                         </div>
 
                                     @endforeach
-
 
                                     {{-- BỔ SUNG Ô TRỐNG
                                          NẾU HÀNG ÍT HƠN 3 GHẾ PHẢI --}}
@@ -1490,7 +1489,6 @@
 
             </section>
 
-
             <div class="bottom-back">
 
                 <a href="{{ route('admin.flights.index') }}">
@@ -1499,11 +1497,10 @@
 
             </div>
 
-
             <footer class="footer">
 
                 <span>
-                    SkyGo Administration
+                    Vietjet Administration
                 </span>
 
                 <span>
