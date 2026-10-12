@@ -33,7 +33,7 @@ class NotificationController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | ĐÁNH DẤU ĐÃ ĐỌC
+    | ĐÁNH DẤU ĐÃ ĐỌC CỦA KHÁCH
     |--------------------------------------------------------------------------
     */
 
@@ -51,5 +51,58 @@ class NotificationController extends Controller
             'success',
             'Đã đánh dấu thông báo là đã đọc.'
         );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DANH SÁCH THÔNG BÁO CỦA ADMIN
+    |--------------------------------------------------------------------------
+    */
+
+    public function adminIndex()
+    {
+        $notifications = Notification::with([
+            'user',
+            'ticket.flight.departureAirport',
+            'ticket.flight.arrivalAirport',
+        ])
+            ->where('user_id', Auth::id())
+            ->orderByDesc('created_at')
+            ->get();
+
+        return view(
+            'admin.notifications.index',
+            compact('notifications')
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ĐÁNH DẤU ĐÃ ĐỌC CỦA ADMIN
+    |--------------------------------------------------------------------------
+    */
+
+    public function adminMarkAsRead(Notification $notification)
+    {
+        if ($notification->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $notification->update([
+            'status' => 'read',
+        ]);
+
+        $bookingId = $notification->ticket?->booking_id;
+
+        if ($bookingId) {
+            return redirect()->route(
+                'admin.bookings.show',
+                $bookingId
+            );
+        }
+
+        return redirect()->route('admin.bookings.index');
     }
 }

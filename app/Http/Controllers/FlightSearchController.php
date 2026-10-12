@@ -29,11 +29,7 @@ class FlightSearchController extends Controller
      */
     public function search(Request $request)
     {
-        /*
-        |--------------------------------------------------------------------------
-        | VALIDATE
-        |--------------------------------------------------------------------------
-        */
+        
 
         $request->validate(
             [

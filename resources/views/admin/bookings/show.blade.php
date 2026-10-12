@@ -418,11 +418,6 @@
             color: #806300;
         }
 
-        .waiting-payment {
-            background: #fff3cd;
-            color: #7a5d00;
-            border: 1px solid #ead58e;
-        }
 
         .alert {
             margin-bottom: 18px;
@@ -1357,17 +1352,11 @@
 
                             <div class="info-value">
 
-                                @if($booking->payment_status === 'paid')
+                               @if($booking->payment_status === 'paid')
 
-                                    <span class="badge paid">
-                                        Đã thanh toán
-                                    </span>
-
-                                @elseif($booking->payment_status === 'waiting_confirmation')
-
-                                    <span class="badge waiting-payment">
-                                        Chờ Admin xác nhận
-                                    </span>
+                                <span class="badge paid">
+                                    Đã thanh toán
+                                </span>
 
                                 @else
 
@@ -1376,7 +1365,6 @@
                                     </span>
 
                                 @endif
-
                             </div>
                         </div>
 
@@ -1454,54 +1442,7 @@
 
                 </div>
 
-                @if(
-                    $booking->payment_status === 'paid'
-                    && $booking->booking_status === 'pending'
-                    && $booking->tickets->contains('ticket_status', 'pending')
-                )
-
-                    <div class="booking-body" style="padding-top:0;">
-
-                        <div class="confirm-payment-box">
-
-                            <h3>
-                                Vé đang chờ xác nhận
-                            </h3>
-
-                            <p>
-                                Khách hàng đã thanh toán đơn
-                                <strong>{{ $booking->booking_code }}</strong>
-                                với số tiền
-                                <strong>{{ number_format($booking->total_amount, 0, ',', '.') }} đ</strong>.
-                                Bấm Xác nhận để kích hoạt vé.
-                            </p>
-
-                            <form
-                                action="{{ route(
-                                    'admin.bookings.confirm-payment',
-                                    $booking->id
-                                ) }}"
-                                method="POST"
-                                onsubmit="return confirm(
-                                    'Bạn xác nhận kích hoạt vé của đơn này?'
-                                );"
-                            >
-                                @csrf
-
-                                <button
-                                    type="submit"
-                                    class="confirm-payment-btn"
-                                >
-                                    Xác nhận
-                                </button>
-
-                            </form>
-
-                        </div>
-
-                    </div>
-
-                @endif
+            
 
             </section>
 

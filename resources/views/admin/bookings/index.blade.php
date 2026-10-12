@@ -484,11 +484,7 @@
             color: #806300;
         }
 
-        .waiting-payment {
-            background: #fff3cd;
-            color: #7a5d00;
-            border: 1px solid #ead58e;
-        }
+        
 
         .active {
             background: #edf8f2;
@@ -633,7 +629,14 @@
 </head>
 
 <body>
-
+@php
+    $unreadNotificationCount = \App\Models\Notification::where(
+        'user_id',
+        auth()->id()
+    )
+        ->where('status', 'unread')
+        ->count();
+@endphp
 <div class="admin-layout">
 
     <aside class="sidebar">
@@ -716,18 +719,37 @@
             </a>
 
             <a
-                href="{{ route('admin.bookings.index') }}"
-                class="menu-link active"
-            >
-                <span class="menu-icon">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M4 4h16v16H4z"/>
-                        <path d="M8 8h8M8 12h8M8 16h5"/>
-                    </svg>
-                </span>
+    href="{{ route('admin.bookings.index') }}"
+    class="menu-link active"
+>
+    <span class="menu-icon">
+        <svg viewBox="0 0 24 24">
+            <path d="M4 4h16v16H4z"/>
+            <path d="M8 8h8M8 12h8M8 16h5"/>
+        </svg>
+    </span>
 
-                Quản lý vé
-            </a>
+    Quản lý vé
+
+    @if($unreadNotificationCount > 0)
+        <span style="
+            margin-left: auto;
+            background: #f4b400;
+            color: #00294f;
+            min-width: 22px;
+            height: 22px;
+            padding: 0 6px;
+            border-radius: 11px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 800;
+        ">
+            {{ $unreadNotificationCount }}
+        </span>
+    @endif
+</a>
 
             <a
                 href="{{ route('admin.users.index') }}"
@@ -962,12 +984,7 @@
                                         Chưa thanh toán
                                     </option>
 
-                                    <option
-                                        value="waiting_confirmation"
-                                        {{ request('payment_status') === 'waiting_confirmation' ? 'selected' : '' }}
-                                    >
-                                        Chờ Admin xác nhận
-                                    </option>
+                                    
 
                                 </select>
 
@@ -1134,7 +1151,7 @@
 
                     <div>
                         <h3>
-                            Danh sách vé
+                            Vé có hiệu lực
                         </h3>
 
                         <p>
@@ -1143,7 +1160,7 @@
                     </div>
 
                     <span class="count-box">
-                        {{ $tickets->count() }} vé
+                        {{ $activeTickets->count() }} vé
                     </span>
 
                 </div>
@@ -1175,7 +1192,7 @@
 
                         <tbody>
 
-                        @forelse($tickets as $ticket)
+                        @forelse($activeTickets as $ticket)
 
                             @php
                                 $booking = $ticket->booking;
@@ -1355,10 +1372,304 @@
                                             Đã thanh toán
                                         </span>
 
-                                    @elseif($booking?->payment_status === 'waiting_confirmation')
+                                    @else
 
-                                        <span class="badge waiting-payment">
+                                        <span class="badge unpaid">
+                                            Chưa thanh toán
+                                        </span>
+
+                                    @endif
+
+                                </td>
+
+                                <td>
+                                    <span class="date-text">
+
+                                        @if($booking?->created_at)
+
+                                            {{ $booking->created_at
+                                                ->timezone('Asia/Ho_Chi_Minh')
+                                                ->format('d/m/Y H:i') }}
+
+                                        @else
+
+                                            -
+
+                                        @endif
+
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    @if($booking)
+
+                                        <a
+                                            href="{{ route(
+                                                'admin.bookings.show',
+                                                $booking->id
+                                            ) }}"
+                                            class="btn-view"
+                                        >
+                                            Xem chi tiết
+                                        </a>
+
+                                    @else
+
+                                        -
+
+                                    @endif
+
+                                </td>
+
+                            </tr>
+
+                        @empty
+
+                            <tr>
+                                <td
+                                    colspan="16"
+                                    class="empty"
+                                >
+                                    Không có vé nào chưa / không có hiệu lực.
+                                </td>
+                            </tr>
+
+                        @endforelse
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+            <section class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h3>
+                             Vé chưa / không có hiệu lực
+                        </h3>
+
+                        <p>
+                            Mỗi dòng tương ứng với một vé hành khách.
+                        </p>
+                    </div>
+
+                    <span class="count-box">
+                        {{ $inactiveTickets->count() }} vé
+                    </span>
+
+                </div>
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Mã đặt vé</th>
+                                <th>Khách đặt</th>
+                                <th>Mã vé</th>
+                                <th>Hành khách</th>
+                                <th>Chuyến bay</th>
+                                <th>Hành trình</th>
+                                <th>Ghế</th>
+                                <th>Hạng ghế</th>
+                                <th>Giá vé</th>
+                                <th>Hành lý ký gửi</th>
+                                <th>Phí hành lý</th>
+                                <th>Tổng đơn</th>
+                                <th>Trạng thái vé</th>
+                                <th>Thanh toán</th>
+                                <th>Ngày đặt</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                        @forelse($inactiveTickets as $ticket)
+
+                            @php
+                                $booking = $ticket->booking;
+                                $flight = $ticket->flight;
+                            @endphp
+
+                            <tr>
+
+                                <td>
+                                    <span class="booking-code">
+                                        {{ $booking->booking_code ?? '-' }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="user-name">
+                                        {{ $booking?->user?->name ?? 'Không xác định' }}
+                                    </span>
+
+                                    <span class="user-email">
+                                        {{ $booking?->user?->email ?? '' }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="ticket-code">
+                                        {{ $ticket->ticket_code }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    {{ $ticket->passenger_name }}
+                                </td>
+
+                                <td>
+                                    <span class="flight-code">
+                                        {{ $flight?->flight_code ?? '-' }}
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    @if(
+                                        $flight &&
+                                        $flight->departureAirport &&
+                                        $flight->arrivalAirport
+                                    )
+
+                                        <span class="route-text">
+                                            {{ $flight->departureAirport->city }}
+                                            →
+                                            {{ $flight->arrivalAirport->city }}
+                                        </span>
+
+                                    @else
+
+                                        -
+
+                                    @endif
+
+                                </td>
+
+                                <td>
+
+                                    @if($ticket->flightSeat)
+
+                                        <span class="seat-number">
+                                            {{ $ticket->flightSeat->seat_number }}
+                                        </span>
+
+                                    @else
+
+                                        -
+
+                                    @endif
+
+                                </td>
+
+                                <td>
+
+                                    @if($ticket->seat_class === 'vip')
+
+                                        <span class="badge vip">
+                                            VIP
+                                        </span>
+
+                                    @else
+
+                                        <span class="badge economy">
+                                            Phổ thông
+                                        </span>
+
+                                    @endif
+
+                                </td>
+
+                                <td>
+                                    <span class="price">
+                                        {{ number_format(
+                                            $ticket->price,
+                                            0,
+                                            ',',
+                                            '.'
+                                        ) }} đ
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="baggage-text">
+
+                                        @if((int) $ticket->baggage_weight > 0)
+                                            {{ (int) $ticket->baggage_weight }} kg
+                                        @else
+                                            Không mua thêm
+                                        @endif
+
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="baggage-price">
+                                        {{ number_format(
+                                            (float) $ticket->baggage_price,
+                                            0,
+                                            ',',
+                                            '.'
+                                        ) }} đ
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="order-total">
+                                        {{ number_format(
+                                            (float) ($booking?->total_amount ?? 0),
+                                            0,
+                                            ',',
+                                            '.'
+                                        ) }} đ
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    @if($ticket->ticket_status === 'active')
+
+                                        <span class="badge active">
+                                            Có hiệu lực
+                                        </span>
+
+                                    @elseif($ticket->ticket_status === 'used')
+
+                                        <span class="badge used">
+                                            Đã sử dụng
+                                        </span>
+
+                                    @elseif($ticket->ticket_status === 'cancelled')
+
+                                        <span class="badge cancelled">
+                                            Đã hủy
+                                        </span>
+
+                                    @else
+
+                                        <span class="badge pending">
                                             Chờ xác nhận
+                                        </span>
+
+                                    @endif
+
+                                </td>
+
+                                <td>
+
+                                    @if($booking?->payment_status === 'paid')
+
+                                        <span class="badge paid">
+                                            Đã thanh toán
                                         </span>
 
                                     @else
@@ -1420,7 +1731,7 @@
                                     colspan="16"
                                     class="empty"
                                 >
-                                    Không tìm thấy vé phù hợp.
+                                    Không có vé nào đang có hiệu lực.
                                 </td>
                             </tr>
 
@@ -1433,7 +1744,6 @@
                 </div>
 
             </section>
-
             <div class="bottom-actions">
 
                 <a

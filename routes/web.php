@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\AircraftController;
 use App\Http\Controllers\Admin\FlightController;
 use App\Http\Controllers\Admin\FlightSeatController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\StatisticController;
 use App\Http\Controllers\Admin\SettingController;
@@ -248,6 +249,10 @@ Route::prefix('admin')
             return view('admin.trang-chu');
         })->name('admin.trang-chu');
 
+          Route::post(
+            '/thong-bao/{notification}/da-doc',
+            [NotificationController::class, 'adminMarkAsRead']
+        )->name('admin.notifications.read');
 
         Route::get(
             '/san-bay',
@@ -392,6 +397,35 @@ Route::prefix('admin')
             [UserController::class, 'update']
         )->name('admin.users.update');
 
+        Route::get(
+            '/nhan-vien',
+            [EmployeeController::class, 'index']
+        )->name('admin.employees.index');
+
+        Route::get(
+            '/nhan-vien/them',
+            [EmployeeController::class, 'create']
+        )->name('admin.employees.create');
+
+        Route::post(
+            '/nhan-vien',
+            [EmployeeController::class, 'store']
+        )->name('admin.employees.store');
+
+        Route::get(
+            '/nhan-vien/{user}/sua',
+            [EmployeeController::class, 'edit']
+        )->name('admin.employees.edit');
+
+        Route::put(
+            '/nhan-vien/{user}',
+            [EmployeeController::class, 'update']
+        )->name('admin.employees.update');
+
+        Route::delete(
+            '/nhan-vien/{user}',
+            [EmployeeController::class, 'destroy']
+        )->name('admin.employees.destroy');
 
         Route::delete(
             '/nguoi-dung/{user}',
@@ -411,10 +445,6 @@ Route::prefix('admin')
         )->name('admin.bookings.show');
 
 
-        Route::post(
-            '/ve/{booking}/xac-nhan-thanh-toan',
-            [AdminBookingController::class, 'confirmPayment']
-        )->name('admin.bookings.confirm-payment');
 
 
         Route::post(

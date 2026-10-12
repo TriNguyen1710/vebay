@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Flight;
-use App\Models\Payment;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -115,8 +114,24 @@ class BookingController extends Controller
         }
 
         $tickets = $query
-            ->orderByDesc('created_at')
-            ->get();
+    ->orderByDesc('created_at')
+    ->get();
+
+$activeTickets = $tickets
+    ->filter(function ($ticket) {
+        return $ticket->ticket_status === 'active'
+            && $ticket->booking?->payment_status === 'paid'
+            && $ticket->booking?->booking_status === 'confirmed';
+    })
+    ->values();
+
+$inactiveTickets = $tickets
+    ->reject(function ($ticket) {
+        return $ticket->ticket_status === 'active'
+            && $ticket->booking?->payment_status === 'paid'
+            && $ticket->booking?->booking_status === 'confirmed';
+    })
+    ->values();
 
         $flights = Flight::with([
             'departureAirport',
@@ -126,17 +141,19 @@ class BookingController extends Controller
             ->orderBy('departure_time')
             ->get();
 
-        return view(
+                return view(
             'admin.bookings.index',
             compact(
                 'tickets',
+                'activeTickets',
+                'inactiveTickets',
                 'flights'
             )
         );
-    }
+}
 
-    public function show(Booking $booking)
-    {
+public function show(Booking $booking)
+{
         $booking->load([
             'user',
             'tickets.flight.departureAirport',
@@ -151,116 +168,7 @@ class BookingController extends Controller
         );
     }
 
-    public function confirmPayment(Booking $booking)
-    {
-        try {
-            DB::transaction(function () use ($booking) {
-                $lockedBooking = Booking::where(
-                    'id',
-                    $booking->id
-                )
-                    ->lockForUpdate()
-                    ->firstOrFail();
 
-                if (
-                    $lockedBooking->booking_status
-                    === 'cancelled'
-                ) {
-                    throw new \Exception(
-                        'Đơn đặt vé đã bị hủy nên không thể xác nhận.'
-                    );
-                }
-
-                if (
-                    $lockedBooking->payment_status
-                    !== 'paid'
-                ) {
-                    throw new \Exception(
-                        'Khách hàng chưa thanh toán đơn đặt vé này.'
-                    );
-                }
-
-                $payment = Payment::where(
-                    'booking_id',
-                    $lockedBooking->id
-                )
-                    ->lockForUpdate()
-                    ->first();
-
-                if (!$payment) {
-                    throw new \Exception(
-                        'Không tìm thấy giao dịch thanh toán của đơn đặt vé này.'
-                    );
-                }
-
-                if (
-                    $payment->payment_status
-                    !== 'paid'
-                ) {
-                    throw new \Exception(
-                        'Giao dịch của đơn đặt vé này chưa ở trạng thái đã thanh toán.'
-                    );
-                }
-
-                $pendingTickets = Ticket::where(
-                    'booking_id',
-                    $lockedBooking->id
-                )
-                    ->where(
-                        'ticket_status',
-                        'pending'
-                    )
-                    ->lockForUpdate()
-                    ->get();
-
-                if (
-                    $lockedBooking->booking_status
-                    === 'confirmed'
-                    && $pendingTickets->isEmpty()
-                ) {
-                    return;
-                }
-
-                if ($pendingTickets->isEmpty()) {
-                    throw new \Exception(
-                        'Đơn đặt vé không có vé nào đang chờ xác nhận.'
-                    );
-                }
-
-                $lockedBooking->update([
-                    'booking_status' => 'confirmed',
-                    'expires_at' => null,
-                ]);
-
-                Ticket::where(
-                    'booking_id',
-                    $lockedBooking->id
-                )
-                    ->where(
-                        'ticket_status',
-                        'pending'
-                    )
-                    ->update([
-                        'ticket_status' => 'active',
-                    ]);
-            });
-        } catch (\Exception $e) {
-            return back()->with(
-                'error',
-                $e->getMessage()
-            );
-        }
-
-        return redirect()
-            ->route(
-                'admin.bookings.show',
-                $booking->id
-            )
-            ->with(
-                'success',
-                'Xác nhận thành công. Vé đã có hiệu lực và nhân viên có thể tra cứu.'
-            );
-    }
 
     public function confirmRefund(
         Booking $booking,

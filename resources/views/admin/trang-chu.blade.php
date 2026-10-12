@@ -196,7 +196,167 @@
             color: var(--muted);
             font-size: 10px;
         }
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
+        .notification-wrapper {
+            position: relative;
+        }
+
+        .notification-button {
+            position: relative;
+            padding: 7px 12px;
+            border: 1px solid #cbdce7;
+            border-radius: 5px;
+            background: white;
+            color: var(--primary);
+            font-size: 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .notification-button:hover {
+            background: var(--primary-light);
+        }
+
+        .notification-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            min-width: 19px;
+            height: 19px;
+            padding: 0 5px;
+            border-radius: 20px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-dropdown {
+            display: none;
+            position: absolute;
+            top: 42px;
+            right: 0;
+            width: 360px;
+            max-height: 420px;
+            overflow-y: auto;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            box-shadow: 0 10px 30px rgba(0, 41, 79, 0.15);
+            z-index: 9999;
+        }
+
+        .notification-dropdown.show {
+            display: block;
+        }
+
+        .notification-header {
+            padding: 15px 17px;
+            border-bottom: 1px solid var(--border);
+            color: var(--primary);
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .notification-item {
+            display: block;
+            padding: 14px 17px;
+            border-bottom: 1px solid #edf0f2;
+            color: var(--text);
+        }
+
+        .notification-item.unread {
+            background: #fff9e8;
+        }
+
+        .notification-item:hover {
+            background: #f5f8fa;
+        }
+
+        .notification-title {
+            margin-bottom: 5px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .notification-message {
+            color: #63717c;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .notification-time {
+            margin-top: 6px;
+            color: #9aa5ad;
+            font-size: 9px;
+        }
+
+        .notification-empty {
+            padding: 25px;
+            color: var(--muted);
+            font-size: 11px;
+            text-align: center;
+        }
+        .admin-notification-popup {
+            position: fixed;
+            top: 85px;
+            left: calc(50% + 122px);
+            transform: translateX(-50%);
+            width: 420px;
+            max-width: calc(100% - 40px);
+            background: white;
+            border: 1px solid #dfe6eb;
+            border-radius: 12px;
+            box-shadow: 0 12px 35px rgba(0, 41, 79, 0.18);
+            padding: 20px 22px;
+            z-index: 10000;
+            animation: popupSlideDown 0.35s ease;
+        }
+
+        .admin-notification-popup-header {
+            color: #003b70;
+            font-size: 14px;
+            font-weight: 800;
+            margin-bottom: 14px;
+        }
+
+        .admin-notification-popup-title {
+            color: #22313f;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        .admin-notification-popup-message {
+            color: #63717c;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .admin-notification-popup-time {
+            margin-top: 10px;
+            color: #9aa5ad;
+            font-size: 10px;
+        }
+
+        @keyframes popupSlideDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
         .admin-badge {
             padding: 7px 11px;
             border: 1px solid #cbdce7;
@@ -624,8 +784,48 @@
         'status',
         'cancelled'
     )->count();
+    $adminNotifications = \App\Models\Notification::where(
+    'user_id',
+    auth()->id()
+)
+    ->orderByDesc('created_at')
+    ->take(5)
+    ->get();
+
+$unreadNotificationCount = \App\Models\Notification::where(
+    'user_id',
+    auth()->id()
+)
+    ->where('status', 'unread')
+    ->count();
+@endphp
+@php
+    $latestUnreadNotification = $adminNotifications
+        ->firstWhere('status', 'unread');
 @endphp
 
+@if($latestUnreadNotification)
+    <div
+        class="admin-notification-popup"
+        id="adminNotificationPopup"
+    >
+        <div class="admin-notification-popup-header">
+            🔔 THÔNG BÁO MỚI
+        </div>
+
+        <div class="admin-notification-popup-title">
+            {{ $latestUnreadNotification->title }}
+        </div>
+
+        <div class="admin-notification-popup-message">
+            {{ $latestUnreadNotification->message }}
+        </div>
+
+        <div class="admin-notification-popup-time">
+            {{ $latestUnreadNotification->created_at->diffForHumans() }}
+        </div>
+    </div>
+@endif
 <div class="admin-layout">
 
     <aside class="sidebar">
@@ -699,18 +899,37 @@
             </a>
 
             <a
-                href="{{ route('admin.bookings.index') }}"
-                class="menu-link"
-            >
-                <span class="menu-icon">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M4 4h16v16H4z" />
-                        <path d="M8 8h8M8 12h8M8 16h5" />
-                    </svg>
-                </span>
+    href="{{ route('admin.bookings.index') }}"
+    class="menu-link"
+>
+    <span class="menu-icon">
+        <svg viewBox="0 0 24 24">
+            <path d="M4 4h16v16H4z" />
+            <path d="M8 8h8M8 12h8M8 16h5" />
+        </svg>
+    </span>
 
-                Quản lý vé
-            </a>
+    <span>Quản lý vé</span>
+
+    @if($unreadNotificationCount > 0)
+        <span style="
+            margin-left: auto;
+            min-width: 20px;
+            height: 20px;
+            padding: 0 6px;
+            border-radius: 20px;
+            background: #dc3545;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        ">
+            {{ $unreadNotificationCount }}
+        </span>
+    @endif
+</a>
 
             <a
                 href="{{ route('admin.users.index') }}"
@@ -726,7 +945,17 @@
 
                 Quản lý người dùng
             </a>
-
+            <a href="{{ route('admin.employees.index') }}" class="menu-link">
+            <span class="menu-icon">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M3 21v-2a6 6 0 0 1 12 0v2" />
+                    <path d="M17 8v6" />
+                    <path d="M14 11h6" />
+                </svg>
+            </span>
+            Quản lý nhân viên
+        </a>
             <a
                 href="{{ route('admin.baggage.index') }}"
                 class="menu-link"
@@ -840,9 +1069,79 @@
                 </p>
             </div>
 
-            <span class="admin-badge">
-                ADMIN
-            </span>
+            <div class="topbar-right">
+
+    <div class="notification-wrapper">
+
+        <button
+            type="button"
+            class="notification-button"
+            id="notificationButton"
+        >
+            Thông báo
+
+            @if($unreadNotificationCount > 0)
+                <span class="notification-count">
+                    {{ $unreadNotificationCount }}
+                </span>
+            @endif
+        </button>
+
+        <div
+            class="notification-dropdown"
+            id="notificationDropdown"
+        >
+
+            <div class="notification-header">
+                Thông báo
+            </div>
+
+            @forelse($adminNotifications as $notification)
+
+               <form
+                    action="{{ route('admin.notifications.read', $notification->id) }}"
+                    method="POST"
+                >
+                    @csrf
+
+                    <button
+                        type="submit"
+                        class="notification-item {{ $notification->status === 'unread' ? 'unread' : '' }}"
+                        style="width: 100%; border: none; text-align: left; cursor: pointer;"
+                    >
+
+                    <div class="notification-title">
+                        {{ $notification->title }}
+                    </div>
+
+                    <div class="notification-message">
+                        {{ $notification->message }}
+                    </div>
+
+                    <div class="notification-time">
+                        {{ $notification->created_at->diffForHumans() }}
+                    </div>
+
+                </button>
+            </form>
+
+            @empty
+
+                <div class="notification-empty">
+                    Chưa có thông báo.
+                </div>
+
+            @endforelse
+
+        </div>
+
+    </div>
+
+    <span class="admin-badge">
+        ADMIN
+    </span>
+
+</div>
 
         </header>
 
@@ -1269,6 +1568,31 @@
     </main>
 
 </div>
+<script>
+    const notificationButton =
+        document.getElementById('notificationButton');
 
+    const notificationDropdown =
+        document.getElementById('notificationDropdown');
+
+    notificationButton.addEventListener('click', function (event) {
+        event.stopPropagation();
+        notificationDropdown.classList.toggle('show');
+    });
+
+    document.addEventListener('click', function (event) {
+        if (!notificationDropdown.contains(event.target)) {
+            notificationDropdown.classList.remove('show');
+        }
+    });
+    const adminNotificationPopup =
+    document.getElementById('adminNotificationPopup');
+
+if (adminNotificationPopup) {
+    setTimeout(function () {
+        adminNotificationPopup.style.display = 'none';
+    }, 5000);
+}
+</script>
 </body>
 </html>

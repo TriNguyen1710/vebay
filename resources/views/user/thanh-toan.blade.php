@@ -1139,9 +1139,9 @@
 
     
 
-    $bankCode = 'VIETCOMBANK';
+    $bankCode = 'MB';
 
-    $bankAccount = '1029213953';
+    $bankAccount = '0769707943';
 
     $bankOwner = 'NGUYEN MINH TRI';
 
@@ -1159,8 +1159,7 @@
     
 
     $transferContent =
-        $booking->booking_code;
-
+    'VJ ' . $booking->booking_code;
 
     
 
@@ -2212,47 +2211,100 @@
 
 
                             <form
-                                action="{{ route(
-                                    'payment.pay',
-                                    $booking->id
-                                ) }}"
+                            action="{{ route(
+                                'payment.pay',
+                                $booking->id
+                            ) }}"
+                            method="POST"
+                            enctype="multipart/form-data"
+                            onsubmit="
+                                return confirm(
+                                    'Gửi hóa đơn để hệ thống tự động kiểm tra thanh toán?'
+                                );
+                            "
+                        >
+                            @csrf
 
-                                method="POST"
-
-                                onsubmit="
-                                    return confirm(
-                                        'Bạn xác nhận đã thanh toán và gửi yêu cầu để Admin kiểm tra?'
-                                    );
-                                "
+                            <input
+                                type="hidden"
+                                name="payment_method"
+                                value="qr_bank"
                             >
 
-                                @csrf
-
+                            <div
+                                style="
+                                    margin-top: 18px;
+                                    padding: 16px;
+                                    background: white;
+                                    border: 1px solid #e0e6eb;
+                                    border-radius: 7px;
+                                "
+                            >
+                                <label
+                                    for="payment_receipt"
+                                    style="
+                                        display: block;
+                                        color: #273847;
+                                        font-size: 13px;
+                                        font-weight: bold;
+                                        margin-bottom: 8px;
+                                    "
+                                >
+                                    Tải ảnh hóa đơn chuyển khoản
+                                </label>
 
                                 <input
-                                    type="hidden"
-                                    name="payment_method"
-                                    value="qr_bank"
+                                    type="file"
+                                    id="payment_receipt"
+                                    name="payment_receipt"
+                                    accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+                                    required
+                                    style="
+                                        width: 100%;
+                                        padding: 10px;
+                                        border: 1px solid #dfe6ed;
+                                        border-radius: 6px;
+                                        background: #f8fafc;
+                                    "
                                 >
 
-
-                                <button
-                                    type="submit"
-                                    class="pay-button"
+                                <div
+                                    style="
+                                        margin-top: 8px;
+                                        color: #6b7280;
+                                        font-size: 11px;
+                                        line-height: 1.5;
+                                    "
                                 >
-                                    Tôi đã thanh toán bằng QR - Gửi xác nhận
-                                </button>
+                                    Sau khi chuyển khoản thành công, hãy tải ảnh hóa đơn.
+                                    Hệ thống sẽ tự động kiểm tra mã đặt vé, mã giao dịch
+                                    và số tiền thanh toán.
+                                </div>
 
-                            </form>
+                                @error('payment_receipt')
+                                    <div
+                                        style="
+                                            margin-top: 8px;
+                                            color: #dc3545;
+                                            font-size: 11px;
+                                        "
+                                    >
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            <button
+                                type="submit"
+                                class="pay-button"
+                            >
+                                Gửi hóa đơn và kiểm tra thanh toán
+                            </button>
+                        </form>
 
                         </div>
 
                     </div>
-
-
-                    
-                    
-                    
 
                     <div
                         id="momo"
@@ -2421,6 +2473,25 @@
 
             <div class="summary-body">
 
+                <div class="summary-row">
+                        <span>
+                            Ngày đặt
+                        </span>
+
+                        <strong>
+                            {{ $booking->created_at->format('d/m/Y H:i') }}
+                        </strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>
+                            Nội dung
+                        </span>
+
+                        <strong>
+                            {{ $transferContent }}
+                        </strong>
+                    </div>
                 <div class="summary-row">
 
                     <span>
