@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="vi">
 
 <head>
@@ -591,7 +592,7 @@
             gap: 6px;
         }
 
-        .remind-btn,
+        
         .face-btn {
             width: 100%;
             min-height: 31px;
@@ -604,14 +605,7 @@
             white-space: nowrap;
         }
 
-        .remind-btn {
-            background: var(--secondary);
-            color: var(--primary-dark);
-        }
-
-        .remind-btn:hover {
-            background: #ffc31a;
-        }
+        
 
         .face-btn {
             display: flex;
@@ -711,7 +705,6 @@
             .reset-btn {
                 width: 100%;
             }
-
         }
 
         @media (max-width: 900px) {
@@ -729,7 +722,6 @@
             .menu {
                 grid-template-columns: repeat(2, 1fr);
             }
-
         }
 
         @media (max-width: 700px) {
@@ -755,7 +747,6 @@
             .menu {
                 grid-template-columns: 1fr;
             }
-
         }
 
     </style>
@@ -860,8 +851,6 @@
 
             </a>
 
-            
-
         </nav>
 
         <div class="sidebar-bottom">
@@ -933,8 +922,8 @@
                     <p>
                         Danh sách hành khách có vé đã thanh toán
                         nhưng chưa được nhân viên xác nhận.
-                        Nhân viên cần nhận diện khuôn mặt hành khách
-                        trước khi xác nhận hoàn tất kiểm tra.
+                        Nhân viên có thể kiểm tra bằng nhận diện khuôn mặt
+                        hoặc xác nhận thông tin thủ công.
                     </p>
 
                 </div>
@@ -1088,8 +1077,8 @@
                         </h3>
 
                         <p>
-                            Chọn nhận diện khuôn mặt để kiểm tra
-                            hành khách trước khi xác nhận.
+                            Chọn xác nhận hành khách để thực hiện
+                            kiểm tra trước khi hoàn tất xác nhận.
                         </p>
 
                     </div>
@@ -1258,21 +1247,23 @@
 
                                     </td>
 
-
                                     <td>
 
                                         <span class="baggage-weight">
 
                                             @if((int) $ticket->baggage_weight > 0)
+
                                                 {{ (int) $ticket->baggage_weight }} kg
+
                                             @else
+
                                                 Không mua thêm
+
                                             @endif
 
                                         </span>
 
                                     </td>
-
 
                                     <td>
 
@@ -1289,7 +1280,6 @@
 
                                     </td>
 
-
                                     <td>
 
                                         <span class="badge status-unchecked">
@@ -1302,47 +1292,17 @@
 
                                         <div class="actions">
 
-                                            <form
-                                                action="{{ route(
-                                                    'nhanvien.tickets.remind',
+                                            
+
+                                            <a
+                                                href="{{ route(
+                                                    'nhanvien.tickets.verification.choose',
                                                     $ticket->id
                                                 ) }}"
-                                                method="POST"
+                                                class="face-btn"
                                             >
-
-                                                @csrf
-
-                                                <button
-                                                    type="submit"
-                                                    class="remind-btn"
-                                                    onclick="return confirm(
-                                                        'Gửi nhắc nhở cho hành khách {{ $ticket->passenger_name }}?'
-                                                    )"
-                                                >
-                                                    Gửi nhắc nhở
-                                                </button>
-
-                                            </form>
-
-                                            @if($ticket->face_image)
-
-                                                <a
-                                                    href="{{ route(
-                                                        'nhanvien.tickets.face',
-                                                        $ticket->id
-                                                    ) }}"
-                                                    class="face-btn"
-                                                >
-                                                    Nhận diện khuôn mặt
-                                                </a>
-
-                                            @else
-
-                                                <div class="face-unavailable">
-                                                    Chưa có ảnh khuôn mặt
-                                                </div>
-
-                                            @endif
+                                                Xác nhận hành khách
+                                            </a>
 
                                         </div>
 

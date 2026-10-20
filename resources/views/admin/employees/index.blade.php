@@ -795,7 +795,8 @@
                                 <th>HỌ TÊN</th>
                                 <th>GMAIL / TÀI KHOẢN</th>
                                 <th>SỐ ĐIỆN THOẠI</th>
-                                <th>TRẠNG THÁI</th>
+                                <th>NGÀY TẠO</th>
+                                <th>XÁC NHẬN EMAIL</th>
                                 <th>THAO TÁC</th>
                             </tr>
                         </thead>
@@ -823,11 +824,56 @@
                                     </td>
 
                                     <td>
-                                        <span class="status">
-                                            <span class="status-dot"></span>
-                                            Hoạt động
-                                        </span>
+                                        {{ $employee->created_at->format('d/m/Y H:i') }}
                                     </td>
+
+<td>
+    @if($employee->employee_account_confirmed_at)
+
+        <span class="status">
+            <span class="status-dot"></span>
+            Đã xác nhận
+        </span>
+
+        <div
+            style="
+                margin-top: 5px;
+                color: #74818c;
+                font-size: 9px;
+            "
+        >
+            {{ $employee->employee_account_confirmed_at->format('d/m/Y H:i') }}
+        </div>
+
+    @else
+
+        <span
+            style="
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+                padding: 5px 9px;
+                border-radius: 20px;
+                background: #fff3cd;
+                color: #856404;
+                font-size: 9px;
+                font-weight: bold;
+            "
+        >
+            <span
+                style="
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 50%;
+                    background: #f4b400;
+                "
+            ></span>
+
+            Chưa xác nhận
+        </span>
+
+    @endif
+</td>
 
                                     <td>
 

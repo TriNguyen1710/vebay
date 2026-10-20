@@ -836,8 +836,7 @@
                     </h1>
 
                     <p>
-                        Tạo tài khoản khách hàng hoặc
-                        nhân viên sân bay trong hệ thống.
+                      
                     </p>
 
                 </div>
@@ -939,59 +938,7 @@
 
                             </div>
 
-                            {{-- ROLE --}}
-                            <div class="role-box">
-
-                                <div class="role-box-title">
-                                    Phân quyền tài khoản
-                                </div>
-
-                                <div class="form-group">
-
-                                    <label for="role">
-                                        Loại tài khoản
-                                        <span class="required">*</span>
-                                    </label>
-
-                                    <select
-                                        id="role"
-                                        name="role"
-                                        required
-                                    >
-
-                                        <option value="">
-                                            -- Chọn loại tài khoản --
-                                        </option>
-
-                                        <option
-                                            value="user"
-                                            {{ old('role') === 'user'
-                                                ? 'selected'
-                                                : '' }}
-                                        >
-                                            Khách hàng
-                                        </option>
-
-                                        <option
-                                            value="nhanvien"
-                                            {{ old('role') === 'nhanvien'
-                                                ? 'selected'
-                                                : '' }}
-                                        >
-                                            Nhân viên sân bay
-                                        </option>
-
-                                    </select>
-
-                                    <div class="field-note">
-                                        Khách hàng sử dụng chức năng đặt vé.
-                                        Nhân viên sân bay sử dụng khu vực
-                                        kiểm tra hành khách và vé.
-                                    </div>
-
-                                </div>
-
-                            </div>
+                            
 
                             {{-- PASSWORD --}}
                             <div class="password-box">

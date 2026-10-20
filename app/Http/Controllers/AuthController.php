@@ -114,6 +114,24 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+
+            if (
+                $user->role === 'nhanvien'
+                && is_null($user->employee_account_confirmed_at)
+            ) {
+                Auth::logout();
+
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return back()
+                    ->withErrors([
+                        'email' => 'Tài khoản nhân viên chưa được xác nhận. Vui lòng kiểm tra Gmail và bấm nút xác nhận tài khoản.',
+                    ])
+                    ->onlyInput('email');
+            }
+
             $request->session()->regenerate();
 
             return $this->redirectTheoQuyen();
@@ -125,7 +143,6 @@ class AuthController extends Controller
             ])
             ->onlyInput('email');
     }
-
 
     public function loginInline(Request $request)
     {
@@ -152,6 +169,31 @@ class AuthController extends Controller
                 ->withErrors(
                     [
                         'email' => 'Email hoặc mật khẩu không chính xác.',
+                    ],
+                    'inlineLogin'
+                )
+                ->withInput()
+                ->with(
+                    'show_inline_login',
+                    true
+                );
+        }
+
+        $user = Auth::user();
+
+        if (
+            $user->role === 'nhanvien'
+            && is_null($user->employee_account_confirmed_at)
+        ) {
+            Auth::logout();
+
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return back()
+                ->withErrors(
+                    [
+                        'email' => 'Tài khoản nhân viên chưa được xác nhận. Vui lòng kiểm tra Gmail và bấm nút xác nhận tài khoản.',
                     ],
                     'inlineLogin'
                 )

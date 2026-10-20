@@ -4,7 +4,6 @@ namespace App\Http\Controllers\NhanVien;
 
 use App\Http\Controllers\Controller;
 use App\Models\Flight;
-use App\Models\Notification;
 use App\Models\Ticket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -178,106 +177,6 @@ class TicketCheckController extends Controller
                 'keyword',
                 'flightId'
             )
-        );
-    }
-
-    public function remind(Ticket $ticket)
-    {
-        $ticket->load([
-            'booking.user',
-            'flight.departureAirport',
-            'flight.arrivalAirport',
-        ]);
-
-        if (!$ticket->booking) {
-            return back()->with(
-                'error',
-                'Không tìm thấy thông tin đặt vé.'
-            );
-        }
-
-        if ($ticket->booking->payment_status !== 'paid') {
-            return back()->with(
-                'error',
-                'Vé chưa thanh toán nên không thể gửi nhắc nhở.'
-            );
-        }
-
-        if ($ticket->ticket_status !== 'active') {
-            if ($ticket->ticket_status === 'used') {
-                return back()->with(
-                    'error',
-                    'Hành khách này đã được kiểm tra.'
-                );
-            }
-
-            return back()->with(
-                'error',
-                'Vé hiện không ở trạng thái hoạt động.'
-            );
-        }
-
-        if (!$ticket->booking->user) {
-            return back()->with(
-                'error',
-                'Không tìm thấy tài khoản khách hàng để gửi thông báo.'
-            );
-        }
-
-        if (!$ticket->flight) {
-            return back()->with(
-                'error',
-                'Không tìm thấy chuyến bay của vé.'
-            );
-        }
-
-        $flight = $ticket->flight;
-
-        $departureCity =
-            $flight->departureAirport->city
-            ?? $flight->departureAirport->name
-            ?? 'Không xác định';
-
-        $arrivalCity =
-            $flight->arrivalAirport->city
-            ?? $flight->arrivalAirport->name
-            ?? 'Không xác định';
-
-        $flightDate = Carbon::parse(
-            $flight->flight_date
-        )->format('d/m/Y');
-
-        $departureTime = Carbon::parse(
-            $flight->departure_time
-        )->format('H:i');
-
-        Notification::create([
-            'user_id' => $ticket->booking->user_id,
-            'ticket_id' => $ticket->id,
-            'sender_id' => Auth::id(),
-            'title' => 'Nhắc nhở chuyến bay ' . $flight->flight_code,
-            'message' =>
-                'Chuyến bay '
-                . $flight->flight_code
-                . ' từ '
-                . $departureCity
-                . ' đến '
-                . $arrivalCity
-                . ' sẽ khởi hành lúc '
-                . $departureTime
-                . ' ngày '
-                . $flightDate
-                . '. Hành khách '
-                . $ticket->passenger_name
-                . ' hiện chưa được kiểm tra. Vui lòng có mặt tại sân bay để làm thủ tục.',
-            'status' => 'unread',
-        ]);
-
-        return back()->with(
-            'success',
-            'Đã gửi nhắc nhở cho hành khách '
-            . $ticket->passenger_name
-            . '.'
         );
     }
 
@@ -666,15 +565,18 @@ class TicketCheckController extends Controller
             );
         }
 
-        $request->validate([
-            'face_image' => [
-                'required',
-                'string',
+        $request->validate(
+            [
+                'face_image' => [
+                    'required',
+                    'string',
+                ],
             ],
-        ], [
-            'face_image.required' =>
-                'Vui lòng chụp khuôn mặt trước khi kiểm tra.',
-        ]);
+            [
+                'face_image.required' =>
+                    'Vui lòng chụp khuôn mặt trước khi kiểm tra.',
+            ]
+        );
 
         $imageData =
             $request->input('face_image');
@@ -786,7 +688,7 @@ class TicketCheckController extends Controller
         );
 
         $pythonPath =
-            'C:\\Users\\tring\\AppData\\Local\\Programs\\Python\\Python312\\python.exe';
+            'C:\Users\tring\AppData\Local\Programs\Python\Python312\python.exe';
 
         if (!file_exists($pythonPath)) {
             @unlink($temporaryPath);
@@ -1004,6 +906,377 @@ class TicketCheckController extends Controller
             ->route(
                 'nhanvien.passengers.unchecked'
             )
+            ->with(
+                'success',
+                'Đã xác nhận hành khách '
+                . $ticket->passenger_name
+                . ' thành công.'
+            );
+    }
+
+    public function chooseVerification(Ticket $ticket)
+    {
+        $ticket->load([
+            'booking',
+            'flight.departureAirport',
+            'flight.arrivalAirport',
+            'flightSeat',
+        ]);
+
+        if (
+            !$ticket->booking
+            ||
+            $ticket->booking->payment_status !== 'paid'
+        ) {
+            return redirect()
+                ->route('nhanvien.tickets.index')
+                ->with(
+                    'error',
+                    'Vé chưa được thanh toán.'
+                );
+        }
+
+        if ($ticket->ticket_status === 'used') {
+            return redirect()
+                ->route('nhanvien.tickets.index')
+                ->with(
+                    'error',
+                    'Hành khách này đã được xác nhận trước đó.'
+                );
+        }
+
+        if ($ticket->ticket_status !== 'active') {
+            return redirect()
+                ->route('nhanvien.tickets.index')
+                ->with(
+                    'error',
+                    'Vé hiện không hợp lệ.'
+                );
+        }
+
+        return view(
+            'nhanvien.chon-cach-xac-nhan',
+            compact('ticket')
+        );
+    }
+
+    public function manualVerification(Ticket $ticket)
+    {
+        $ticket->load([
+            'booking',
+            'flight.departureAirport',
+            'flight.arrivalAirport',
+            'flight.aircraft',
+            'flightSeat',
+        ]);
+
+        if (
+            !$ticket->booking
+            ||
+            $ticket->booking->payment_status !== 'paid'
+        ) {
+            return redirect()
+                ->route('nhanvien.tickets.index')
+                ->with(
+                    'error',
+                    'Vé chưa được thanh toán.'
+                );
+        }
+
+        if ($ticket->ticket_status === 'used') {
+            return redirect()
+                ->route('nhanvien.tickets.index')
+                ->with(
+                    'error',
+                    'Hành khách này đã được xác nhận trước đó.'
+                );
+        }
+
+        if ($ticket->ticket_status === 'cancelled') {
+            return redirect()
+                ->route('nhanvien.tickets.index')
+                ->with(
+                    'error',
+                    'Vé đã bị hủy nên không thể xác nhận.'
+                );
+        }
+
+        if ($ticket->ticket_status !== 'active') {
+            return redirect()
+                ->route('nhanvien.tickets.index')
+                ->with(
+                    'error',
+                    'Vé hiện không hợp lệ.'
+                );
+        }
+
+        $verification = session(
+            'employee_manual_verified_' . $ticket->id
+        );
+
+        $manualVerified =
+            is_array($verification)
+            &&
+            isset(
+                $verification['employee_id'],
+                $verification['verified_at'],
+                $verification['identity_number']
+            )
+            &&
+            (int) $verification['employee_id']
+                === (int) Auth::id()
+            &&
+            now()->timestamp
+                - (int) $verification['verified_at']
+                <= 300
+            &&
+            strcasecmp(
+                trim((string) $verification['identity_number']),
+                trim((string) $ticket->identity_number)
+            ) === 0;
+
+        if (!$manualVerified) {
+            session()->forget(
+                'employee_manual_verified_' . $ticket->id
+            );
+        }
+
+        return view(
+            'nhanvien.xac-nhan-thu-cong',
+            compact(
+                'ticket',
+                'manualVerified'
+            )
+        );
+    }
+
+    public function checkManual(
+        Request $request,
+        Ticket $ticket
+    ) {
+        $ticket->load([
+            'booking',
+            'flight.departureAirport',
+            'flight.arrivalAirport',
+            'flight.aircraft',
+            'flightSeat',
+        ]);
+
+        session()->forget(
+            'employee_manual_verified_' . $ticket->id
+        );
+
+        if (
+            !$ticket->booking
+            ||
+            $ticket->booking->payment_status !== 'paid'
+        ) {
+            return redirect()
+                ->route('nhanvien.tickets.index')
+                ->with(
+                    'error',
+                    'Vé chưa được thanh toán nên không thể kiểm tra.'
+                );
+        }
+
+        if ($ticket->ticket_status === 'used') {
+            return redirect()
+                ->route('nhanvien.tickets.index')
+                ->with(
+                    'error',
+                    'Hành khách này đã được xác nhận trước đó.'
+                );
+        }
+
+        if ($ticket->ticket_status === 'cancelled') {
+            return redirect()
+                ->route('nhanvien.tickets.index')
+                ->with(
+                    'error',
+                    'Vé đã bị hủy nên không thể kiểm tra.'
+                );
+        }
+
+        if ($ticket->ticket_status !== 'active') {
+            return redirect()
+                ->route('nhanvien.tickets.index')
+                ->with(
+                    'error',
+                    'Vé hiện không hợp lệ.'
+                );
+        }
+
+        $request->validate(
+            [
+                'identity_number' => [
+                    'required',
+                    'string',
+                    'max:50',
+                ],
+            ],
+            [
+                'identity_number.required' =>
+                    'Vui lòng nhập CCCD / Hộ chiếu của hành khách.',
+            ]
+        );
+
+        $identityNumber = trim(
+            (string) $request->input('identity_number')
+        );
+
+        $ticketIdentityNumber = trim(
+            (string) $ticket->identity_number
+        );
+
+        if (
+            $ticketIdentityNumber === ''
+            ||
+            strcasecmp(
+                $identityNumber,
+                $ticketIdentityNumber
+            ) !== 0
+        ) {
+            return back()
+                ->withInput()
+                ->with(
+                    'error',
+                    'CCCD / Hộ chiếu không khớp với thông tin hành khách.'
+                );
+        }
+
+        session()->put(
+            'employee_manual_verified_' . $ticket->id,
+            [
+                'employee_id' => Auth::id(),
+                'verified_at' => now()->timestamp,
+                'identity_number' => $ticketIdentityNumber,
+            ]
+        );
+
+        return redirect()
+            ->route(
+                'nhanvien.tickets.manual',
+                $ticket->id
+            )
+            ->with(
+                'success',
+                'Thông tin hành khách đã được tìm thấy.'
+            );
+    }
+
+    public function confirmManual(Ticket $ticket)
+    {
+        $ticket->load([
+            'booking',
+            'flight.departureAirport',
+            'flight.arrivalAirport',
+            'flight.aircraft',
+            'flightSeat',
+        ]);
+
+        if (
+            !$ticket->booking
+            ||
+            $ticket->booking->payment_status !== 'paid'
+        ) {
+            return redirect()
+                ->route('nhanvien.tickets.index')
+                ->with(
+                    'error',
+                    'Vé chưa được thanh toán nên không thể xác nhận.'
+                );
+        }
+
+        if ($ticket->ticket_status === 'used') {
+            session()->forget(
+                'employee_manual_verified_' . $ticket->id
+            );
+
+            return redirect()
+                ->route('nhanvien.tickets.index')
+                ->with(
+                    'error',
+                    'Hành khách này đã được xác nhận trước đó.'
+                );
+        }
+
+        if ($ticket->ticket_status === 'cancelled') {
+            session()->forget(
+                'employee_manual_verified_' . $ticket->id
+            );
+
+            return redirect()
+                ->route('nhanvien.tickets.index')
+                ->with(
+                    'error',
+                    'Vé đã bị hủy nên không thể xác nhận.'
+                );
+        }
+
+        if ($ticket->ticket_status !== 'active') {
+            session()->forget(
+                'employee_manual_verified_' . $ticket->id
+            );
+
+            return redirect()
+                ->route('nhanvien.tickets.index')
+                ->with(
+                    'error',
+                    'Vé hiện không hợp lệ.'
+                );
+        }
+
+        $verification = session(
+            'employee_manual_verified_' . $ticket->id
+        );
+
+        $manualVerified =
+            is_array($verification)
+            &&
+            isset(
+                $verification['employee_id'],
+                $verification['verified_at'],
+                $verification['identity_number']
+            )
+            &&
+            (int) $verification['employee_id']
+                === (int) Auth::id()
+            &&
+            now()->timestamp
+                - (int) $verification['verified_at']
+                <= 300
+            &&
+            strcasecmp(
+                trim((string) $verification['identity_number']),
+                trim((string) $ticket->identity_number)
+            ) === 0;
+
+        if (!$manualVerified) {
+            session()->forget(
+                'employee_manual_verified_' . $ticket->id
+            );
+
+            return redirect()
+                ->route(
+                    'nhanvien.tickets.manual',
+                    $ticket->id
+                )
+                ->with(
+                    'error',
+                    'Vui lòng kiểm tra CCCD / Hộ chiếu trước khi xác nhận hành khách.'
+                );
+        }
+
+        $ticket->update([
+            'ticket_status' => 'used',
+        ]);
+
+        session()->forget(
+            'employee_manual_verified_' . $ticket->id
+        );
+
+        return redirect()
+            ->route('nhanvien.tickets.index')
             ->with(
                 'success',
                 'Đã xác nhận hành khách '

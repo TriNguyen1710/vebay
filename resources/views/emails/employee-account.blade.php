@@ -180,6 +180,59 @@
                             để đăng nhập vào hệ thống nhân viên.
                         </p>
 
+                        <p
+                            style="
+                                margin: 20px 0 15px;
+                                line-height: 1.7;
+                                color: #53626e;
+                                font-size: 13px;
+                            "
+                        >
+                            Sau khi đã nhận được thông tin tài khoản,
+                            vui lòng bấm nút bên dưới để xác nhận với Admin.
+                        </p>
+
+                        <table
+                            width="100%"
+                            cellpadding="0"
+                            cellspacing="0"
+                            border="0"
+                        >
+                            <tr>
+                                <td align="center" style="padding: 5px 0 10px;">
+
+                                    <a
+                                        href="{{ $confirmationUrl }}"
+                                        style="
+                                            display: inline-block;
+                                            padding: 14px 24px;
+                                            background: #003b70;
+                                            color: #ffffff;
+                                            text-decoration: none;
+                                            border-radius: 6px;
+                                            font-size: 13px;
+                                            font-weight: bold;
+                                        "
+                                    >
+                                        XÁC NHẬN ĐÃ NHẬN TÀI KHOẢN
+                                    </a>
+
+                                </td>
+                            </tr>
+                        </table>
+
+                        <p
+                            style="
+                                margin: 12px 0 0;
+                                line-height: 1.7;
+                                color: #74818c;
+                                font-size: 11px;
+                                text-align: center;
+                            "
+                        >
+                            Liên kết xác nhận có hiệu lực trong 7 ngày.
+                        </p>
+
                     </td>
                 </tr>
 

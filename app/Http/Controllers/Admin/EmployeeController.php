@@ -71,6 +71,7 @@ class EmployeeController extends Controller
             'phone' => $request->phone,
             'password' => Hash::make($plainPassword),
             'role' => 'nhanvien',
+            'employee_account_confirmed_at' => null,
         ]);
 
         try {
@@ -96,6 +97,104 @@ class EmployeeController extends Controller
                 'success',
                 'Thêm nhân viên thành công và đã gửi thông tin đăng nhập qua Email.'
             );
+    }
+
+    public function confirmAccount(Request $request, User $user)
+    {
+        if (!$request->hasValidSignature()) {
+            abort(403, 'Liên kết xác nhận không hợp lệ hoặc đã hết hạn.');
+        }
+
+        if ($user->role !== 'nhanvien') {
+            abort(404);
+        }
+
+        if (!$user->employee_account_confirmed_at) {
+            $user->update([
+                'employee_account_confirmed_at' => now(),
+            ]);
+        }
+
+        return response(
+            '<!DOCTYPE html>
+            <html lang="vi">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Xác nhận tài khoản - Vietjet</title>
+            </head>
+            <body style="
+                margin:0;
+                padding:0;
+                background:#f3f6f9;
+                font-family:Arial,Helvetica,sans-serif;
+                color:#22313f;
+            ">
+                <div style="
+                    min-height:100vh;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    padding:20px;
+                    box-sizing:border-box;
+                ">
+                    <div style="
+                        width:100%;
+                        max-width:520px;
+                        background:#ffffff;
+                        border-radius:10px;
+                        padding:40px 35px;
+                        box-sizing:border-box;
+                        text-align:center;
+                        box-shadow:0 5px 20px rgba(0,0,0,0.08);
+                    ">
+                        <div style="
+                            color:#003b70;
+                            font-size:30px;
+                            font-weight:bold;
+                            margin-bottom:25px;
+                        ">
+                            Viet<span style="color:#f4b400;">jet</span>
+                        </div>
+
+                        <div style="
+                            width:65px;
+                            height:65px;
+                            margin:0 auto 20px;
+                            border-radius:50%;
+                            background:#e9f7ef;
+                            color:#198754;
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                            font-size:32px;
+                            font-weight:bold;
+                        ">
+                            ✓
+                        </div>
+
+                        <h2 style="
+                            margin:0 0 15px;
+                            color:#003b70;
+                            font-size:22px;
+                        ">
+                            Xác nhận thành công
+                        </h2>
+
+                        <p style="
+                            margin:0;
+                            color:#53626e;
+                            font-size:14px;
+                            line-height:1.7;
+                        ">
+                            Bạn đã xác nhận nhận được thông tin tài khoản nhân viên.
+                            Admin có thể xem trạng thái xác nhận của bạn trên hệ thống.
+                        </p>
+                    </div>
+                </div>
+            </body>
+            </html>'
+        );
     }
 
     public function edit(User $user)
@@ -150,6 +249,10 @@ class EmployeeController extends Controller
             'phone' => $request->phone,
         ];
 
+        if ($request->email !== $user->email) {
+            $data['employee_account_confirmed_at'] = null;
+        }
+
         if ($request->filled('password')) {
             $data['password'] = Hash::make(
                 $request->password
@@ -181,4 +284,4 @@ class EmployeeController extends Controller
                 'Xóa nhân viên thành công.'
             );
     }
-}
+}   

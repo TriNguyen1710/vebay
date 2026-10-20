@@ -835,8 +835,7 @@
                     </h1>
 
                     <p>
-                        Theo dõi tài khoản khách hàng,
-                        nhân viên sân bay và quản trị viên.
+                        Theo dõi tài khoản khách hàng
                     </p>
 
                 </div>
@@ -905,29 +904,7 @@
 
                 </div>
 
-                <div class="summary-card">
-
-                    <div class="summary-label">
-                        Quản trị viên
-                    </div>
-
-                    <div class="summary-number">
-                        {{ $adminCount }}
-                    </div>
-
-                </div>
-
-                <div class="summary-card">
-
-                    <div class="summary-label">
-                        Nhân viên sân bay
-                    </div>
-
-                    <div class="summary-number">
-                        {{ $employeeCount }}
-                    </div>
-
-                </div>
+                
 
                 <div class="summary-card">
 
@@ -955,7 +932,7 @@
 
                         <p>
                             Quản lý thông tin tài khoản
-                            và loại quyền truy cập hệ thống.
+                            
                         </p>
 
                     </div>

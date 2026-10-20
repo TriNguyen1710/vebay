@@ -239,7 +239,12 @@ Route::middleware('auth')->group(function () {
     )->name('ticket.cancel.submit');
 
 });
-
+Route::get(
+    '/nhan-vien/xac-nhan-tai-khoan/{user}',
+    [EmployeeController::class, 'confirmAccount']
+)
+    ->middleware('signed')
+    ->name('employee.account.confirm');
 
 Route::prefix('admin')
     ->middleware(['auth', 'admin'])
@@ -566,11 +571,7 @@ Route::prefix('nhan-vien')
         )->name('nhanvien.flights.passengers');
 
 
-        Route::post(
-            '/ve/{ticket}/nhac-nho',
-            [TicketCheckController::class, 'remind']
-        )->name('nhanvien.tickets.remind');
-
+       
 
         Route::get(
             '/ve/{ticket}/nhan-dien-khuon-mat',
@@ -588,6 +589,26 @@ Route::prefix('nhan-vien')
             '/ve/{ticket}/xac-nhan',
             [TicketCheckController::class, 'confirm']
         )->name('nhanvien.tickets.confirm');
+
+        Route::get(
+            '/ve/{ticket}/chon-cach-xac-nhan',
+            [TicketCheckController::class, 'chooseVerification']
+        )->name('nhanvien.tickets.verification.choose');
+
+       Route::get(
+            '/ve/{ticket}/xac-nhan-thu-cong',
+            [TicketCheckController::class, 'manualVerification']
+        )->name('nhanvien.tickets.manual');
+
+        Route::post(
+            '/ve/{ticket}/kiem-tra-thu-cong',
+            [TicketCheckController::class, 'checkManual']
+        )->name('nhanvien.tickets.manual.check');
+
+        Route::post(
+            '/ve/{ticket}/xac-nhan-thu-cong',
+            [TicketCheckController::class, 'confirmManual']
+        )->name('nhanvien.tickets.confirm.manual');
 
 
     });

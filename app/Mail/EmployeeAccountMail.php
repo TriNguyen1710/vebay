@@ -8,6 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\URL;
 
 class EmployeeAccountMail extends Mailable
 {
@@ -15,11 +16,20 @@ class EmployeeAccountMail extends Mailable
 
     public User $employee;
     public string $plainPassword;
+    public string $confirmationUrl;
 
     public function __construct(User $employee, string $plainPassword)
     {
         $this->employee = $employee;
         $this->plainPassword = $plainPassword;
+
+        $this->confirmationUrl = URL::temporarySignedRoute(
+            'employee.account.confirm',
+            now()->addDays(7),
+            [
+                'user' => $employee->id,
+            ]
+        );
     }
 
     public function envelope(): Envelope

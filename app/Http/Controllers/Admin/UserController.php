@@ -12,7 +12,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::orderBy('role')
+        $users = User::where('role', 'user')
             ->orderBy('name')
             ->get();
 
@@ -31,7 +31,7 @@ class UserController extends Controller
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|max:255|unique:users,email',
                 'password' => 'required|string|min:4|confirmed',
-                'role' => 'required|in:user,nhanvien',
+                
             ],
             [
                 'name.required' => 'Vui lòng nhập họ tên.',
@@ -44,8 +44,7 @@ class UserController extends Controller
                 'password.min' => 'Mật khẩu phải có ít nhất 4 ký tự.',
                 'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
 
-                'role.required' => 'Vui lòng chọn loại tài khoản.',
-                'role.in' => 'Loại tài khoản không hợp lệ.',
+                
             ]
         );
 
@@ -53,7 +52,7 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => $request->role,
+            'role' => 'user',
         ]);
 
         return redirect()
@@ -79,7 +78,7 @@ class UserController extends Controller
                     Rule::unique('users', 'email')->ignore($user->id),
                 ],
 
-                'role' => 'required|in:user,nhanvien,admin',
+                
 
                 'password' => 'nullable|string|min:4|confirmed',
             ],
@@ -90,9 +89,7 @@ class UserController extends Controller
                 'email.email' => 'Email không đúng định dạng.',
                 'email.unique' => 'Email này đã được sử dụng.',
 
-                'role.required' => 'Vui lòng chọn loại tài khoản.',
-                'role.in' => 'Loại tài khoản không hợp lệ.',
-
+               
                 'password.min' => 'Mật khẩu phải có ít nhất 4 ký tự.',
                 'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
             ]
@@ -117,7 +114,7 @@ class UserController extends Controller
         $data = [
             'name' => $request->name,
             'email' => $request->email,
-            'role' => $request->role,
+            'role' => 'user',
         ];
 
         if ($request->filled('password')) {

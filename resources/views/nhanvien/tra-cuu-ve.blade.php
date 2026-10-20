@@ -868,18 +868,24 @@
         ================================= */
 
         .confirm-btn,
-        .done-btn {
-            min-height: 31px;
+.done-btn {
+    min-height: 38px;
 
-            padding: 0 10px;
+    padding: 0 18px;
 
-            border-radius: 5px;
+    border-radius: 6px;
 
-            font-size: 8px;
-            font-weight: bold;
+    font-size: 10px;
+    font-weight: bold;
 
-            white-space: nowrap;
-        }
+    white-space: nowrap;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    text-decoration: none;
+}
 
         .confirm-btn {
             border: none;
@@ -1679,28 +1685,15 @@
 
                                         @if($ticket->ticket_status === 'active')
 
-                                            <form
-                                                action="{{ route(
-                                                    'nhanvien.tickets.confirm',
+                                            <a
+                                                href="{{ route(
+                                                    'nhanvien.tickets.verification.choose',
                                                     $ticket->id
                                                 ) }}"
-                                                method="POST"
+                                                class="confirm-btn"
                                             >
-
-                                                @csrf
-
-                                                <button
-                                                    type="submit"
-                                                    class="confirm-btn"
-
-                                                    onclick="return confirm(
-                                                        'Xác nhận hành khách {{ $ticket->passenger_name }} đã được kiểm tra?'
-                                                    )"
-                                                >
-                                                    Xác nhận
-                                                </button>
-
-                                            </form>
+                                                Xác nhận
+                                            </a>
 
                                         @elseif($ticket->ticket_status === 'used')
 
