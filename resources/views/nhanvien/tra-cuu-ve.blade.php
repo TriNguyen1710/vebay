@@ -1,19 +1,15 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Tra cứu vé -  Nhân viên</title>
+    <title>Tra cứu vé - Nhân viên</title>
 
     <style>
-
         * {
             margin: 0;
             padding: 0;
@@ -24,25 +20,19 @@
             --primary: #003b70;
             --primary-dark: #00294f;
             --primary-light: #edf5fb;
-
             --secondary: #f4b400;
-
             --background: #f3f6f9;
             --white: #ffffff;
-
             --text: #243746;
             --muted: #74818c;
             --border: #dfe6eb;
-
             --success: #198754;
             --danger: #dc3545;
         }
 
         body {
             min-height: 100vh;
-
             font-family: Arial, Helvetica, sans-serif;
-
             background: var(--background);
             color: var(--text);
         }
@@ -62,7 +52,6 @@
 
         .employee-layout {
             min-height: 100vh;
-
             display: grid;
             grid-template-columns: 245px 1fr;
         }
@@ -73,30 +62,22 @@
 
         .sidebar {
             position: fixed;
-
             top: 0;
             left: 0;
             bottom: 0;
-
             width: 245px;
-
             padding: 26px 16px;
-
             display: flex;
             flex-direction: column;
-
             background: var(--primary-dark);
             color: white;
         }
 
         .logo {
             display: block;
-
             padding: 0 10px;
             margin-bottom: 7px;
-
             color: white;
-
             font-size: 29px;
             font-weight: 800;
             letter-spacing: -1px;
@@ -109,12 +90,9 @@
         .employee-label {
             padding: 0 11px;
             margin-bottom: 31px;
-
             color: #8ca5b6;
-
             font-size: 9px;
             font-weight: bold;
-
             letter-spacing: 1px;
             text-transform: uppercase;
         }
@@ -122,9 +100,7 @@
         .menu-title {
             padding: 0 11px;
             margin-bottom: 10px;
-
             color: #7895aa;
-
             font-size: 9px;
             font-weight: bold;
             letter-spacing: 1.3px;
@@ -137,21 +113,14 @@
 
         .menu-link {
             min-height: 44px;
-
             padding: 0 13px;
-
             border-radius: 7px;
-
             display: flex;
             align-items: center;
-
             gap: 12px;
-
             color: #cad9e4;
-
             font-size: 12px;
             font-weight: 600;
-
             transition: 0.2s;
         }
 
@@ -164,18 +133,15 @@
         .menu-icon {
             width: 17px;
             height: 17px;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             flex-shrink: 0;
         }
 
         .menu-icon svg {
             width: 17px;
             height: 17px;
-
             fill: none;
             stroke: currentColor;
             stroke-width: 1.8;
@@ -196,9 +162,7 @@
 
         .sidebar-bottom {
             margin-top: auto;
-
             padding-top: 22px;
-
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
@@ -208,32 +172,23 @@
 
         .employee-info strong {
             display: block;
-
             margin-bottom: 4px;
-
             font-size: 12px;
         }
 
         .employee-info span {
             color: #8fa5b5;
-
             font-size: 10px;
         }
 
         .logout-btn {
             width: 100%;
-
             padding: 10px;
-
             border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 6px;
-
             background: rgba(255, 255, 255, 0.06);
-
             color: white;
-
             cursor: pointer;
-
             font-size: 11px;
             font-weight: bold;
         }
@@ -249,7 +204,6 @@
 
         .main {
             grid-column: 2;
-
             min-width: 0;
         }
 
@@ -259,13 +213,9 @@
 
         .topbar {
             height: 70px;
-
             padding: 0 30px;
-
             background: white;
-
             border-bottom: 1px solid var(--border);
-
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -273,28 +223,21 @@
 
         .topbar-left h2 {
             margin-bottom: 3px;
-
             color: var(--primary);
-
             font-size: 19px;
         }
 
         .topbar-left p {
             color: var(--muted);
-
             font-size: 10px;
         }
 
         .employee-badge {
             padding: 7px 11px;
-
             border: 1px solid #cbdce7;
             border-radius: 5px;
-
             background: var(--primary-light);
-
             color: var(--primary);
-
             font-size: 10px;
             font-weight: bold;
         }
@@ -305,58 +248,43 @@
 
         .content {
             max-width: 1500px;
-
             margin: auto;
-
             padding: 28px 30px 45px;
         }
 
         .page-heading {
             margin-bottom: 20px;
-
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-
             gap: 20px;
         }
 
         .page-heading h1 {
             margin-bottom: 6px;
-
             color: var(--text);
-
             font-size: 24px;
         }
 
         .page-heading p {
             max-width: 720px;
-
             color: var(--muted);
-
             font-size: 11px;
             line-height: 1.6;
         }
 
         .back-btn {
             min-height: 38px;
-
             padding: 0 15px;
-
             display: inline-flex;
             align-items: center;
             justify-content: center;
-
             border: 1px solid var(--border);
             border-radius: 6px;
-
             background: white;
-
             color: var(--primary);
-
             font-size: 10px;
             font-weight: bold;
-
             white-space: nowrap;
         }
 
@@ -370,30 +298,23 @@
 
         .alert {
             margin-bottom: 16px;
-
             padding: 13px 15px;
-
             border-radius: 7px;
-
             font-size: 10px;
             line-height: 1.6;
         }
 
         .alert-success {
             background: #edf8f2;
-
             border: 1px solid #badfc9;
             border-left: 4px solid var(--success);
-
             color: #17643d;
         }
 
         .alert-error {
             background: #fff0f1;
-
             border: 1px solid #efc0c5;
             border-left: 4px solid var(--danger);
-
             color: #a52a36;
         }
 
@@ -403,16 +324,11 @@
 
         .search-card {
             margin-bottom: 16px;
-
             padding: 18px 20px;
-
             border: 1px solid var(--border);
             border-radius: 9px;
-
             background: white;
-
-            box-shadow:
-                0 3px 12px rgba(20, 45, 65, 0.04);
+            box-shadow: 0 3px 12px rgba(20, 45, 65, 0.04);
         }
 
         .search-header {
@@ -421,48 +337,38 @@
 
         .search-header h3 {
             margin-bottom: 4px;
-
             color: var(--primary);
-
             font-size: 13px;
         }
 
         .search-header p {
             color: var(--muted);
-
             font-size: 9px;
         }
 
         .search-form {
             display: flex;
-
             gap: 9px;
         }
 
         .search-input-wrap {
             position: relative;
-
             flex: 1;
         }
 
         .search-icon {
             position: absolute;
-
             top: 50%;
             left: 13px;
-
             width: 16px;
             height: 16px;
-
             transform: translateY(-50%);
-
             color: #87949d;
         }
 
         .search-icon svg {
             width: 16px;
             height: 16px;
-
             fill: none;
             stroke: currentColor;
             stroke-width: 1.8;
@@ -471,53 +377,37 @@
         .search-form input {
             width: 100%;
             height: 43px;
-
             padding: 0 13px 0 40px;
-
             border: 1px solid #d5dee5;
             border-radius: 6px;
-
             background: white;
-
             color: #394b58;
-
             font-size: 10px;
         }
 
         .search-form input:focus {
             outline: none;
-
             border-color: var(--primary);
-
-            box-shadow:
-                0 0 0 3px rgba(0, 59, 112, 0.06);
+            box-shadow: 0 0 0 3px rgba(0, 59, 112, 0.06);
         }
 
         .search-btn,
         .reset-btn {
             min-height: 43px;
-
             padding: 0 17px;
-
             border-radius: 6px;
-
             display: inline-flex;
             align-items: center;
             justify-content: center;
-
             font-size: 10px;
             font-weight: 800;
-
             white-space: nowrap;
         }
 
         .search-btn {
             border: none;
-
             background: var(--secondary);
-
             color: var(--primary-dark);
-
             cursor: pointer;
         }
 
@@ -527,9 +417,7 @@
 
         .reset-btn {
             border: 1px solid var(--border);
-
             background: white;
-
             color: var(--primary);
         }
 
@@ -543,23 +431,17 @@
 
         .summary {
             margin-bottom: 16px;
-
             padding: 12px 15px;
-
             border: 1px solid #d4e3ed;
             border-left: 4px solid var(--primary);
             border-radius: 6px;
-
             background: var(--primary-light);
-
             color: #526b7a;
-
             font-size: 10px;
         }
 
         .summary strong {
             color: var(--primary);
-
             font-size: 12px;
         }
 
@@ -569,53 +451,38 @@
 
         .panel {
             background: white;
-
             border: 1px solid var(--border);
             border-radius: 10px;
-
-            box-shadow:
-                0 3px 12px rgba(20, 45, 65, 0.04);
-
+            box-shadow: 0 3px 12px rgba(20, 45, 65, 0.04);
             overflow: hidden;
         }
 
         .panel-header {
             min-height: 64px;
-
             padding: 16px 19px;
-
             border-bottom: 1px solid #e8edf1;
-
             display: flex;
             justify-content: space-between;
             align-items: center;
-
             gap: 20px;
         }
 
         .panel-header h3 {
             margin-bottom: 4px;
-
             color: var(--primary);
-
             font-size: 13px;
         }
 
         .panel-header p {
             color: var(--muted);
-
             font-size: 9px;
         }
 
         .count-box {
             padding: 6px 10px;
-
             border-radius: 5px;
-
             background: var(--primary-light);
-
             color: var(--primary);
-
             font-size: 9px;
             font-weight: bold;
         }
@@ -626,15 +493,12 @@
 
         .table-wrapper {
             width: 100%;
-
             overflow-x: auto;
         }
 
         table {
             width: 100%;
-
             min-width: 1520px;
-
             border-collapse: collapse;
         }
 
@@ -644,30 +508,20 @@
 
         th {
             padding: 12px 11px;
-
             text-align: left;
-
             border-bottom: 1px solid var(--border);
-
             color: #52616d;
-
             font-size: 8px;
             font-weight: 800;
-
             white-space: nowrap;
-
             text-transform: uppercase;
         }
 
         td {
             padding: 13px 11px;
-
             border-bottom: 1px solid #edf0f2;
-
             color: #435461;
-
             font-size: 9px;
-
             vertical-align: middle;
         }
 
@@ -685,123 +539,90 @@
 
         .ticket-code {
             margin-bottom: 4px;
-
             color: var(--primary);
-
             font-size: 10px;
             font-weight: 800;
-
             white-space: nowrap;
         }
 
         .booking-code {
             color: var(--muted);
-
             font-size: 8px;
-
             white-space: nowrap;
         }
 
         .passenger-name {
             margin-bottom: 4px;
-
             color: var(--primary-dark);
-
             font-size: 10px;
             font-weight: 700;
-
             white-space: nowrap;
         }
 
         .passenger-phone {
             color: var(--muted);
-
             font-size: 8px;
         }
 
         .flight-code {
             color: var(--primary);
-
             font-weight: 800;
         }
 
         .route-code {
             display: block;
-
             margin-bottom: 3px;
-
             color: var(--primary-dark);
-
             font-weight: 800;
-
             white-space: nowrap;
         }
 
         .route-city {
             color: var(--muted);
-
             font-size: 8px;
-
             white-space: nowrap;
         }
 
         .flight-date {
             color: #435461;
-
             font-weight: 700;
-
             white-space: nowrap;
         }
 
         .flight-time {
             display: block;
-
             margin-top: 3px;
-
             color: var(--muted);
-
             font-size: 8px;
         }
 
         .seat-number {
             min-width: 31px;
-
             padding: 5px 7px;
-
             display: inline-flex;
             justify-content: center;
-
             border: 1px solid #cedde7;
             border-radius: 4px;
-
             background: #f7fafc;
-
             color: var(--primary);
-
             font-weight: 800;
         }
 
         .price {
             color: #364c59;
-
             font-weight: 700;
-
             white-space: nowrap;
         }
 
         .baggage-weight {
             color: var(--primary-dark);
-
             font-weight: 800;
-
             white-space: nowrap;
         }
 
         .baggage-price {
             color: #9b7200;
-
             font-weight: 800;
-
             white-space: nowrap;
         }
 
@@ -811,55 +632,43 @@
 
         .badge {
             padding: 5px 8px;
-
             display: inline-flex;
             align-items: center;
-
             border-radius: 4px;
-
             font-size: 8px;
             font-weight: bold;
-
             white-space: nowrap;
         }
 
         .badge-vip {
             background: #fff8df;
-
             color: #856700;
-
             border: 1px solid #ead58e;
         }
 
         .badge-economy {
             background: var(--primary-light);
-
             color: var(--primary);
-
             border: 1px solid #c8dce8;
         }
 
         .status-active {
             background: #fff8df;
-
             color: #7a6000;
         }
 
         .status-used {
             background: #edf8f2;
-
             color: #17643d;
         }
 
         .status-cancelled {
             background: #fff0f1;
-
             color: #b02a37;
         }
 
         .status-pending {
             background: #f0f2f4;
-
             color: #68747c;
         }
 
@@ -868,32 +677,23 @@
         ================================= */
 
         .confirm-btn,
-.done-btn {
-    min-height: 38px;
-
-    padding: 0 18px;
-
-    border-radius: 6px;
-
-    font-size: 10px;
-    font-weight: bold;
-
-    white-space: nowrap;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    text-decoration: none;
-}
+        .done-btn {
+            min-height: 38px;
+            padding: 0 18px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: bold;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
 
         .confirm-btn {
             border: none;
-
             background: var(--success);
-
             color: white;
-
             cursor: pointer;
         }
 
@@ -903,9 +703,7 @@
 
         .done-btn {
             border: 1px solid #bddfc9;
-
             background: #edf8f2;
-
             color: #17643d;
         }
 
@@ -915,22 +713,16 @@
 
         .empty {
             padding: 52px 20px;
-
             text-align: center;
         }
 
         .empty-icon {
             width: 48px;
             height: 48px;
-
             margin: 0 auto 14px;
-
             border-radius: 50%;
-
             background: var(--primary-light);
-
             color: var(--primary);
-
             display: flex;
             align-items: center;
             justify-content: center;
@@ -939,7 +731,6 @@
         .empty-icon svg {
             width: 23px;
             height: 23px;
-
             fill: none;
             stroke: currentColor;
             stroke-width: 1.6;
@@ -947,23 +738,18 @@
 
         .empty h3 {
             margin-bottom: 7px;
-
             color: var(--primary-dark);
-
             font-size: 14px;
         }
 
         .empty p {
             margin-bottom: 13px;
-
             color: var(--muted);
-
             font-size: 9px;
         }
 
         .empty a {
             color: var(--primary);
-
             font-size: 9px;
             font-weight: bold;
         }
@@ -978,7 +764,6 @@
 
         .bottom-back a {
             color: var(--primary);
-
             font-size: 10px;
             font-weight: bold;
         }
@@ -989,16 +774,11 @@
 
         .footer {
             margin-top: 28px;
-
             padding-top: 18px;
-
             border-top: 1px solid var(--border);
-
             display: flex;
             justify-content: space-between;
-
             color: #919ca4;
-
             font-size: 9px;
         }
 
@@ -1007,31 +787,26 @@
         ================================= */
 
         @media (max-width: 900px) {
-
             .employee-layout {
                 display: block;
             }
 
             .sidebar {
                 position: relative;
-
                 width: 100%;
                 height: auto;
             }
 
             .menu {
-                grid-template-columns:
-                    repeat(2, 1fr);
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .main {
                 margin-left: 0;
             }
-
         }
 
         @media (max-width: 700px) {
-
             .content {
                 padding: 20px 15px 35px;
             }
@@ -1058,23 +833,184 @@
             .menu {
                 grid-template-columns: 1fr;
             }
-
         }
 
-    </style>
+        /* ================================
+           BỘ LỌC TRA CỨU VÉ
+        ================================= */
 
+        .search-form.ticket-filter-form {
+            display: block;
+        }
+
+        .ticket-filter-grid {
+            display: grid;
+            grid-template-columns: 2fr 1.1fr 1.2fr 1.5fr 1fr;
+            gap: 14px;
+            align-items: end;
+        }
+
+        .ticket-filter-field {
+            min-width: 0;
+        }
+
+        .ticket-filter-field label {
+            display: block;
+            margin-bottom: 7px;
+            color: #465763;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .ticket-filter-field select,
+        .ticket-filter-field input[type="date"] {
+            width: 100%;
+            height: 43px;
+            padding: 0 11px;
+            border: 1px solid #d5dee5;
+            border-radius: 6px;
+            background: white;
+            color: #394b58;
+            font-family: inherit;
+            font-size: 10px;
+        }
+
+        .ticket-filter-field select:focus,
+        .ticket-filter-field input[type="date"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 59, 112, 0.06);
+        }
+
+        .ticket-filter-actions {
+            display: flex;
+            gap: 9px;
+            margin-top: 16px;
+        }
+
+        .confirmation-panel {
+            margin-bottom: 20px;
+        }
+
+        .confirmation-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 24px;
+        }
+
+        @media (max-width: 1200px) {
+            .ticket-filter-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 700px) {
+            .ticket-filter-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ticket-filter-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 
 <body>
+@php
+    $selectedFlightDate = request('flight_date', '');
+    $selectedFlightDate = is_string($selectedFlightDate)
+        ? trim($selectedFlightDate)
+        : '';
+
+    $selectedTicketStatus = request('ticket_status', '');
+    $selectedTicketStatus = in_array(
+        $selectedTicketStatus,
+        ['active', 'used'],
+        true
+    )
+        ? $selectedTicketStatus
+        : '';
+
+    $selectedFlightId = request('flight_id', '');
+    $selectedFlightId = is_string($selectedFlightId)
+        ? trim($selectedFlightId)
+        : '';
+
+    $selectedSeatClass = request('seat_class', '');
+    $selectedSeatClass = in_array(
+        $selectedSeatClass,
+        ['economy', 'vip'],
+        true
+    )
+        ? $selectedSeatClass
+        : '';
+
+    $flightFilterOptions = \App\Models\Flight::with([
+        'departureAirport',
+        'arrivalAirport',
+    ])
+        ->orderByDesc('flight_date')
+        ->orderBy('departure_time')
+        ->get();
+
+    $filteredTickets = $tickets->filter(function ($ticket) use (
+        $selectedFlightDate,
+        $selectedTicketStatus,
+        $selectedFlightId,
+        $selectedSeatClass
+    ) {
+        if (
+            $selectedFlightDate !== '' &&
+            (
+                !$ticket->flight ||
+                \Carbon\Carbon::parse(
+                    $ticket->flight->flight_date
+                )->format('Y-m-d') !== $selectedFlightDate
+            )
+        ) {
+            return false;
+        }
+
+        if (
+            $selectedTicketStatus !== '' &&
+            $ticket->ticket_status !== $selectedTicketStatus
+        ) {
+            return false;
+        }
+
+        if (
+            $selectedFlightId !== '' &&
+            (string) $ticket->flight_id !== $selectedFlightId
+        ) {
+            return false;
+        }
+
+        if (
+            $selectedSeatClass !== '' &&
+            $ticket->seat_class !== $selectedSeatClass
+        ) {
+            return false;
+        }
+
+        return true;
+    })->values();
+
+    $unconfirmedTickets = $filteredTickets
+        ->where('ticket_status', 'active')
+        ->values();
+
+    $confirmedTickets = $filteredTickets
+        ->where('ticket_status', 'used')
+        ->values();
+@endphp
 
 <div class="employee-layout">
-
     {{-- ========================= --}}
     {{-- SIDEBAR --}}
     {{-- ========================= --}}
 
     <aside class="sidebar">
-
         <a
             href="{{ route('nhanvien.trang-chu') }}"
             class="logo"
@@ -1091,26 +1027,21 @@
         </div>
 
         <nav class="menu">
-
             {{-- TỔNG QUAN --}}
             <a
                 href="{{ route('nhanvien.trang-chu') }}"
                 class="menu-link"
             >
-
                 <span class="menu-icon">
-
                     <svg viewBox="0 0 24 24">
                         <rect x="3" y="3" width="7" height="7"/>
                         <rect x="14" y="3" width="7" height="7"/>
                         <rect x="3" y="14" width="7" height="7"/>
                         <rect x="14" y="14" width="7" height="7"/>
                     </svg>
-
                 </span>
 
                 Tổng quan
-
             </a>
 
             {{-- TRA CỨU VÉ --}}
@@ -1118,19 +1049,15 @@
                 href="{{ route('nhanvien.tickets.index') }}"
                 class="menu-link active"
             >
-
                 <span class="menu-icon">
-
                     <svg viewBox="0 0 24 24">
                         <path d="M4 5h16v14H4z"/>
                         <path d="M8 9h8"/>
                         <path d="M8 13h5"/>
                     </svg>
-
                 </span>
 
                 Tra cứu vé
-
             </a>
 
             {{-- HÀNH KHÁCH --}}
@@ -1138,19 +1065,15 @@
                 href="{{ route('nhanvien.passengers.unchecked') }}"
                 class="menu-link"
             >
-
                 <span class="menu-icon">
-
                     <svg viewBox="0 0 24 24">
                         <circle cx="9" cy="8" r="4"/>
                         <path d="M3 21v-2a6 6 0 0 1 12 0v2"/>
                         <path d="M16 11a4 4 0 0 1 5 4"/>
                     </svg>
-
                 </span>
 
                 Hành khách chưa kiểm tra
-
             </a>
 
             {{-- FLIGHT --}}
@@ -1158,29 +1081,21 @@
                 href="{{ route('nhanvien.flights.index') }}"
                 class="menu-link"
             >
-
                 <span class="menu-icon">
-
                     <svg viewBox="0 0 24 24">
                         <path d="M2 16l20-5-20-5 3 5-3 5z"/>
                     </svg>
-
                 </span>
 
                 Danh sách chuyến bay
-
             </a>
 
             {{-- FACE --}}
-            
-
         </nav>
 
         {{-- EMPLOYEE INFO --}}
         <div class="sidebar-bottom">
-
             <div class="employee-info">
-
                 <strong>
                     {{ auth()->user()->name }}
                 </strong>
@@ -1188,14 +1103,12 @@
                 <span>
                     Nhân viên sân bay
                 </span>
-
             </div>
 
             <form
                 action="{{ route('dang-xuat') }}"
                 method="POST"
             >
-
                 @csrf
 
                 <button
@@ -1204,52 +1117,38 @@
                 >
                     Đăng xuất
                 </button>
-
             </form>
-
         </div>
-
     </aside>
-
 
     {{-- ========================= --}}
     {{-- MAIN --}}
     {{-- ========================= --}}
 
     <main class="main">
-
         {{-- TOPBAR --}}
         <header class="topbar">
-
             <div class="topbar-left">
-
                 <h2>
-                    
                 </h2>
 
                 <p>
                     Tra cứu và xác nhận thông tin vé hành khách
                 </p>
-
             </div>
 
             <span class="employee-badge">
                 NHÂN VIÊN
             </span>
-
         </header>
 
-
         <div class="content">
-
             {{-- ========================= --}}
             {{-- PAGE HEADING --}}
             {{-- ========================= --}}
 
             <div class="page-heading">
-
                 <div>
-
                     <h1>
                         Tra cứu vé
                     </h1>
@@ -1259,7 +1158,6 @@
                         Có thể tìm kiếm bằng mã vé,
                         mã đặt vé, tên hành khách hoặc CCCD / Hộ chiếu.
                     </p>
-
                 </div>
 
                 <a
@@ -1268,525 +1166,506 @@
                 >
                     ← Quay lại trang nhân viên
                 </a>
-
             </div>
-
 
             {{-- ========================= --}}
             {{-- ALERT --}}
             {{-- ========================= --}}
 
             @if(session('success'))
-
                 <div class="alert alert-success">
                     {{ session('success') }}
                 </div>
-
             @endif
 
             @if(session('error'))
-
                 <div class="alert alert-error">
                     {{ session('error') }}
                 </div>
-
             @endif
-
 
             {{-- ========================= --}}
             {{-- SEARCH --}}
             {{-- ========================= --}}
 
             <section class="search-card">
-
                 <div class="search-header">
-
                     <h3>
-                        Tìm kiếm vé
+                        Tìm kiếm và lọc vé
                     </h3>
 
                     <p>
-                        Nhập một trong các thông tin
-                        để lọc danh sách vé.
+                        Kết hợp từ khóa, ngày bay, trạng thái xác nhận,
+                        chuyến bay và hạng ghế để lọc danh sách vé.
                     </p>
-
                 </div>
 
                 <form
                     action="{{ route('nhanvien.tickets.search') }}"
                     method="GET"
-                    class="search-form"
+                    class="search-form ticket-filter-form"
                 >
+                    <div class="ticket-filter-grid">
+                        <div class="ticket-filter-field">
+                            <label for="keyword">
+                                Tìm kiếm
+                            </label>
 
-                    <div class="search-input-wrap">
+                            <div class="search-input-wrap">
+                                <span class="search-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <circle cx="11" cy="11" r="7"/>
+                                        <path d="M20 20l-4-4"/>
+                                    </svg>
+                                </span>
 
-                        <span class="search-icon">
+                                <input
+                                    type="text"
+                                    id="keyword"
+                                    name="keyword"
+                                    value="{{ $keyword ?? '' }}"
+                                    placeholder="Mã vé, mã đặt vé, tên hoặc CCCD..."
+                                >
+                            </div>
+                        </div>
 
-                            <svg viewBox="0 0 24 24">
-                                <circle cx="11" cy="11" r="7"/>
-                                <path d="M20 20l-4-4"/>
-                            </svg>
+                        <div class="ticket-filter-field">
+                            <label for="flight_date">
+                                Ngày bay
+                            </label>
 
-                        </span>
+                            <input
+                                type="date"
+                                id="flight_date"
+                                name="flight_date"
+                                value="{{ $selectedFlightDate }}"
+                            >
+                        </div>
 
-                        <input
-                            type="text"
-                            name="keyword"
+                        <div class="ticket-filter-field">
+                            <label for="ticket_status">
+                                Trạng thái xác nhận
+                            </label>
 
-                            value="{{ $keyword ?? '' }}"
+                            <select
+                                id="ticket_status"
+                                name="ticket_status"
+                            >
+                                <option value="">
+                                    Tất cả
+                                </option>
 
-                            placeholder="Nhập mã vé, mã đặt vé, tên hành khách hoặc CCCD..."
-                        >
+                                <option
+                                    value="active"
+                                    {{ $selectedTicketStatus === 'active' ? 'selected' : '' }}
+                                >
+                                    Chưa xác nhận
+                                </option>
 
+                                <option
+                                    value="used"
+                                    {{ $selectedTicketStatus === 'used' ? 'selected' : '' }}
+                                >
+                                    Đã xác nhận
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="ticket-filter-field">
+                            <label for="flight_id">
+                                Chuyến bay
+                            </label>
+
+                            <select
+                                id="flight_id"
+                                name="flight_id"
+                            >
+                                <option value="">
+                                    Tất cả chuyến bay
+                                </option>
+
+                                @foreach($flightFilterOptions as $flightOption)
+                                    <option
+                                        value="{{ $flightOption->id }}"
+                                        {{ $selectedFlightId === (string) $flightOption->id ? 'selected' : '' }}
+                                    >
+                                        {{ $flightOption->flight_code }}
+                                        - {{ $flightOption->departureAirport->city ?? '---' }}
+                                        → {{ $flightOption->arrivalAirport->city ?? '---' }}
+                                        ({{ \Carbon\Carbon::parse($flightOption->flight_date)->format('d/m/Y') }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="ticket-filter-field">
+                            <label for="seat_class">
+                                Hạng ghế
+                            </label>
+
+                            <select
+                                id="seat_class"
+                                name="seat_class"
+                            >
+                                <option value="">
+                                    Tất cả
+                                </option>
+
+                                <option
+                                    value="economy"
+                                    {{ $selectedSeatClass === 'economy' ? 'selected' : '' }}
+                                >
+                                    Phổ thông
+                                </option>
+
+                                <option
+                                    value="vip"
+                                    {{ $selectedSeatClass === 'vip' ? 'selected' : '' }}
+                                >
+                                    VIP
+                                </option>
+                            </select>
+                        </div>
                     </div>
 
-                    <button
-                        type="submit"
-                        class="search-btn"
-                    >
-                        Tìm kiếm
-                    </button>
+                    <div class="ticket-filter-actions">
+                        <button
+                            type="submit"
+                            class="search-btn"
+                        >
+                            Tìm / Lọc
+                        </button>
 
-                    <a
-                        href="{{ route('nhanvien.tickets.index') }}"
-                        class="reset-btn"
-                    >
-                        Hiện tất cả
-                    </a>
-
+                        <a
+                            href="{{ route('nhanvien.tickets.index') }}"
+                            class="reset-btn"
+                        >
+                            Đặt lại bộ lọc
+                        </a>
+                    </div>
                 </form>
-
             </section>
-
 
             {{-- ========================= --}}
             {{-- SUMMARY --}}
             {{-- ========================= --}}
 
-            <div class="summary">
+            <div class="summary confirmation-summary">
+                <span>
+                    Tổng số vé đang hiển thị:
+                    <strong>{{ $filteredTickets->count() }}</strong>
+                </span>
 
-                Tổng số vé đang hiển thị:
+                <span>
+                    Chưa xác nhận:
+                    <strong>{{ $unconfirmedTickets->count() }}</strong>
+                </span>
 
-                <strong>
-                    {{ $tickets->count() }}
-                </strong>
-
+                <span>
+                    Đã xác nhận:
+                    <strong>{{ $confirmedTickets->count() }}</strong>
+                </span>
             </div>
-
 
             {{-- ========================= --}}
             {{-- TABLE --}}
             {{-- ========================= --}}
 
-            <section class="panel">
-
-                <div class="panel-header">
-
-                    <div>
-
-                        <h3>
-                            Danh sách vé hành khách
-                        </h3>
-
-                        <p>
-                            Chỉ hiển thị các vé thuộc
-                            đơn đặt vé đã thanh toán.
-                        </p>
-
-                    </div>
-
-                    <span class="count-box">
-                        {{ $tickets->count() }} vé
-                    </span>
-
-                </div>
-
-
-                @if($tickets->count() > 0)
-
-                    <div class="table-wrapper">
-
-                        <table>
-
-                            <thead>
-
-                                <tr>
-
-                                    <th>STT</th>
-
-                                    <th>Mã vé</th>
-
-                                    <th>Hành khách</th>
-
-                                    <th>CCCD / Hộ chiếu</th>
-
-                                    <th>Chuyến bay</th>
-
-                                    <th>Hành trình</th>
-
-                                    <th>Ngày bay</th>
-
-                                    <th>Ghế</th>
-
-                                    <th>Hạng</th>
-
-                                    <th>Giá vé</th>
-
-                                    <th>Hành lý ký gửi</th>
-
-                                    <th>Phí hành lý</th>
-
-                                    <th>Trạng thái</th>
-
-                                    <th>Thao tác</th>
-
-                                </tr>
-
-                            </thead>
-
-                            <tbody>
-
-                            @foreach($tickets as $ticket)
-
-                                <tr>
-
-                                    {{-- STT --}}
-                                    <td>
-                                        {{ $loop->iteration }}
-                                    </td>
-
-                                    {{-- TICKET CODE --}}
-                                    <td>
-
-                                        <div class="ticket-code">
-
-                                            {{ $ticket->ticket_code }}
-
-                                        </div>
-
-                                        <div class="booking-code">
-
-                                            Mã đặt:
-                                            {{ $ticket->booking->booking_code ?? '---' }}
-
-                                        </div>
-
-                                    </td>
-
-                                    {{-- PASSENGER --}}
-                                    <td>
-
-                                        <div class="passenger-name">
-
-                                            {{ $ticket->passenger_name }}
-
-                                        </div>
-
-                                        @if($ticket->phone)
-
-                                            <div class="passenger-phone">
-
-                                                {{ $ticket->phone }}
-
-                                            </div>
-
-                                        @endif
-
-                                    </td>
-
-                                    {{-- IDENTITY --}}
-                                    <td>
-
-                                        {{ $ticket->identity_number ?? '---' }}
-
-                                    </td>
-
-                                    {{-- FLIGHT --}}
-                                    <td>
-
-                                        <span class="flight-code">
-
-                                            {{ $ticket->flight->flight_code ?? '---' }}
-
-                                        </span>
-
-                                    </td>
-
-                                    {{-- ROUTE --}}
-                                    <td>
-
-                                        <span class="route-code">
-
-                                            {{ $ticket->flight->departureAirport->code ?? '---' }}
-
-                                            →
-
-                                            {{ $ticket->flight->arrivalAirport->code ?? '---' }}
-
-                                        </span>
-
-                                        <span class="route-city">
-
-                                            {{ $ticket->flight->departureAirport->city ?? '---' }}
-
-                                            →
-
-                                            {{ $ticket->flight->arrivalAirport->city ?? '---' }}
-
-                                        </span>
-
-                                    </td>
-
-                                    {{-- DATE --}}
-                                    <td>
-
-                                        @if($ticket->flight)
-
-                                            <span class="flight-date">
-
-                                                {{ \Carbon\Carbon::parse(
-                                                    $ticket->flight->flight_date
-                                                )->format('d/m/Y') }}
-
-                                            </span>
-
-                                            <span class="flight-time">
-
-                                                {{
-                                                    substr(
-                                                        $ticket->flight->departure_time,
-                                                        0,
-                                                        5
-                                                    )
-                                                }}
-
-                                            </span>
-
-                                        @else
-
-                                            ---
-
-                                        @endif
-
-                                    </td>
-
-                                    {{-- SEAT --}}
-                                    <td>
-
-                                        <span class="seat-number">
-
-                                            {{ $ticket->flightSeat->seat_number ?? '---' }}
-
-                                        </span>
-
-                                    </td>
-
-                                    {{-- CLASS --}}
-                                    <td>
-
-                                        @if($ticket->seat_class === 'vip')
-
-                                            <span class="badge badge-vip">
-                                                VIP
-                                            </span>
-
-                                        @else
-
-                                            <span class="badge badge-economy">
-                                                Phổ thông
-                                            </span>
-
-                                        @endif
-
-                                    </td>
-
-                                    {{-- PRICE --}}
-                                    <td>
-
-                                        <span class="price">
-
-                                            {{ number_format(
-                                                $ticket->price,
-                                                0,
-                                                ',',
-                                                '.'
-                                            ) }} đ
-
-                                        </span>
-
-                                    </td>
-
-
-                                    <td>
-
-                                        <span class="baggage-weight">
-
-                                            @if((int) $ticket->baggage_weight > 0)
-                                                {{ (int) $ticket->baggage_weight }} kg
-                                            @else
-                                                Không mua thêm
-                                            @endif
-
-                                        </span>
-
-                                    </td>
-
-
-                                    <td>
-
-                                        <span class="baggage-price">
-
-                                            {{ number_format(
-                                                (float) $ticket->baggage_price,
-                                                0,
-                                                ',',
-                                                '.'
-                                            ) }} đ
-
-                                        </span>
-
-                                    </td>
-
-                                    {{-- STATUS --}}
-                                    <td>
-
-                                        @if($ticket->ticket_status === 'active')
-
-                                            <span class="badge status-active">
-                                                Chưa kiểm tra
-                                            </span>
-
-                                        @elseif($ticket->ticket_status === 'used')
-
-                                            <span class="badge status-used">
-                                                Đã kiểm tra
-                                            </span>
-
-                                        @elseif($ticket->ticket_status === 'cancelled')
-
-                                            <span class="badge status-cancelled">
-                                                Đã hủy
-                                            </span>
-
-                                        @else
-
-                                            <span class="badge status-pending">
-
-                                                {{ $ticket->ticket_status }}
-
-                                            </span>
-
-                                        @endif
-
-                                    </td>
-
-                                    {{-- ACTION --}}
-                                    <td>
-
-                                        @if($ticket->ticket_status === 'active')
-
-                                            <a
-                                                href="{{ route(
-                                                    'nhanvien.tickets.verification.choose',
-                                                    $ticket->id
-                                                ) }}"
-                                                class="confirm-btn"
-                                            >
-                                                Xác nhận
-                                            </a>
-
-                                        @elseif($ticket->ticket_status === 'used')
-
-                                            <button
-                                                type="button"
-                                                class="done-btn"
-                                                disabled
-                                            >
-                                                Đã kiểm tra
-                                            </button>
-
-                                        @else
-
-                                            ---
-
-                                        @endif
-
-                                    </td>
-
-                                </tr>
-
-                            @endforeach
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-                @else
-
-                    <div class="empty">
-
-                        <div class="empty-icon">
-
-                            <svg viewBox="0 0 24 24">
-                                <circle cx="11" cy="11" r="7"/>
-                                <path d="M20 20l-4-4"/>
-                            </svg>
-
+            @foreach([
+                [
+                    'title' => 'Vé chưa xác nhận',
+                    'tickets' => $unconfirmedTickets,
+                    'empty' => 'Không có vé chưa xác nhận phù hợp',
+                ],
+                [
+                    'title' => 'Vé đã xác nhận',
+                    'tickets' => $confirmedTickets,
+                    'empty' => 'Không có vé đã xác nhận phù hợp',
+                ],
+            ] as $ticketSection)
+
+                @php
+                    $tableTickets = $ticketSection['tickets'];
+                @endphp
+
+                <section class="panel confirmation-panel">
+                    <div class="panel-header">
+                        <div>
+                            <h3>
+                                {{ $ticketSection['title'] }}
+                            </h3>
+
+                            <p>
+                                Chỉ hiển thị các vé thuộc
+                                đơn đặt vé đã thanh toán.
+                            </p>
                         </div>
 
-                        <h3>
-                            Không tìm thấy vé
-                        </h3>
-
-                        <p>
-                            Thử nhập mã vé, mã đặt vé,
-                            tên hành khách hoặc CCCD khác.
-                        </p>
-
-                        <a href="{{ route('nhanvien.tickets.index') }}">
-                            Hiện toàn bộ vé
-                        </a>
-
+                        <span class="count-box">
+                            {{ $tableTickets->count() }} vé
+                        </span>
                     </div>
 
-                @endif
+                    @if($tableTickets->count() > 0)
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Mã vé</th>
+                                        <th>Hành khách</th>
+                                        <th>CCCD / Hộ chiếu</th>
+                                        <th>Chuyến bay</th>
+                                        <th>Hành trình</th>
+                                        <th>Ngày bay</th>
+                                        <th>Ghế</th>
+                                        <th>Hạng</th>
+                                        <th>Giá vé</th>
+                                        <th>Hành lý ký gửi</th>
+                                        <th>Phí hành lý</th>
+                                        <th>Trạng thái</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
 
-            </section>
+                                <tbody>
+                                @foreach($tableTickets as $ticket)
+                                    <tr>
+                                        {{-- STT --}}
+                                        <td>
+                                            {{ $loop->iteration }}
+                                        </td>
 
+                                        {{-- TICKET CODE --}}
+                                        <td>
+                                            <div class="ticket-code">
+                                                {{ $ticket->ticket_code }}
+                                            </div>
+
+                                            <div class="booking-code">
+                                                Mã đặt:
+                                                {{ $ticket->booking->booking_code ?? '---' }}
+                                            </div>
+                                        </td>
+
+                                        {{-- PASSENGER --}}
+                                        <td>
+                                            <div class="passenger-name">
+                                                {{ $ticket->passenger_name }}
+                                            </div>
+
+                                            @if($ticket->phone)
+                                                <div class="passenger-phone">
+                                                    {{ $ticket->phone }}
+                                                </div>
+                                            @endif
+                                        </td>
+
+                                        {{-- IDENTITY --}}
+                                        <td>
+                                            {{ $ticket->identity_number ?? '---' }}
+                                        </td>
+
+                                        {{-- FLIGHT --}}
+                                        <td>
+                                            <span class="flight-code">
+                                                {{ $ticket->flight->flight_code ?? '---' }}
+                                            </span>
+                                        </td>
+
+                                        {{-- ROUTE --}}
+                                        <td>
+                                            <span class="route-code">
+                                                {{ $ticket->flight->departureAirport->code ?? '---' }}
+
+                                                →
+
+                                                {{ $ticket->flight->arrivalAirport->code ?? '---' }}
+                                            </span>
+
+                                            <span class="route-city">
+                                                {{ $ticket->flight->departureAirport->city ?? '---' }}
+
+                                                →
+
+                                                {{ $ticket->flight->arrivalAirport->city ?? '---' }}
+                                            </span>
+                                        </td>
+
+                                        {{-- DATE --}}
+                                        <td>
+                                            @if($ticket->flight)
+                                                <span class="flight-date">
+                                                    {{ \Carbon\Carbon::parse(
+                                                        $ticket->flight->flight_date
+                                                    )->format('d/m/Y') }}
+                                                </span>
+
+                                                <span class="flight-time">
+                                                    {{
+                                                        substr(
+                                                            $ticket->flight->departure_time,
+                                                            0,
+                                                            5
+                                                        )
+                                                    }}
+                                                </span>
+                                            @else
+                                                ---
+                                            @endif
+                                        </td>
+
+                                        {{-- SEAT --}}
+                                        <td>
+                                            <span class="seat-number">
+                                                {{ $ticket->flightSeat->seat_number ?? '---' }}
+                                            </span>
+                                        </td>
+
+                                        {{-- CLASS --}}
+                                        <td>
+                                            @if($ticket->seat_class === 'vip')
+                                                <span class="badge badge-vip">
+                                                    VIP
+                                                </span>
+                                            @else
+                                                <span class="badge badge-economy">
+                                                    Phổ thông
+                                                </span>
+                                            @endif
+                                        </td>
+
+                                        {{-- PRICE --}}
+                                        <td>
+                                            <span class="price">
+                                                {{ number_format(
+                                                    $ticket->price,
+                                                    0,
+                                                    ',',
+                                                    '.'
+                                                ) }} đ
+                                            </span>
+                                        </td>
+
+                                        {{-- BAGGAGE --}}
+                                        <td>
+                                            <span class="baggage-weight">
+                                                @if((int) $ticket->baggage_weight > 0)
+                                                    {{ (int) $ticket->baggage_weight }} kg
+                                                @else
+                                                    Không mua thêm
+                                                @endif
+                                            </span>
+                                        </td>
+
+                                        {{-- BAGGAGE PRICE --}}
+                                        <td>
+                                            <span class="baggage-price">
+                                                {{ number_format(
+                                                    (float) $ticket->baggage_price,
+                                                    0,
+                                                    ',',
+                                                    '.'
+                                                ) }} đ
+                                            </span>
+                                        </td>
+
+                                        {{-- STATUS --}}
+                                        <td>
+                                            @if($ticket->ticket_status === 'active')
+                                                <span class="badge status-active">
+                                                    Chưa xác nhận
+                                                </span>
+                                            @elseif($ticket->ticket_status === 'used')
+                                                <span class="badge status-used">
+                                                    Đã xác nhận
+                                                </span>
+                                            @elseif($ticket->ticket_status === 'cancelled')
+                                                <span class="badge status-cancelled">
+                                                    Đã hủy
+                                                </span>
+                                            @else
+                                                <span class="badge status-pending">
+                                                    {{ $ticket->ticket_status }}
+                                                </span>
+                                            @endif
+                                        </td>
+
+                                        {{-- ACTION --}}
+                                        <td>
+                                            @if($ticket->ticket_status === 'active')
+                                                <a
+                                                    href="{{ route(
+                                                        'nhanvien.tickets.verification.choose',
+                                                        $ticket->id
+                                                    ) }}"
+                                                    class="confirm-btn"
+                                                >
+                                                    Xác nhận
+                                                </a>
+                                            @elseif($ticket->ticket_status === 'used')
+                                                <button
+                                                    type="button"
+                                                    class="done-btn"
+                                                    disabled
+                                                >
+                                                    Đã xác nhận
+                                                </button>
+                                            @else
+                                                ---
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <div class="empty">
+                            <div class="empty-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <circle cx="11" cy="11" r="7"/>
+                                    <path d="M20 20l-4-4"/>
+                                </svg>
+                            </div>
+
+                            <h3>
+                                {{ $ticketSection['empty'] }}
+                            </h3>
+
+                            <p>
+                                Không có vé phù hợp với bộ lọc hiện tại.
+                                Bạn có thể thay đổi điều kiện hoặc đặt lại bộ lọc.
+                            </p>
+
+                            <a href="{{ route('nhanvien.tickets.index') }}">
+                                Hiện toàn bộ vé
+                            </a>
+                        </div>
+                    @endif
+                </section>
+            @endforeach
 
             {{-- ========================= --}}
             {{-- BACK --}}
             {{-- ========================= --}}
 
             <div class="bottom-back">
-
                 <a href="{{ route('nhanvien.trang-chu') }}">
                     ← Quay lại trang nhân viên
                 </a>
-
             </div>
 
-
             <footer class="footer">
-
                 <span>
-                   
                 </span>
 
                 <span>
                     Tra cứu vé hành khách
                 </span>
-
             </footer>
-
         </div>
-
     </main>
-
 </div>
-
 </body>
-
 </html>

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <meta
@@ -198,6 +197,169 @@
         .topbar-left p {
             color: var(--muted);
             font-size: 10px;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .notification-wrapper {
+            position: relative;
+        }
+
+        .notification-button {
+            position: relative;
+            padding: 7px 12px;
+            border: 1px solid #cbdce7;
+            border-radius: 5px;
+            background: white;
+            color: var(--primary);
+            font-size: 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .notification-button:hover {
+            background: var(--primary-light);
+        }
+
+        .notification-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            min-width: 19px;
+            height: 19px;
+            padding: 0 5px;
+            border-radius: 20px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-dropdown {
+            display: none;
+            position: absolute;
+            top: 42px;
+            right: 0;
+            width: 360px;
+            max-height: 420px;
+            overflow-y: auto;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            box-shadow: 0 10px 30px rgba(0, 41, 79, 0.15);
+            z-index: 9999;
+        }
+
+        .notification-dropdown.show {
+            display: block;
+        }
+
+        .notification-header {
+            padding: 15px 17px;
+            border-bottom: 1px solid var(--border);
+            color: var(--primary);
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .notification-item {
+            display: block;
+            padding: 14px 17px;
+            border-bottom: 1px solid #edf0f2;
+            color: var(--text);
+        }
+
+        .notification-item.unread {
+            background: #fff9e8;
+        }
+
+        .notification-item:hover {
+            background: #f5f8fa;
+        }
+
+        .notification-title {
+            margin-bottom: 5px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .notification-message {
+            color: #63717c;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .notification-time {
+            margin-top: 6px;
+            color: #9aa5ad;
+            font-size: 9px;
+        }
+
+        .notification-empty {
+            padding: 25px;
+            color: var(--muted);
+            font-size: 11px;
+            text-align: center;
+        }
+
+        .admin-notification-popup {
+            position: fixed;
+            top: 85px;
+            left: calc(50% + 122px);
+            transform: translateX(-50%);
+            width: 420px;
+            max-width: calc(100% - 40px);
+            background: white;
+            border: 1px solid #dfe6eb;
+            border-radius: 12px;
+            box-shadow: 0 12px 35px rgba(0, 41, 79, 0.18);
+            padding: 20px 22px;
+            z-index: 10000;
+            animation: popupSlideDown 0.35s ease;
+        }
+
+        .admin-notification-popup-header {
+            color: #003b70;
+            font-size: 14px;
+            font-weight: 800;
+            margin-bottom: 14px;
+        }
+
+        .admin-notification-popup-title {
+            color: #22313f;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        .admin-notification-popup-message {
+            color: #63717c;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .admin-notification-popup-time {
+            margin-top: 10px;
+            color: #9aa5ad;
+            font-size: 10px;
+        }
+
+        @keyframes popupSlideDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
         }
 
         .admin-badge {
@@ -484,8 +646,6 @@
             color: #806300;
         }
 
-        
-
         .active {
             background: #edf8f2;
             color: #17643d;
@@ -574,6 +734,10 @@
         }
 
         @media (max-width: 900px) {
+            .admin-notification-popup {
+                left: 50%;
+            }
+
             .admin-layout {
                 display: block;
             }
@@ -598,6 +762,17 @@
         }
 
         @media (max-width: 650px) {
+            .notification-dropdown {
+                position: fixed;
+                top: 75px;
+                right: 15px;
+                width: calc(100% - 30px);
+            }
+
+            .admin-notification-popup {
+                left: 50%;
+            }
+
             .content {
                 padding: 20px 15px 35px;
             }
@@ -636,11 +811,49 @@
     )
         ->where('status', 'unread')
         ->count();
+
+    $adminNotifications = \App\Models\Notification::where(
+        'user_id',
+        auth()->id()
+    )
+        ->orderByDesc('created_at')
+        ->take(5)
+        ->get();
+
+    $latestUnreadNotification = \App\Models\Notification::where(
+        'user_id',
+        auth()->id()
+    )
+        ->where('status', 'unread')
+        ->orderByDesc('created_at')
+        ->first();
 @endphp
+
+@if($latestUnreadNotification)
+    <div
+        class="admin-notification-popup"
+        id="adminNotificationPopup"
+    >
+        <div class="admin-notification-popup-header">
+            🔔 THÔNG BÁO MỚI
+        </div>
+
+        <div class="admin-notification-popup-title">
+            {{ $latestUnreadNotification->title }}
+        </div>
+
+        <div class="admin-notification-popup-message">
+            {{ $latestUnreadNotification->message }}
+        </div>
+
+        <div class="admin-notification-popup-time">
+            {{ $latestUnreadNotification->created_at->diffForHumans() }}
+        </div>
+    </div>
+@endif
+
 <div class="admin-layout">
-
     <aside class="sidebar">
-
         <a
             href="{{ route('admin.trang-chu') }}"
             class="logo"
@@ -653,7 +866,6 @@
         </div>
 
         <nav class="menu">
-
             <a
                 href="{{ route('admin.trang-chu') }}"
                 class="menu-link"
@@ -666,7 +878,6 @@
                         <rect x="14" y="14" width="7" height="7"/>
                     </svg>
                 </span>
-
                 Tổng quan
             </a>
 
@@ -681,7 +892,6 @@
                         <path d="M9 13h6"/>
                     </svg>
                 </span>
-
                 Quản lý sân bay
             </a>
 
@@ -694,7 +904,6 @@
                         <path d="M2 16l20-5-20-5 3 5-3 5z"/>
                     </svg>
                 </span>
-
                 Quản lý máy bay
             </a>
 
@@ -714,42 +923,41 @@
                         <path d="M8 3v4M16 3v4M3 10h18"/>
                     </svg>
                 </span>
-
                 Quản lý chuyến bay
             </a>
 
             <a
-    href="{{ route('admin.bookings.index') }}"
-    class="menu-link active"
->
-    <span class="menu-icon">
-        <svg viewBox="0 0 24 24">
-            <path d="M4 4h16v16H4z"/>
-            <path d="M8 8h8M8 12h8M8 16h5"/>
-        </svg>
-    </span>
+                href="{{ route('admin.bookings.index') }}"
+                class="menu-link active"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 4h16v16H4z"/>
+                        <path d="M8 8h8M8 12h8M8 16h5"/>
+                    </svg>
+                </span>
 
-    Quản lý vé
+                Quản lý vé
 
-    @if($unreadNotificationCount > 0)
-        <span style="
-            margin-left: auto;
-            background: #f4b400;
-            color: #00294f;
-            min-width: 22px;
-            height: 22px;
-            padding: 0 6px;
-            border-radius: 11px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            font-weight: 800;
-        ">
-            {{ $unreadNotificationCount }}
-        </span>
-    @endif
-</a>
+                @if($unreadNotificationCount > 0)
+                    <span style="
+                        margin-left: auto;
+                        background: #f4b400;
+                        color: #00294f;
+                        min-width: 22px;
+                        height: 22px;
+                        padding: 0 6px;
+                        border-radius: 11px;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 10px;
+                        font-weight: 800;
+                    ">
+                        {{ $unreadNotificationCount }}
+                    </span>
+                @endif
+            </a>
 
             <a
                 href="{{ route('admin.users.index') }}"
@@ -762,10 +970,22 @@
                         <path d="M16 11a4 4 0 0 1 5 4"/>
                     </svg>
                 </span>
-
                 Quản lý người dùng
             </a>
+            <a
+                href="{{ route('admin.employees.index') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="9" cy="8" r="4"/>
+                        <path d="M3 21v-2a6 6 0 0 1 12 0v2"/>
+                        <path d="M16 11a4 4 0 0 1 5 4"/>
+                    </svg>
+                </span>
 
+                Quản lý nhân viên
+            </a>
             <a
                 href="{{ route('admin.baggage.index') }}"
                 class="menu-link"
@@ -777,7 +997,6 @@
                         <path d="M8 11h8"/>
                     </svg>
                 </span>
-
                 Quản lý hành lý
             </a>
 
@@ -793,7 +1012,6 @@
                         <path d="M22 20V7"/>
                     </svg>
                 </span>
-
                 Thống kê chi tiết
             </a>
 
@@ -814,7 +1032,6 @@
                         <circle cx="13" cy="17" r="2"/>
                     </svg>
                 </span>
-
                 Quản lý đổi giá vé
             </a>
 
@@ -829,19 +1046,15 @@
                         <path d="M12 8v6"/>
                     </svg>
                 </span>
-
                 Quản lý hoàn vé
             </a>
-
         </nav>
 
         <div class="sidebar-bottom">
-
             <div class="admin-info">
                 <strong>
                     {{ auth()->user()->name }}
                 </strong>
-
                 <span>
                     Quản trị viên hệ thống
                 </span>
@@ -852,7 +1065,6 @@
                 method="POST"
             >
                 @csrf
-
                 <button
                     type="submit"
                     class="logout-btn"
@@ -860,40 +1072,89 @@
                     Đăng xuất
                 </button>
             </form>
-
         </div>
-
     </aside>
 
     <main class="main">
-
         <header class="topbar">
-
             <div class="topbar-left">
                 <h2>
                     Vietjet Administration
                 </h2>
-
                 <p>
                     Quản lý vé hành khách
                 </p>
             </div>
 
-            <span class="admin-badge">
-                ADMIN
-            </span>
+            <div class="topbar-right">
+                <div class="notification-wrapper">
+                    <button
+                        type="button"
+                        class="notification-button"
+                        id="notificationButton"
+                    >
+                        Thông báo
 
+                        @if($unreadNotificationCount > 0)
+                            <span class="notification-count">
+                                {{ $unreadNotificationCount }}
+                            </span>
+                        @endif
+                    </button>
+
+                    <div
+                        class="notification-dropdown"
+                        id="notificationDropdown"
+                    >
+                        <div class="notification-header">
+                            Thông báo
+                        </div>
+
+                        @forelse($adminNotifications as $notification)
+                            <form
+                                action="{{ route('admin.notifications.read', $notification->id) }}"
+                                method="POST"
+                            >
+                                @csrf
+
+                                <button
+                                    type="submit"
+                                    class="notification-item {{ $notification->status === 'unread' ? 'unread' : '' }}"
+                                    style="width: 100%; border: none; text-align: left; cursor: pointer;"
+                                >
+                                    <div class="notification-title">
+                                        {{ $notification->title }}
+                                    </div>
+
+                                    <div class="notification-message">
+                                        {{ $notification->message }}
+                                    </div>
+
+                                    <div class="notification-time">
+                                        {{ $notification->created_at->diffForHumans() }}
+                                    </div>
+                                </button>
+                            </form>
+                        @empty
+                            <div class="notification-empty">
+                                Chưa có thông báo.
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+
+                <span class="admin-badge">
+                    ADMIN
+                </span>
+            </div>
         </header>
 
         <div class="content">
-
             <div class="page-heading">
-
                 <div>
                     <h1>
                         Quản lý vé
                     </h1>
-
                     <p>
                         Tìm kiếm, lọc và theo dõi từng vé
                         khách hàng đã đặt trong hệ thống.
@@ -906,18 +1167,14 @@
                 >
                     ← Quay lại tổng quan
                 </a>
-
             </div>
 
             <section class="panel">
-
                 <div class="panel-header">
-
                     <div>
                         <h3>
                             Tìm kiếm và lọc vé
                         </h3>
-
                         <p>
                             Có thể kết hợp nhiều điều kiện
                             để tìm đúng vé cần quản lý.
@@ -927,24 +1184,18 @@
                     <span class="count-box">
                         {{ $tickets->count() }} vé
                     </span>
-
                 </div>
 
                 <div class="filter-body">
-
                     <form
                         action="{{ route('admin.bookings.index') }}"
                         method="GET"
                     >
-
                         <div class="filter-grid">
-
                             <div class="form-group">
-
                                 <label for="keyword">
                                     Tìm kiếm
                                 </label>
-
                                 <input
                                     type="text"
                                     id="keyword"
@@ -952,141 +1203,111 @@
                                     value="{{ request('keyword') }}"
                                     placeholder="Mã đặt vé, mã vé, tên hành khách..."
                                 >
-
                             </div>
 
                             <div class="form-group">
-
                                 <label for="payment_status">
                                     Thanh toán
                                 </label>
-
                                 <select
                                     id="payment_status"
                                     name="payment_status"
                                 >
-
                                     <option value="">
                                         Tất cả
                                     </option>
-
                                     <option
                                         value="paid"
                                         {{ request('payment_status') === 'paid' ? 'selected' : '' }}
                                     >
                                         Đã thanh toán
                                     </option>
-
                                     <option
                                         value="unpaid"
                                         {{ request('payment_status') === 'unpaid' ? 'selected' : '' }}
                                     >
                                         Chưa thanh toán
                                     </option>
-
-                                    
-
                                 </select>
-
                             </div>
 
                             <div class="form-group">
-
                                 <label for="ticket_status">
                                     Trạng thái vé
                                 </label>
-
                                 <select
                                     id="ticket_status"
                                     name="ticket_status"
                                 >
-
                                     <option value="">
                                         Tất cả
                                     </option>
-
                                     <option
                                         value="pending"
                                         {{ request('ticket_status') === 'pending' ? 'selected' : '' }}
                                     >
                                         Chờ xác nhận
                                     </option>
-
                                     <option
                                         value="active"
                                         {{ request('ticket_status') === 'active' ? 'selected' : '' }}
                                     >
                                         Có hiệu lực
                                     </option>
-
                                     <option
                                         value="used"
                                         {{ request('ticket_status') === 'used' ? 'selected' : '' }}
                                     >
                                         Đã sử dụng
                                     </option>
-
                                     <option
                                         value="cancelled"
                                         {{ request('ticket_status') === 'cancelled' ? 'selected' : '' }}
                                     >
                                         Đã hủy
                                     </option>
-
                                 </select>
-
                             </div>
 
                             <div class="form-group">
-
                                 <label for="seat_class">
                                     Hạng ghế
                                 </label>
-
                                 <select
                                     id="seat_class"
                                     name="seat_class"
                                 >
-
                                     <option value="">
                                         Tất cả
                                     </option>
-
                                     <option
                                         value="vip"
                                         {{ request('seat_class') === 'vip' ? 'selected' : '' }}
                                     >
                                         VIP
                                     </option>
-
                                     <option
                                         value="economy"
                                         {{ request('seat_class') === 'economy' ? 'selected' : '' }}
                                     >
                                         Phổ thông
                                     </option>
-
                                 </select>
-
                             </div>
 
                             <div class="form-group">
-
                                 <label for="flight_id">
                                     Chuyến bay
                                 </label>
-
                                 <select
                                     id="flight_id"
                                     name="flight_id"
                                 >
-
                                     <option value="">
                                         Tất cả chuyến bay
                                     </option>
 
                                     @foreach($flights as $flight)
-
                                         <option
                                             value="{{ $flight->id }}"
                                             {{ (string) request('flight_id') === (string) $flight->id ? 'selected' : '' }}
@@ -1097,32 +1318,24 @@
                                             →
                                             {{ $flight->arrivalAirport->city }}
                                         </option>
-
                                     @endforeach
-
                                 </select>
-
                             </div>
 
                             <div class="form-group">
-
                                 <label for="flight_date">
                                     Ngày bay
                                 </label>
-
                                 <input
                                     type="date"
                                     id="flight_date"
                                     name="flight_date"
                                     value="{{ request('flight_date') }}"
                                 >
-
                             </div>
-
                         </div>
 
                         <div class="filter-actions">
-
                             <button
                                 type="submit"
                                 class="btn-filter"
@@ -1136,24 +1349,17 @@
                             >
                                 Đặt lại bộ lọc
                             </a>
-
                         </div>
-
                     </form>
-
                 </div>
-
             </section>
 
             <section class="panel">
-
                 <div class="panel-header">
-
                     <div>
                         <h3>
                             Vé có hiệu lực
                         </h3>
-
                         <p>
                             Mỗi dòng tương ứng với một vé hành khách.
                         </p>
@@ -1162,13 +1368,10 @@
                     <span class="count-box">
                         {{ $activeTickets->count() }} vé
                     </span>
-
                 </div>
 
                 <div class="table-wrapper">
-
                     <table>
-
                         <thead>
                             <tr>
                                 <th>Mã đặt vé</th>
@@ -1191,16 +1394,13 @@
                         </thead>
 
                         <tbody>
-
                         @forelse($activeTickets as $ticket)
-
                             @php
                                 $booking = $ticket->booking;
                                 $flight = $ticket->flight;
                             @endphp
 
                             <tr>
-
                                 <td>
                                     <span class="booking-code">
                                         {{ $booking->booking_code ?? '-' }}
@@ -1211,7 +1411,6 @@
                                     <span class="user-name">
                                         {{ $booking?->user?->name ?? 'Không xác định' }}
                                     </span>
-
                                     <span class="user-email">
                                         {{ $booking?->user?->email ?? '' }}
                                     </span>
@@ -1234,59 +1433,41 @@
                                 </td>
 
                                 <td>
-
                                     @if(
                                         $flight &&
                                         $flight->departureAirport &&
                                         $flight->arrivalAirport
                                     )
-
                                         <span class="route-text">
                                             {{ $flight->departureAirport->city }}
                                             →
                                             {{ $flight->arrivalAirport->city }}
                                         </span>
-
                                     @else
-
                                         -
-
                                     @endif
-
                                 </td>
 
                                 <td>
-
                                     @if($ticket->flightSeat)
-
                                         <span class="seat-number">
                                             {{ $ticket->flightSeat->seat_number }}
                                         </span>
-
                                     @else
-
                                         -
-
                                     @endif
-
                                 </td>
 
                                 <td>
-
                                     @if($ticket->seat_class === 'vip')
-
                                         <span class="badge vip">
                                             VIP
                                         </span>
-
                                     @else
-
                                         <span class="badge economy">
                                             Phổ thông
                                         </span>
-
                                     @endif
-
                                 </td>
 
                                 <td>
@@ -1302,13 +1483,11 @@
 
                                 <td>
                                     <span class="baggage-text">
-
                                         @if((int) $ticket->baggage_weight > 0)
                                             {{ (int) $ticket->baggage_weight }} kg
                                         @else
                                             Không mua thêm
                                         @endif
-
                                     </span>
                                 </td>
 
@@ -1335,75 +1514,51 @@
                                 </td>
 
                                 <td>
-
                                     @if($ticket->ticket_status === 'active')
-
                                         <span class="badge active">
                                             Có hiệu lực
                                         </span>
-
                                     @elseif($ticket->ticket_status === 'used')
-
                                         <span class="badge used">
                                             Đã sử dụng
                                         </span>
-
                                     @elseif($ticket->ticket_status === 'cancelled')
-
                                         <span class="badge cancelled">
                                             Đã hủy
                                         </span>
-
                                     @else
-
                                         <span class="badge pending">
                                             Chờ xác nhận
                                         </span>
-
                                     @endif
-
                                 </td>
 
                                 <td>
-
                                     @if($booking?->payment_status === 'paid')
-
                                         <span class="badge paid">
                                             Đã thanh toán
                                         </span>
-
                                     @else
-
                                         <span class="badge unpaid">
                                             Chưa thanh toán
                                         </span>
-
                                     @endif
-
                                 </td>
 
                                 <td>
                                     <span class="date-text">
-
                                         @if($booking?->created_at)
-
                                             {{ $booking->created_at
                                                 ->timezone('Asia/Ho_Chi_Minh')
                                                 ->format('d/m/Y H:i') }}
-
                                         @else
-
                                             -
-
                                         @endif
-
                                     </span>
                                 </td>
 
                                 <td>
-
                                     @if($booking)
-
                                         <a
                                             href="{{ route(
                                                 'admin.bookings.show',
@@ -1413,19 +1568,12 @@
                                         >
                                             Xem chi tiết
                                         </a>
-
                                     @else
-
                                         -
-
                                     @endif
-
                                 </td>
-
                             </tr>
-
                         @empty
-
                             <tr>
                                 <td
                                     colspan="16"
@@ -1434,26 +1582,18 @@
                                     Không có vé nào chưa / không có hiệu lực.
                                 </td>
                             </tr>
-
                         @endforelse
-
                         </tbody>
-
                     </table>
-
                 </div>
-
             </section>
 
             <section class="panel">
-
                 <div class="panel-header">
-
                     <div>
                         <h3>
-                             Vé chưa / không có hiệu lực
+                            Vé chưa / không có hiệu lực
                         </h3>
-
                         <p>
                             Mỗi dòng tương ứng với một vé hành khách.
                         </p>
@@ -1462,13 +1602,10 @@
                     <span class="count-box">
                         {{ $inactiveTickets->count() }} vé
                     </span>
-
                 </div>
 
                 <div class="table-wrapper">
-
                     <table>
-
                         <thead>
                             <tr>
                                 <th>Mã đặt vé</th>
@@ -1491,16 +1628,13 @@
                         </thead>
 
                         <tbody>
-
                         @forelse($inactiveTickets as $ticket)
-
                             @php
                                 $booking = $ticket->booking;
                                 $flight = $ticket->flight;
                             @endphp
 
                             <tr>
-
                                 <td>
                                     <span class="booking-code">
                                         {{ $booking->booking_code ?? '-' }}
@@ -1511,7 +1645,6 @@
                                     <span class="user-name">
                                         {{ $booking?->user?->name ?? 'Không xác định' }}
                                     </span>
-
                                     <span class="user-email">
                                         {{ $booking?->user?->email ?? '' }}
                                     </span>
@@ -1534,59 +1667,41 @@
                                 </td>
 
                                 <td>
-
                                     @if(
                                         $flight &&
                                         $flight->departureAirport &&
                                         $flight->arrivalAirport
                                     )
-
                                         <span class="route-text">
                                             {{ $flight->departureAirport->city }}
                                             →
                                             {{ $flight->arrivalAirport->city }}
                                         </span>
-
                                     @else
-
                                         -
-
                                     @endif
-
                                 </td>
 
                                 <td>
-
                                     @if($ticket->flightSeat)
-
                                         <span class="seat-number">
                                             {{ $ticket->flightSeat->seat_number }}
                                         </span>
-
                                     @else
-
                                         -
-
                                     @endif
-
                                 </td>
 
                                 <td>
-
                                     @if($ticket->seat_class === 'vip')
-
                                         <span class="badge vip">
                                             VIP
                                         </span>
-
                                     @else
-
                                         <span class="badge economy">
                                             Phổ thông
                                         </span>
-
                                     @endif
-
                                 </td>
 
                                 <td>
@@ -1602,13 +1717,11 @@
 
                                 <td>
                                     <span class="baggage-text">
-
                                         @if((int) $ticket->baggage_weight > 0)
                                             {{ (int) $ticket->baggage_weight }} kg
                                         @else
                                             Không mua thêm
                                         @endif
-
                                     </span>
                                 </td>
 
@@ -1635,75 +1748,51 @@
                                 </td>
 
                                 <td>
-
                                     @if($ticket->ticket_status === 'active')
-
                                         <span class="badge active">
                                             Có hiệu lực
                                         </span>
-
                                     @elseif($ticket->ticket_status === 'used')
-
                                         <span class="badge used">
                                             Đã sử dụng
                                         </span>
-
                                     @elseif($ticket->ticket_status === 'cancelled')
-
                                         <span class="badge cancelled">
                                             Đã hủy
                                         </span>
-
                                     @else
-
                                         <span class="badge pending">
                                             Chờ xác nhận
                                         </span>
-
                                     @endif
-
                                 </td>
 
                                 <td>
-
                                     @if($booking?->payment_status === 'paid')
-
                                         <span class="badge paid">
                                             Đã thanh toán
                                         </span>
-
                                     @else
-
                                         <span class="badge unpaid">
                                             Chưa thanh toán
                                         </span>
-
                                     @endif
-
                                 </td>
 
                                 <td>
                                     <span class="date-text">
-
                                         @if($booking?->created_at)
-
                                             {{ $booking->created_at
                                                 ->timezone('Asia/Ho_Chi_Minh')
                                                 ->format('d/m/Y H:i') }}
-
                                         @else
-
                                             -
-
                                         @endif
-
                                     </span>
                                 </td>
 
                                 <td>
-
                                     @if($booking)
-
                                         <a
                                             href="{{ route(
                                                 'admin.bookings.show',
@@ -1713,19 +1802,12 @@
                                         >
                                             Xem chi tiết
                                         </a>
-
                                     @else
-
                                         -
-
                                     @endif
-
                                 </td>
-
                             </tr>
-
                         @empty
-
                             <tr>
                                 <td
                                     colspan="16"
@@ -1734,44 +1816,70 @@
                                     Không có vé nào đang có hiệu lực.
                                 </td>
                             </tr>
-
                         @endforelse
-
                         </tbody>
-
                     </table>
-
                 </div>
-
             </section>
-            <div class="bottom-actions">
 
+            <div class="bottom-actions">
                 <a
                     href="{{ route('admin.trang-chu') }}"
                     class="bottom-back"
                 >
                     ← Quay lại trang quản trị
                 </a>
-
             </div>
 
             <footer class="footer">
-
                 <span>
                     Vietjet Administration
                 </span>
-
                 <span>
                     Quản lý vé
                 </span>
-
             </footer>
-
         </div>
-
     </main>
-
 </div>
 
+<script>
+    const notificationButton = document.getElementById('notificationButton');
+    const notificationDropdown = document.getElementById('notificationDropdown');
+
+    if (notificationButton && notificationDropdown) {
+        notificationButton.setAttribute('aria-expanded', 'false');
+        notificationButton.setAttribute('aria-controls', 'notificationDropdown');
+
+        notificationButton.addEventListener('click', function (event) {
+            event.stopPropagation();
+
+            const isOpen = notificationDropdown.classList.toggle('show');
+            notificationButton.setAttribute('aria-expanded', String(isOpen));
+        });
+
+        document.addEventListener('click', function (event) {
+            if (!notificationDropdown.contains(event.target)) {
+                notificationDropdown.classList.remove('show');
+                notificationButton.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                notificationDropdown.classList.remove('show');
+                notificationButton.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
+
+    const adminNotificationPopup = document.getElementById('adminNotificationPopup');
+
+    if (adminNotificationPopup) {
+        setTimeout(function () {
+            adminNotificationPopup.style.display = 'none';
+        }, 5000);
+    }
+</script>
 </body>
 </html>

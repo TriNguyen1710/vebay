@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
@@ -764,7 +762,6 @@
 </head>
 
 <body>
-
 @php
     $totalSeats = $flight->aircraft->total_seats ?? 0;
 
@@ -793,9 +790,7 @@
 @endphp
 
 <div class="employee-layout">
-
     <aside class="sidebar">
-
         <a
             href="{{ route('nhanvien.trang-chu') }}"
             class="logo"
@@ -812,7 +807,6 @@
         </div>
 
         <nav class="menu">
-
             <a
                 href="{{ route('nhanvien.trang-chu') }}"
                 class="menu-link"
@@ -871,11 +865,9 @@
 
                 Danh sách chuyến bay
             </a>
-
         </nav>
 
         <div class="sidebar-bottom">
-
             <div class="employee-info">
                 <strong>
                     {{ auth()->user()->name }}
@@ -899,15 +891,11 @@
                     Đăng xuất
                 </button>
             </form>
-
         </div>
-
     </aside>
 
     <main class="main">
-
         <header class="topbar">
-
             <div class="topbar-left">
                 <h2>
                     SkyGo Airport Operations
@@ -921,13 +909,10 @@
             <span class="employee-badge">
                 NHÂN VIÊN
             </span>
-
         </header>
 
         <div class="content">
-
             <div class="page-heading">
-
                 <div>
                     <h1>
                         Hành khách chuyến bay
@@ -945,13 +930,10 @@
                 >
                     ← Quay lại danh sách chuyến bay
                 </a>
-
             </div>
 
             <section class="flight-card">
-
                 <div class="flight-top">
-
                     <div>
                         <div class="flight-code-label">
                             Mã chuyến bay
@@ -965,11 +947,9 @@
                     <span class="flight-status">
                         THÔNG TIN CHUYẾN
                     </span>
-
                 </div>
 
                 <div class="route-box">
-
                     <div class="airport">
                         <div class="airport-code">
                             {{ $flight->departureAirport->code ?? '---' }}
@@ -995,11 +975,9 @@
                             {{ $flight->arrivalAirport->city ?? '---' }}
                         </div>
                     </div>
-
                 </div>
 
                 <div class="flight-details">
-
                     <div class="detail-item">
                         <div class="detail-label">
                             Ngày bay
@@ -1039,11 +1017,9 @@
                             {{ $flight->aircraft->name ?? 'Không có thông tin' }}
                         </div>
                     </div>
-
                 </div>
 
                 <div class="statistics">
-
                     <div class="stat-card">
                         <div class="stat-label">
                             Sức chứa máy bay
@@ -1113,9 +1089,7 @@
                             hành khách
                         </span>
                     </div>
-
                 </div>
-
             </section>
 
             @if(session('success'))
@@ -1131,9 +1105,7 @@
             @endif
 
             <section class="panel">
-
                 <div class="panel-header">
-
                     <div>
                         <h3>
                             Danh sách hành khách
@@ -1148,15 +1120,11 @@
                     <span class="count-box">
                         {{ $totalPassengers }} hành khách
                     </span>
-
                 </div>
 
                 @if($tickets->count() > 0)
-
                     <div class="table-wrapper">
-
                         <table>
-
                             <thead>
                                 <tr>
                                     <th>Mã vé</th>
@@ -1172,11 +1140,8 @@
                             </thead>
 
                             <tbody>
-
                             @foreach($tickets as $ticket)
-
                                 <tr>
-
                                     <td>
                                         <span class="ticket-code">
                                             {{ $ticket->ticket_code }}
@@ -1201,118 +1166,75 @@
 
                                     <td>
                                         @if($ticket->seat_class === 'vip')
-
                                             <span class="badge badge-vip">
                                                 VIP
                                             </span>
-
                                         @else
-
                                             <span class="badge badge-economy">
                                                 Phổ thông
                                             </span>
-
                                         @endif
                                     </td>
 
-
                                     <td>
-
                                         <span class="baggage-weight">
-
                                             @if((int) $ticket->baggage_weight > 0)
                                                 {{ (int) $ticket->baggage_weight }} kg
                                             @else
                                                 Không mua thêm
                                             @endif
-
                                         </span>
-
                                     </td>
 
-
                                     <td>
-
                                         <span class="baggage-price">
-
                                             {{ number_format(
                                                 (float) $ticket->baggage_price,
                                                 0,
                                                 ',',
                                                 '.'
                                             ) }} đ
-
                                         </span>
-
                                     </td>
-
 
                                     <td>
                                         @if($ticket->ticket_status === 'used')
-
                                             <span class="badge status-used">
                                                 Đã kiểm tra
                                             </span>
-
                                         @elseif($ticket->ticket_status === 'active')
-
                                             <span class="badge status-active">
                                                 Chưa kiểm tra
                                             </span>
-
                                         @else
-
                                             <span class="badge status-other">
                                                 {{ $ticket->ticket_status }}
                                             </span>
-
                                         @endif
                                     </td>
 
                                     <td>
                                         @if($ticket->ticket_status === 'active')
-
-                                            @if($ticket->face_image)
-
-                                                <a
-                                                    href="{{ route(
-                                                        'nhanvien.tickets.face',
-                                                        $ticket->id
-                                                    ) }}"
-                                                    class="face-btn"
-                                                >
-                                                    Nhận diện khuôn mặt
-                                                </a>
-
-                                            @else
-
-                                                <span class="no-face">
-                                                    Chưa có ảnh khuôn mặt
-                                                </span>
-
-                                            @endif
-
+                                            <a
+                                                href="{{ route(
+                                                    'nhanvien.tickets.verification.choose',
+                                                    $ticket->id
+                                                ) }}"
+                                                class="face-btn"
+                                            >
+                                                Kiểm tra hành khách
+                                            </a>
                                         @else
-
                                             ---
-
                                         @endif
                                     </td>
-
                                 </tr>
-
                             @endforeach
-
                             </tbody>
-
                         </table>
-
                     </div>
-
                 @else
-
                     <div class="empty">
-
                         <div class="empty-icon">
                             <svg viewBox="0 0 24 24">
                                 <circle cx="9" cy="8" r="4"/>
@@ -1328,11 +1250,8 @@
                             Chưa có hành khách đã thanh toán
                             trên chuyến bay này.
                         </p>
-
                     </div>
-
                 @endif
-
             </section>
 
             <div class="bottom-back">
@@ -1350,13 +1269,8 @@
                     Hành khách chuyến {{ $flight->flight_code }}
                 </span>
             </footer>
-
         </div>
-
     </main>
-
 </div>
-
 </body>
-
 </html>

@@ -433,11 +433,13 @@ class TicketCheckController extends Controller
 
     public function faceRecognition(Ticket $ticket)
     {
+        $this->rememberVerificationReturnUrl($ticket);
+
         $ticket->load('booking');
 
         if (!$ticket->booking) {
             return redirect()
-                ->route('nhanvien.passengers.unchecked')
+                ->to($this->verificationReturnUrl($ticket))
                 ->with(
                     'error',
                     'Không tìm thấy thông tin đặt vé.'
@@ -446,7 +448,7 @@ class TicketCheckController extends Controller
 
         if ($ticket->booking->payment_status !== 'paid') {
             return redirect()
-                ->route('nhanvien.passengers.unchecked')
+                ->to($this->verificationReturnUrl($ticket))
                 ->with(
                     'error',
                     'Vé chưa thanh toán nên không thể nhận diện.'
@@ -455,7 +457,7 @@ class TicketCheckController extends Controller
 
         if ($ticket->ticket_status === 'used') {
             return redirect()
-                ->route('nhanvien.passengers.unchecked')
+                ->to($this->verificationReturnUrl($ticket))
                 ->with(
                     'error',
                     'Hành khách này đã được xác nhận trước đó.'
@@ -464,7 +466,7 @@ class TicketCheckController extends Controller
 
         if ($ticket->ticket_status !== 'active') {
             return redirect()
-                ->route('nhanvien.passengers.unchecked')
+                ->to($this->verificationReturnUrl($ticket))
                 ->with(
                     'error',
                     'Vé hiện không ở trạng thái hoạt động.'
@@ -473,7 +475,7 @@ class TicketCheckController extends Controller
 
         if (!$ticket->face_image) {
             return redirect()
-                ->route('nhanvien.passengers.unchecked')
+                ->to($this->verificationReturnUrl($ticket))
                 ->with(
                     'error',
                     'Hành khách chưa đăng ký khuôn mặt.'
@@ -485,6 +487,7 @@ class TicketCheckController extends Controller
         );
 
         $verified = false;
+
         $similarity = null;
 
         if (
@@ -749,6 +752,7 @@ class TicketCheckController extends Controller
             . escapeshellarg($recognizerModel);
 
         $output = [];
+
         $exitCode = 0;
 
         exec(
@@ -903,9 +907,7 @@ class TicketCheckController extends Controller
         );
 
         return redirect()
-            ->route(
-                'nhanvien.passengers.unchecked'
-            )
+            ->to($this->verificationReturnUrl($ticket))
             ->with(
                 'success',
                 'Đã xác nhận hành khách '
@@ -916,6 +918,8 @@ class TicketCheckController extends Controller
 
     public function chooseVerification(Ticket $ticket)
     {
+        $this->rememberVerificationReturnUrl($ticket);
+
         $ticket->load([
             'booking',
             'flight.departureAirport',
@@ -929,7 +933,7 @@ class TicketCheckController extends Controller
             $ticket->booking->payment_status !== 'paid'
         ) {
             return redirect()
-                ->route('nhanvien.tickets.index')
+                ->to($this->verificationReturnUrl($ticket))
                 ->with(
                     'error',
                     'Vé chưa được thanh toán.'
@@ -938,7 +942,7 @@ class TicketCheckController extends Controller
 
         if ($ticket->ticket_status === 'used') {
             return redirect()
-                ->route('nhanvien.tickets.index')
+                ->to($this->verificationReturnUrl($ticket))
                 ->with(
                     'error',
                     'Hành khách này đã được xác nhận trước đó.'
@@ -947,7 +951,7 @@ class TicketCheckController extends Controller
 
         if ($ticket->ticket_status !== 'active') {
             return redirect()
-                ->route('nhanvien.tickets.index')
+                ->to($this->verificationReturnUrl($ticket))
                 ->with(
                     'error',
                     'Vé hiện không hợp lệ.'
@@ -962,6 +966,8 @@ class TicketCheckController extends Controller
 
     public function manualVerification(Ticket $ticket)
     {
+        $this->rememberVerificationReturnUrl($ticket);
+
         $ticket->load([
             'booking',
             'flight.departureAirport',
@@ -976,7 +982,7 @@ class TicketCheckController extends Controller
             $ticket->booking->payment_status !== 'paid'
         ) {
             return redirect()
-                ->route('nhanvien.tickets.index')
+                ->to($this->verificationReturnUrl($ticket))
                 ->with(
                     'error',
                     'Vé chưa được thanh toán.'
@@ -985,7 +991,7 @@ class TicketCheckController extends Controller
 
         if ($ticket->ticket_status === 'used') {
             return redirect()
-                ->route('nhanvien.tickets.index')
+                ->to($this->verificationReturnUrl($ticket))
                 ->with(
                     'error',
                     'Hành khách này đã được xác nhận trước đó.'
@@ -994,7 +1000,7 @@ class TicketCheckController extends Controller
 
         if ($ticket->ticket_status === 'cancelled') {
             return redirect()
-                ->route('nhanvien.tickets.index')
+                ->to($this->verificationReturnUrl($ticket))
                 ->with(
                     'error',
                     'Vé đã bị hủy nên không thể xác nhận.'
@@ -1003,7 +1009,7 @@ class TicketCheckController extends Controller
 
         if ($ticket->ticket_status !== 'active') {
             return redirect()
-                ->route('nhanvien.tickets.index')
+                ->to($this->verificationReturnUrl($ticket))
                 ->with(
                     'error',
                     'Vé hiện không hợp lệ.'
@@ -1072,7 +1078,7 @@ class TicketCheckController extends Controller
             $ticket->booking->payment_status !== 'paid'
         ) {
             return redirect()
-                ->route('nhanvien.tickets.index')
+                ->to($this->verificationReturnUrl($ticket))
                 ->with(
                     'error',
                     'Vé chưa được thanh toán nên không thể kiểm tra.'
@@ -1081,7 +1087,7 @@ class TicketCheckController extends Controller
 
         if ($ticket->ticket_status === 'used') {
             return redirect()
-                ->route('nhanvien.tickets.index')
+                ->to($this->verificationReturnUrl($ticket))
                 ->with(
                     'error',
                     'Hành khách này đã được xác nhận trước đó.'
@@ -1090,7 +1096,7 @@ class TicketCheckController extends Controller
 
         if ($ticket->ticket_status === 'cancelled') {
             return redirect()
-                ->route('nhanvien.tickets.index')
+                ->to($this->verificationReturnUrl($ticket))
                 ->with(
                     'error',
                     'Vé đã bị hủy nên không thể kiểm tra.'
@@ -1099,7 +1105,7 @@ class TicketCheckController extends Controller
 
         if ($ticket->ticket_status !== 'active') {
             return redirect()
-                ->route('nhanvien.tickets.index')
+                ->to($this->verificationReturnUrl($ticket))
                 ->with(
                     'error',
                     'Vé hiện không hợp lệ.'
@@ -1180,7 +1186,7 @@ class TicketCheckController extends Controller
             $ticket->booking->payment_status !== 'paid'
         ) {
             return redirect()
-                ->route('nhanvien.tickets.index')
+                ->to($this->verificationReturnUrl($ticket))
                 ->with(
                     'error',
                     'Vé chưa được thanh toán nên không thể xác nhận.'
@@ -1193,7 +1199,7 @@ class TicketCheckController extends Controller
             );
 
             return redirect()
-                ->route('nhanvien.tickets.index')
+                ->to($this->verificationReturnUrl($ticket))
                 ->with(
                     'error',
                     'Hành khách này đã được xác nhận trước đó.'
@@ -1206,7 +1212,7 @@ class TicketCheckController extends Controller
             );
 
             return redirect()
-                ->route('nhanvien.tickets.index')
+                ->to($this->verificationReturnUrl($ticket))
                 ->with(
                     'error',
                     'Vé đã bị hủy nên không thể xác nhận.'
@@ -1219,7 +1225,7 @@ class TicketCheckController extends Controller
             );
 
             return redirect()
-                ->route('nhanvien.tickets.index')
+                ->to($this->verificationReturnUrl($ticket))
                 ->with(
                     'error',
                     'Vé hiện không hợp lệ.'
@@ -1276,12 +1282,85 @@ class TicketCheckController extends Controller
         );
 
         return redirect()
-            ->route('nhanvien.tickets.index')
+            ->to($this->verificationReturnUrl($ticket))
             ->with(
                 'success',
                 'Đã xác nhận hành khách '
                 . $ticket->passenger_name
                 . ' thành công.'
             );
+    }
+
+    private function rememberVerificationReturnUrl(Ticket $ticket): void
+    {
+        $previousUrl = request()->headers->get('referer');
+
+        if (!is_string($previousUrl) || $previousUrl === '') {
+            return;
+        }
+
+        $previous = parse_url($previousUrl);
+
+        if (!is_array($previous)) {
+            return;
+        }
+
+        $allowedUrls = [
+            route('nhanvien.tickets.index'),
+            route('nhanvien.tickets.search'),
+            route('nhanvien.passengers.unchecked'),
+            route('nhanvien.flights.passengers', $ticket->flight_id),
+        ];
+
+        foreach ($allowedUrls as $allowedUrl) {
+            $allowed = parse_url($allowedUrl);
+
+            $previousPort = $previous['port']
+                ?? (($previous['scheme'] ?? '') === 'https' ? 443 : 80);
+
+            $allowedPort = $allowed['port']
+                ?? (($allowed['scheme'] ?? '') === 'https' ? 443 : 80);
+
+            if (
+                strtolower($previous['scheme'] ?? '')
+                    !== strtolower($allowed['scheme'] ?? '')
+                ||
+                strtolower($previous['host'] ?? '')
+                    !== strtolower($allowed['host'] ?? '')
+                ||
+                $previousPort !== $allowedPort
+                ||
+                rtrim($previous['path'] ?? '/', '/')
+                    !== rtrim($allowed['path'] ?? '/', '/')
+            ) {
+                continue;
+            }
+
+            $returnUrl = $allowedUrl;
+
+            if (isset($previous['query']) && $previous['query'] !== '') {
+                $returnUrl .= '?' . $previous['query'];
+            }
+
+            session()->put(
+                'employee_verification_return_' . $ticket->id,
+                $returnUrl
+            );
+
+            return;
+        }
+    }
+
+    private function verificationReturnUrl(Ticket $ticket): string
+    {
+        $returnUrl = session(
+            'employee_verification_return_' . $ticket->id
+        );
+
+        if (is_string($returnUrl) && $returnUrl !== '') {
+            return $returnUrl;
+        }
+
+        return route('nhanvien.tickets.index');
     }
 }

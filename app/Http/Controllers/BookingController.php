@@ -47,6 +47,7 @@ class BookingController extends Controller
     public function store(Request $request)
     {
         $tripType = session('flight_search.trip_type', 'one_way');
+
         $passenger = session('booking.passenger');
         $faceStatus = session('booking.face_status');
         $faceImage = session('booking.face_image');
@@ -168,28 +169,30 @@ class BookingController extends Controller
                 );
 
                 session()->forget([
-        'booking',
-        'baggage',
-    ]);
+                    'booking',
+                    'baggage',
+                ]);
 
-        $admins = User::where('role', 'admin')->get();
+                $admins = User::where('role', 'admin')->get();
 
-        foreach ($admins as $admin) {
-            Notification::create([
-                'user_id' => $admin->id,
-                'ticket_id' => $booking->tickets()->first()?->id,
-                'sender_id' => auth()->id(),
-                'title' => 'Có đơn đặt vé mới',
-                'message' => 'Khách hàng vừa tạo đơn ' . $booking->booking_code . '.',
-                'status' => 'unread',
-            ]);
-        }
+                foreach ($admins as $admin) {
+                    Notification::create([
+                        'user_id' => $admin->id,
+                        'ticket_id' => $booking->tickets()->first()?->id,
+                        'sender_id' => auth()->id(),
+                        'title' => 'Có đơn đặt vé mới',
+                        'message' => 'Khách hàng vừa tạo đơn '
+                            . $booking->booking_code
+                            . '.',
+                        'status' => 'unread',
+                    ]);
+                }
 
-        return redirect()
-            ->route(
-                'payment.show',
-                $booking->id
-        );
+                return redirect()
+                    ->route(
+                        'payment.show',
+                        $booking->id
+                    );
             } catch (\Exception $e) {
                 return redirect()
                     ->route('flights.search.form')
@@ -319,8 +322,7 @@ class BookingController extends Controller
 
                     if (
                         !$outboundSeat
-                        || $outboundSeat->status
-                            !== 'available'
+                        || $outboundSeat->status !== 'available'
                     ) {
                         throw new \Exception(
                             'Ghế chiều đi không còn khả dụng.'
@@ -340,8 +342,7 @@ class BookingController extends Controller
 
                     if (
                         !$returnSeat
-                        || $returnSeat->status
-                            !== 'available'
+                        || $returnSeat->status !== 'available'
                     ) {
                         throw new \Exception(
                             'Ghế chiều về không còn khả dụng.'
@@ -417,28 +418,30 @@ class BookingController extends Controller
             );
 
             session()->forget([
-            'booking',
-            'baggage',
-        ]);
-
-        $admins = User::where('role', 'admin')->get();
-
-        foreach ($admins as $admin) {
-            Notification::create([
-                'user_id' => $admin->id,
-                'ticket_id' => $booking->tickets()->first()?->id,
-                'sender_id' => auth()->id(),
-                'title' => 'Có đơn đặt vé mới',
-                'message' => 'Khách hàng vừa tạo đơn ' . $booking->booking_code . '.',
-                'status' => 'unread',
+                'booking',
+                'baggage',
             ]);
-        }
 
-        return redirect()
-            ->route(
-                'payment.show',
-                $booking->id
-    );
+            $admins = User::where('role', 'admin')->get();
+
+            foreach ($admins as $admin) {
+                Notification::create([
+                    'user_id' => $admin->id,
+                    'ticket_id' => $booking->tickets()->first()?->id,
+                    'sender_id' => auth()->id(),
+                    'title' => 'Có đơn đặt vé mới',
+                    'message' => 'Khách hàng vừa tạo đơn '
+                        . $booking->booking_code
+                        . '.',
+                    'status' => 'unread',
+                ]);
+            }
+
+            return redirect()
+                ->route(
+                    'payment.show',
+                    $booking->id
+                );
         } catch (\Exception $e) {
             return redirect()
                 ->route('flights.search.form')
@@ -522,389 +525,405 @@ class BookingController extends Controller
     }
 
     public function pay(
-    Request $request,
-    Booking $booking
-) {
-    set_time_limit(300);
+        Request $request,
+        Booking $booking
+    ) {
+        set_time_limit(300);
 
-    if ($booking->user_id !== auth()->id()) {
-        abort(403);
-    }
+        if ($booking->user_id !== auth()->id()) {
+            abort(403);
+        }
 
-    $request->validate(
-        [
-            'payment_receipt' => [
-                'required',
-                'image',
-                'mimes:jpg,jpeg,png',
-                'max:5120',
+        $request->validate(
+            [
+                'payment_receipt' => [
+                    'required',
+                    'image',
+                    'mimes:jpg,jpeg,png',
+                    'max:5120',
+                ],
             ],
-        ],
-        [
-            'payment_receipt.required' =>
-                'Vui lòng tải ảnh hóa đơn chuyển khoản.',
-
-            'payment_receipt.image' =>
-                'Hóa đơn phải là hình ảnh.',
-
-            'payment_receipt.mimes' =>
-                'Hóa đơn phải là ảnh JPG, JPEG hoặc PNG.',
-
-            'payment_receipt.max' =>
-                'Ảnh hóa đơn không được vượt quá 5MB.',
-        ]
-    );
-
-    if (
-        $booking->payment_status === 'paid'
-        && $booking->booking_status === 'confirmed'
-    ) {
-        return redirect()->route(
-            'ticket.show',
-            $booking->id
-        );
-    }
-
-    if ($booking->booking_status === 'cancelled') {
-        return back()->with(
-            'error',
-            'Đơn đặt vé đã bị hủy.'
-        );
-    }
-
-    if ($this->isBookingExpired($booking)) {
-        $this->cancelExpiredBookingById(
-            $booking->id
-        );
-
-        return redirect()
-            ->route('flights.search.form')
-            ->with(
-                'error',
-                'Thời gian giữ ghế 15 phút đã hết. Ghế đã được giải phóng.'
-            );
-    }
-
-    $receipt = $request->file(
-        'payment_receipt'
-    );
-
-    $receiptPath = $receipt->store(
-        'payment_receipts',
-        'public'
-    );
-
-    $absolutePath = storage_path(
-        'app/public/' . $receiptPath
-    );
-
-    try {
-       $pythonPath =
-    'C:\Users\tring\AppData\Local\Programs\Python\Python312\python.exe';
-
-$result = Process::timeout(300)
-    ->env([
-        'PATH' => getenv('PATH'),
-        'SYSTEMROOT' => getenv('SYSTEMROOT'),
-        'WINDIR' => getenv('WINDIR'),
-        'TEMP' => getenv('TEMP'),
-        'TMP' => getenv('TMP'),
-        'PYTHONUTF8' => '1',
-        'PYTHONIOENCODING' => 'utf-8',
-    ])
-        ->run([
-        $pythonPath,
-        base_path('python/receipt_ocr.py'),
-        $absolutePath,
-        'C:\Users\tring\.EasyOCR\model',
-    ]);
-
-        if (!$result->successful()) {
-            throw new \Exception(
-                'OCR lỗi: ' . trim($result->errorOutput())
-            );
-        }
-
-        $ocr = json_decode(
-            trim($result->output()),
-            true
-        );
-
-        if (!is_array($ocr)) {
-            throw new \Exception(
-                'OCR trả về dữ liệu không hợp lệ: '
-                . $result->output()
-            );
-        }
-
-        if (empty($ocr['success'])) {
-            throw new \Exception(
-                'OCR Python lỗi: '
-                . ($ocr['message'] ?? 'Không rõ lỗi.')
-            );
-        }
-
-        $ocrText = $ocr['text'] ?? '';
-
-        $normalizedText =
-            $ocr['normalized_text']
-            ?? $ocrText;
-
-        $transactionCode =
-            $ocr['transaction_code']
-            ?? null;
-
-        $amounts =
-            $ocr['amounts']
-            ?? [];
-
-        $expectedContent =
-    'VJ ' . $booking->booking_code;
-
-$normalizedExpectedContent = strtoupper(
-    preg_replace(
-        '/[^A-Za-z0-9]/',
-        '',
-        $expectedContent
-    )
-);
-
-$normalizedReceipt = strtoupper(
-    preg_replace(
-        '/[^A-Za-z0-9]/',
-        '',
-        $normalizedText
-    )
-);
-
-$hasCorrectContent = str_contains(
-    $normalizedReceipt,
-    $normalizedExpectedContent
-);
-
-if (!$hasCorrectContent) {
-    $receiptLength =
-        strlen($normalizedReceipt);
-
-    $expectedLength =
-        strlen($normalizedExpectedContent);
-
-    for (
-        $i = 0;
-        $i <= $receiptLength - $expectedLength;
-        $i++
-    ) {
-        $part = substr(
-            $normalizedReceipt,
-            $i,
-            $expectedLength
+            [
+                'payment_receipt.required' =>
+                    'Vui lòng tải ảnh hóa đơn chuyển khoản.',
+                'payment_receipt.image' =>
+                    'Hóa đơn phải là hình ảnh.',
+                'payment_receipt.mimes' =>
+                    'Hóa đơn phải là ảnh JPG, JPEG hoặc PNG.',
+                'payment_receipt.max' =>
+                    'Ảnh hóa đơn không được vượt quá 5MB.',
+            ]
         );
 
         if (
-            levenshtein(
-                $normalizedExpectedContent,
-                $part
-            ) <= 1
+            $booking->payment_status === 'paid'
+            && $booking->booking_status === 'confirmed'
         ) {
-            $hasCorrectContent = true;
-            break;
-        }
-    }
-}
-
-        $expectedAmount =
-            (int) $booking->total_amount;
-
-        $hasCorrectAmount = false;
-
-        foreach ($amounts as $amount) {
-            if ((int) $amount === $expectedAmount) {
-                $hasCorrectAmount = true;
-                break;
-            }
-        }
-
-        if (!$transactionCode) {
-            return back()->with(
-                'error',
-                'Không đọc được mã giao dịch trên hóa đơn. Vui lòng sử dụng ảnh hóa đơn rõ hơn.'
-            );
-        }
-
-        if (
-            Payment::where(
-                'receipt_transaction_code',
-                $transactionCode
-            )->exists()
-        ) {
-            return back()->with(
-                'error',
-                'Mã giao dịch này đã được sử dụng cho một thanh toán khác.'
-            );
-        }
-
-        if (!$hasCorrectContent) {
-            return back()->with(
-                'error',
-                'Hóa đơn không hợp lệ. Nội dung chuyển khoản không đúng.'
-            );
-        }
-
-        if (!$hasCorrectAmount) {
-            return back()->with(
-                'error',
-                'Hóa đơn không hợp lệ. Số tiền chuyển khoản không đúng.'
-            );
-        }
-
-        DB::transaction(
-            function () use (
-                $booking,
-                $receiptPath,
-                $transactionCode,
-                $ocrText,
-                $expectedAmount,
-                $expectedContent
-            ) {
-                $lockedBooking =
-                    Booking::where(
-                        'id',
-                        $booking->id
-                    )
-                        ->lockForUpdate()
-                        ->firstOrFail();
-
-                if (
-                    $lockedBooking->payment_status
-                    === 'paid'
-                ) {
-                    return;
-                }
-
-                if (
-                    $lockedBooking->booking_status
-                    === 'cancelled'
-                ) {
-                    throw new \Exception(
-                        'Đơn đặt vé đã bị hủy.'
-                    );
-                }
-
-                if (
-                    $this->isBookingExpired(
-                        $lockedBooking
-                    )
-                ) {
-                    throw new \Exception(
-                        'Thời gian giữ ghế 15 phút đã hết.'
-                    );
-                }
-
-                if (
-                    Payment::where(
-                        'receipt_transaction_code',
-                        $transactionCode
-                    )
-                        ->lockForUpdate()
-                        ->exists()
-                ) {
-                    throw new \Exception(
-                        'Mã giao dịch này đã được sử dụng.'
-                    );
-                }
-
-                $lockedBooking->update([
-                    'payment_status' => 'paid',
-                    'booking_status' => 'confirmed',
-                    'expires_at' => null,
-                ]);
-
-                Ticket::where(
-                    'booking_id',
-                    $lockedBooking->id
-                )->update([
-                    'ticket_status' => 'active',
-                ]);
-
-                Payment::create([
-                    'booking_id' =>
-                        $lockedBooking->id,
-
-                    'payment_code' =>
-                        'PAY'
-                        . Str::upper(
-                            Str::random(10)
-                        ),
-
-                    'amount' =>
-                        $expectedAmount,
-
-                    'payment_method' =>
-                        'bank_transfer',
-
-                    'payment_status' =>
-                        'paid',
-
-                    'receipt_image' =>
-                        $receiptPath,
-
-                    'receipt_transaction_code' =>
-                        $transactionCode,
-
-                    'receipt_content' =>
-                         $expectedContent,
-
-                    'receipt_amount' =>
-                        $expectedAmount,
-
-                    'ocr_text' =>
-                        $ocrText,
-
-                    'paid_at' =>
-                        now(),
-                        
-                ]);
-                $admins = User::where('role', 'admin')->get();
-
-                foreach ($admins as $admin) {
-                    Notification::create([
-                        'user_id' => $admin->id,
-                        'ticket_id' => $lockedBooking->tickets()->first()?->id,
-                        'sender_id' => auth()->id(),
-                        'title' => 'Thanh toán thành công',
-                        'message' =>
-                            'Đơn '
-                            . $lockedBooking->booking_code
-                            . ' đã thanh toán thành công '
-                            . number_format($expectedAmount, 0, ',', '.')
-                            . 'đ.',
-                        'status' => 'unread',
-                    ]);
-                }
-            }
-        );
-
-        return redirect()
-            ->route(
+            return redirect()->route(
                 'ticket.show',
                 $booking->id
-            )
-            ->with(
-                'success',
-                'Thanh toán thành công. Vé đã có hiệu lực.'
             );
-    } catch (\Throwable $e) {
-        return redirect()
-            ->route(
-                'payment.show',
-                $booking->id
-            )
-            ->with(
+        }
+
+        if ($booking->booking_status === 'cancelled') {
+            return back()->with(
                 'error',
-                $e->getMessage()
+                'Đơn đặt vé đã bị hủy.'
             );
+        }
+
+        if ($this->isBookingExpired($booking)) {
+            $this->cancelExpiredBookingById(
+                $booking->id
+            );
+
+            return redirect()
+                ->route('flights.search.form')
+                ->with(
+                    'error',
+                    'Thời gian giữ ghế 15 phút đã hết. Ghế đã được giải phóng.'
+                );
+        }
+
+        $receipt = $request->file(
+            'payment_receipt'
+        );
+
+        $receiptPath = $receipt->store(
+            'payment_receipts',
+            'public'
+        );
+
+        $absolutePath = storage_path(
+            'app/public/' . $receiptPath
+        );
+
+        try {
+            $pythonPath =
+                'C:\Users\tring\AppData\Local\Programs\Python\Python312\python.exe';
+
+            $result = Process::timeout(300)
+                ->env([
+                    'PATH' => getenv('PATH'),
+                    'SYSTEMROOT' => getenv('SYSTEMROOT'),
+                    'WINDIR' => getenv('WINDIR'),
+                    'TEMP' => getenv('TEMP'),
+                    'TMP' => getenv('TMP'),
+                    'PYTHONUTF8' => '1',
+                    'PYTHONIOENCODING' => 'utf-8',
+                ])
+                ->run([
+                    $pythonPath,
+                    base_path('python/receipt_ocr.py'),
+                    $absolutePath,
+                    'C:\Users\tring\.EasyOCR\model',
+                ]);
+
+            if (!$result->successful()) {
+                throw new \Exception(
+                    'OCR lỗi: ' . trim($result->errorOutput())
+                );
+            }
+
+            $ocr = json_decode(
+                trim($result->output()),
+                true
+            );
+
+            if (!is_array($ocr)) {
+                throw new \Exception(
+                    'OCR trả về dữ liệu không hợp lệ: '
+                    . $result->output()
+                );
+            }
+
+            if (empty($ocr['success'])) {
+                throw new \Exception(
+                    'OCR Python lỗi: '
+                    . ($ocr['message'] ?? 'Không rõ lỗi.')
+                );
+            }
+
+            $ocrText = $ocr['text'] ?? '';
+
+            $normalizedText =
+                $ocr['normalized_text']
+                ?? $ocrText;
+
+            $transactionCode =
+                $ocr['transaction_code']
+                ?? null;
+
+            $amounts =
+                $ocr['amounts']
+                ?? [];
+
+            $expectedContent =
+                'VJ ' . $booking->booking_code;
+
+            $normalizedExpectedContent = strtoupper(
+                preg_replace(
+                    '/[^A-Za-z0-9]/',
+                    '',
+                    $expectedContent
+                )
+            );
+
+            $normalizedReceipt = strtoupper(
+                preg_replace(
+                    '/[^A-Za-z0-9]/',
+                    '',
+                    $normalizedText
+                )
+            );
+
+            $hasCorrectContent = str_contains(
+                $normalizedReceipt,
+                $normalizedExpectedContent
+            );
+
+            if (!$hasCorrectContent) {
+                // Chỉ chuẩn hóa các cặp ký tự OCR dễ nhầm: O/0 và S/5.
+                // Vẫn đối chiếu đầy đủ nội dung VJ + mã đặt vé.
+                $ocrConfusionMap = [
+                    'O' => '0',
+                    'S' => '5',
+                ];
+
+                $canonicalExpectedContent = strtr(
+                    $normalizedExpectedContent,
+                    $ocrConfusionMap
+                );
+
+                $canonicalReceipt = strtr(
+                    $normalizedReceipt,
+                    $ocrConfusionMap
+                );
+
+                $hasCorrectContent = str_contains(
+                    $canonicalReceipt,
+                    $canonicalExpectedContent
+                );
+            }
+
+            if (!$hasCorrectContent) {
+                $receiptLength =
+                    strlen($normalizedReceipt);
+
+                $expectedLength =
+                    strlen($normalizedExpectedContent);
+
+                for (
+                    $i = 0;
+                    $i <= $receiptLength - $expectedLength;
+                    $i++
+                ) {
+                    $part = substr(
+                        $normalizedReceipt,
+                        $i,
+                        $expectedLength
+                    );
+
+                    if (
+                        levenshtein(
+                            $normalizedExpectedContent,
+                            $part
+                        ) <= 1
+                    ) {
+                        $hasCorrectContent = true;
+                        break;
+                    }
+                }
+            }
+
+            $expectedAmount =
+                (int) $booking->total_amount;
+
+            $hasCorrectAmount = false;
+
+            foreach ($amounts as $amount) {
+                if ((int) $amount === $expectedAmount) {
+                    $hasCorrectAmount = true;
+                    break;
+                }
+            }
+
+            if (!$transactionCode) {
+                return back()->with(
+                    'error',
+                    'Không đọc được mã giao dịch trên hóa đơn. Vui lòng sử dụng ảnh hóa đơn rõ hơn.'
+                );
+            }
+
+            if (
+                Payment::where(
+                    'receipt_transaction_code',
+                    $transactionCode
+                )->exists()
+            ) {
+                return back()->with(
+                    'error',
+                    'Mã giao dịch này đã được sử dụng cho một thanh toán khác.'
+                );
+            }
+
+            if (!$hasCorrectContent) {
+                return back()->with(
+                    'error',
+                    'Hóa đơn không hợp lệ. Nội dung chuyển khoản không đúng.'
+                );
+            }
+
+            if (!$hasCorrectAmount) {
+                return back()->with(
+                    'error',
+                    'Hóa đơn không hợp lệ. Số tiền chuyển khoản không đúng.'
+                );
+            }
+
+            DB::transaction(
+                function () use (
+                    $booking,
+                    $receiptPath,
+                    $transactionCode,
+                    $ocrText,
+                    $expectedAmount,
+                    $expectedContent
+                ) {
+                    $lockedBooking =
+                        Booking::where(
+                            'id',
+                            $booking->id
+                        )
+                            ->lockForUpdate()
+                            ->firstOrFail();
+
+                    if (
+                        $lockedBooking->payment_status
+                        === 'paid'
+                    ) {
+                        return;
+                    }
+
+                    if (
+                        $lockedBooking->booking_status
+                        === 'cancelled'
+                    ) {
+                        throw new \Exception(
+                            'Đơn đặt vé đã bị hủy.'
+                        );
+                    }
+
+                    if (
+                        $this->isBookingExpired(
+                            $lockedBooking
+                        )
+                    ) {
+                        throw new \Exception(
+                            'Thời gian giữ ghế 15 phút đã hết.'
+                        );
+                    }
+
+                    if (
+                        Payment::where(
+                            'receipt_transaction_code',
+                            $transactionCode
+                        )
+                            ->lockForUpdate()
+                            ->exists()
+                    ) {
+                        throw new \Exception(
+                            'Mã giao dịch này đã được sử dụng.'
+                        );
+                    }
+
+                    $lockedBooking->update([
+                        'payment_status' => 'paid',
+                        'booking_status' => 'confirmed',
+                        'expires_at' => null,
+                    ]);
+
+                    Ticket::where(
+                        'booking_id',
+                        $lockedBooking->id
+                    )->update([
+                        'ticket_status' => 'active',
+                    ]);
+
+                    Payment::create([
+                        'booking_id' =>
+                            $lockedBooking->id,
+                        'payment_code' =>
+                            'PAY'
+                            . Str::upper(
+                                Str::random(10)
+                            ),
+                        'amount' =>
+                            $expectedAmount,
+                        'payment_method' =>
+                            'bank_transfer',
+                        'payment_status' =>
+                            'paid',
+                        'receipt_image' =>
+                            $receiptPath,
+                        'receipt_transaction_code' =>
+                            $transactionCode,
+                        'receipt_content' =>
+                            $expectedContent,
+                        'receipt_amount' =>
+                            $expectedAmount,
+                        'ocr_text' =>
+                            $ocrText,
+                        'paid_at' =>
+                            now(),
+                    ]);
+
+                    $admins = User::where('role', 'admin')->get();
+
+                    foreach ($admins as $admin) {
+                        Notification::create([
+                            'user_id' => $admin->id,
+                            'ticket_id' => $lockedBooking->tickets()->first()?->id,
+                            'sender_id' => auth()->id(),
+                            'title' => 'Thanh toán thành công',
+                            'message' =>
+                                'Đơn '
+                                . $lockedBooking->booking_code
+                                . ' đã thanh toán thành công '
+                                . number_format(
+                                    $expectedAmount,
+                                    0,
+                                    ',',
+                                    '.'
+                                )
+                                . 'đ.',
+                            'status' => 'unread',
+                        ]);
+                    }
+                }
+            );
+
+            return redirect()
+                ->route(
+                    'ticket.show',
+                    $booking->id
+                )
+                ->with(
+                    'success',
+                    'Thanh toán thành công. Vé đã có hiệu lực.'
+                );
+        } catch (\Throwable $e) {
+            return redirect()
+                ->route(
+                    'payment.show',
+                    $booking->id
+                )
+                ->with(
+                    'error',
+                    $e->getMessage()
+                );
+        }
     }
-}
 
     public function ticket(Booking $booking)
     {
@@ -944,9 +963,9 @@ if (!$hasCorrectContent) {
                     $booking->id
                 )
                 ->with(
-                'error',
-                'Vui lòng thanh toán trước khi xem vé điện tử.'
-            );
+                    'error',
+                    'Vui lòng thanh toán trước khi xem vé điện tử.'
+                );
         }
 
         $booking->load([
@@ -1432,15 +1451,15 @@ if (!$hasCorrectContent) {
                 );
         }
 
-            session()->forget(
+        session()->forget(
             'ticket_change'
         );
 
-            $ticket->refresh();
+        $ticket->refresh();
 
-             $admins = User::where('role', 'admin')->get();
+        $admins = User::where('role', 'admin')->get();
 
-              foreach ($admins as $admin) {
+        foreach ($admins as $admin) {
             Notification::create([
                 'user_id' => $admin->id,
                 'ticket_id' => $ticket->id,
@@ -1694,6 +1713,7 @@ if (!$hasCorrectContent) {
                                 'cancelled',
                         ]);
                     }
+
                     $admins = User::where('role', 'admin')->get();
 
                     foreach ($admins as $admin) {
@@ -1867,6 +1887,7 @@ if (!$hasCorrectContent) {
                     'booking_status' =>
                         'cancelled',
                 ]);
+
                 $admins = User::where('role', 'admin')->get();
 
                 foreach ($admins as $admin) {

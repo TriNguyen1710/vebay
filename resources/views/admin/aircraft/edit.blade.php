@@ -870,7 +870,20 @@
 
                 Quản lý người dùng
             </a>
+            <a
+                href="{{ route('admin.employees.index') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="9" cy="8" r="4"/>
+                        <path d="M3 21v-2a6 6 0 0 1 12 0v2"/>
+                        <path d="M16 11a4 4 0 0 1 5 4"/>
+                    </svg>
+                </span>
 
+                Quản lý nhân viên
+            </a>
             {{-- QUẢN LÝ HÀNH LÝ --}}
             <a
                 href="{{ route('admin.baggage.index') }}"
