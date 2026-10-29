@@ -6,16 +6,13 @@
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
-
     <title>Tra cứu vé - Nhân viên</title>
-
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         :root {
             --primary: #003b70;
             --primary-dark: #00294f;
@@ -29,37 +26,30 @@
             --success: #198754;
             --danger: #dc3545;
         }
-
         body {
             min-height: 100vh;
             font-family: Arial, Helvetica, sans-serif;
             background: var(--background);
             color: var(--text);
         }
-
         a {
             text-decoration: none;
         }
-
         button,
         input {
             font-family: inherit;
         }
-
         /* ================================
            LAYOUT
         ================================= */
-
         .employee-layout {
             min-height: 100vh;
             display: grid;
             grid-template-columns: 245px 1fr;
         }
-
         /* ================================
            SIDEBAR
         ================================= */
-
         .sidebar {
             position: fixed;
             top: 0;
@@ -72,7 +62,6 @@
             background: var(--primary-dark);
             color: white;
         }
-
         .logo {
             display: block;
             padding: 0 10px;
@@ -82,11 +71,9 @@
             font-weight: 800;
             letter-spacing: -1px;
         }
-
         .logo span {
             color: var(--secondary);
         }
-
         .employee-label {
             padding: 0 11px;
             margin-bottom: 31px;
@@ -96,7 +83,6 @@
             letter-spacing: 1px;
             text-transform: uppercase;
         }
-
         .menu-title {
             padding: 0 11px;
             margin-bottom: 10px;
@@ -105,12 +91,10 @@
             font-weight: bold;
             letter-spacing: 1.3px;
         }
-
         .menu {
             display: grid;
             gap: 4px;
         }
-
         .menu-link {
             min-height: 44px;
             padding: 0 13px;
@@ -123,13 +107,11 @@
             font-weight: 600;
             transition: 0.2s;
         }
-
         .menu-link:hover,
         .menu-link.active {
             background: rgba(255, 255, 255, 0.1);
             color: white;
         }
-
         .menu-icon {
             width: 17px;
             height: 17px;
@@ -138,7 +120,6 @@
             justify-content: center;
             flex-shrink: 0;
         }
-
         .menu-icon svg {
             width: 17px;
             height: 17px;
@@ -146,41 +127,33 @@
             stroke: currentColor;
             stroke-width: 1.8;
         }
-
         .menu-link.active .menu-icon {
             color: var(--secondary);
         }
-
         .disabled-link {
             opacity: 0.45;
             pointer-events: none;
         }
-
         /* ================================
            SIDEBAR BOTTOM
         ================================= */
-
         .sidebar-bottom {
             margin-top: auto;
             padding-top: 22px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
-
         .employee-info {
             padding: 0 11px 16px;
         }
-
         .employee-info strong {
             display: block;
             margin-bottom: 4px;
             font-size: 12px;
         }
-
         .employee-info span {
             color: #8fa5b5;
             font-size: 10px;
         }
-
         .logout-btn {
             width: 100%;
             padding: 10px;
@@ -192,25 +165,20 @@
             font-size: 11px;
             font-weight: bold;
         }
-
         .logout-btn:hover {
             background: var(--danger);
             border-color: var(--danger);
         }
-
         /* ================================
            MAIN
         ================================= */
-
         .main {
             grid-column: 2;
             min-width: 0;
         }
-
         /* ================================
            TOPBAR
         ================================= */
-
         .topbar {
             height: 70px;
             padding: 0 30px;
@@ -220,18 +188,15 @@
             justify-content: space-between;
             align-items: center;
         }
-
         .topbar-left h2 {
             margin-bottom: 3px;
             color: var(--primary);
             font-size: 19px;
         }
-
         .topbar-left p {
             color: var(--muted);
             font-size: 10px;
         }
-
         .employee-badge {
             padding: 7px 11px;
             border: 1px solid #cbdce7;
@@ -241,17 +206,14 @@
             font-size: 10px;
             font-weight: bold;
         }
-
         /* ================================
            CONTENT
         ================================= */
-
         .content {
             max-width: 1500px;
             margin: auto;
             padding: 28px 30px 45px;
         }
-
         .page-heading {
             margin-bottom: 20px;
             display: flex;
@@ -259,20 +221,17 @@
             align-items: flex-end;
             gap: 20px;
         }
-
         .page-heading h1 {
             margin-bottom: 6px;
             color: var(--text);
             font-size: 24px;
         }
-
         .page-heading p {
             max-width: 720px;
             color: var(--muted);
             font-size: 11px;
             line-height: 1.6;
         }
-
         .back-btn {
             min-height: 38px;
             padding: 0 15px;
@@ -287,15 +246,12 @@
             font-weight: bold;
             white-space: nowrap;
         }
-
         .back-btn:hover {
             background: #f6f8fa;
         }
-
         /* ================================
            ALERT
         ================================= */
-
         .alert {
             margin-bottom: 16px;
             padding: 13px 15px;
@@ -303,25 +259,21 @@
             font-size: 10px;
             line-height: 1.6;
         }
-
         .alert-success {
             background: #edf8f2;
             border: 1px solid #badfc9;
             border-left: 4px solid var(--success);
             color: #17643d;
         }
-
         .alert-error {
             background: #fff0f1;
             border: 1px solid #efc0c5;
             border-left: 4px solid var(--danger);
             color: #a52a36;
         }
-
         /* ================================
            SEARCH
         ================================= */
-
         .search-card {
             margin-bottom: 16px;
             padding: 18px 20px;
@@ -330,32 +282,26 @@
             background: white;
             box-shadow: 0 3px 12px rgba(20, 45, 65, 0.04);
         }
-
         .search-header {
             margin-bottom: 14px;
         }
-
         .search-header h3 {
             margin-bottom: 4px;
             color: var(--primary);
             font-size: 13px;
         }
-
         .search-header p {
             color: var(--muted);
             font-size: 9px;
         }
-
         .search-form {
             display: flex;
             gap: 9px;
         }
-
         .search-input-wrap {
             position: relative;
             flex: 1;
         }
-
         .search-icon {
             position: absolute;
             top: 50%;
@@ -365,7 +311,6 @@
             transform: translateY(-50%);
             color: #87949d;
         }
-
         .search-icon svg {
             width: 16px;
             height: 16px;
@@ -373,7 +318,6 @@
             stroke: currentColor;
             stroke-width: 1.8;
         }
-
         .search-form input {
             width: 100%;
             height: 43px;
@@ -384,13 +328,11 @@
             color: #394b58;
             font-size: 10px;
         }
-
         .search-form input:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(0, 59, 112, 0.06);
         }
-
         .search-btn,
         .reset-btn {
             min-height: 43px;
@@ -403,32 +345,26 @@
             font-weight: 800;
             white-space: nowrap;
         }
-
         .search-btn {
             border: none;
             background: var(--secondary);
             color: var(--primary-dark);
             cursor: pointer;
         }
-
         .search-btn:hover {
             background: #ffc31a;
         }
-
         .reset-btn {
             border: 1px solid var(--border);
             background: white;
             color: var(--primary);
         }
-
         .reset-btn:hover {
             background: #f6f8fa;
         }
-
         /* ================================
            SUMMARY
         ================================= */
-
         .summary {
             margin-bottom: 16px;
             padding: 12px 15px;
@@ -439,16 +375,13 @@
             color: #526b7a;
             font-size: 10px;
         }
-
         .summary strong {
             color: var(--primary);
             font-size: 12px;
         }
-
         /* ================================
            TABLE PANEL
         ================================= */
-
         .panel {
             background: white;
             border: 1px solid var(--border);
@@ -456,7 +389,6 @@
             box-shadow: 0 3px 12px rgba(20, 45, 65, 0.04);
             overflow: hidden;
         }
-
         .panel-header {
             min-height: 64px;
             padding: 16px 19px;
@@ -466,18 +398,15 @@
             align-items: center;
             gap: 20px;
         }
-
         .panel-header h3 {
             margin-bottom: 4px;
             color: var(--primary);
             font-size: 13px;
         }
-
         .panel-header p {
             color: var(--muted);
             font-size: 9px;
         }
-
         .count-box {
             padding: 6px 10px;
             border-radius: 5px;
@@ -486,26 +415,21 @@
             font-size: 9px;
             font-weight: bold;
         }
-
         /* ================================
            TABLE
         ================================= */
-
         .table-wrapper {
             width: 100%;
             overflow-x: auto;
         }
-
         table {
             width: 100%;
-            min-width: 1520px;
+            min-width: 1680px;
             border-collapse: collapse;
         }
-
         thead {
             background: #f8fafc;
         }
-
         th {
             padding: 12px 11px;
             text-align: left;
@@ -516,7 +440,6 @@
             white-space: nowrap;
             text-transform: uppercase;
         }
-
         td {
             padding: 13px 11px;
             border-bottom: 1px solid #edf0f2;
@@ -524,19 +447,15 @@
             font-size: 9px;
             vertical-align: middle;
         }
-
         tbody tr:hover {
             background: #fbfcfd;
         }
-
         tbody tr:last-child td {
             border-bottom: none;
         }
-
         /* ================================
            TICKET INFO
         ================================= */
-
         .ticket-code {
             margin-bottom: 4px;
             color: var(--primary);
@@ -544,13 +463,11 @@
             font-weight: 800;
             white-space: nowrap;
         }
-
         .booking-code {
             color: var(--muted);
             font-size: 8px;
             white-space: nowrap;
         }
-
         .passenger-name {
             margin-bottom: 4px;
             color: var(--primary-dark);
@@ -558,17 +475,14 @@
             font-weight: 700;
             white-space: nowrap;
         }
-
         .passenger-phone {
             color: var(--muted);
             font-size: 8px;
         }
-
         .flight-code {
             color: var(--primary);
             font-weight: 800;
         }
-
         .route-code {
             display: block;
             margin-bottom: 3px;
@@ -576,26 +490,34 @@
             font-weight: 800;
             white-space: nowrap;
         }
-
         .route-city {
             color: var(--muted);
             font-size: 8px;
             white-space: nowrap;
         }
-
         .flight-date {
             color: #435461;
             font-weight: 700;
             white-space: nowrap;
         }
-
         .flight-time {
             display: block;
             margin-top: 3px;
             color: var(--muted);
             font-size: 8px;
         }
-
+        .check-in-time {
+            min-width: 145px;
+            color: #17643d;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .check-in-unavailable {
+            color: var(--muted);
+            font-size: 8px;
+            font-weight: normal;
+            white-space: nowrap;
+        }
         .seat-number {
             min-width: 31px;
             padding: 5px 7px;
@@ -607,29 +529,24 @@
             color: var(--primary);
             font-weight: 800;
         }
-
         .price {
             color: #364c59;
             font-weight: 700;
             white-space: nowrap;
         }
-
         .baggage-weight {
             color: var(--primary-dark);
             font-weight: 800;
             white-space: nowrap;
         }
-
         .baggage-price {
             color: #9b7200;
             font-weight: 800;
             white-space: nowrap;
         }
-
         /* ================================
            BADGES
         ================================= */
-
         .badge {
             padding: 5px 8px;
             display: inline-flex;
@@ -639,43 +556,35 @@
             font-weight: bold;
             white-space: nowrap;
         }
-
         .badge-vip {
             background: #fff8df;
             color: #856700;
             border: 1px solid #ead58e;
         }
-
         .badge-economy {
             background: var(--primary-light);
             color: var(--primary);
             border: 1px solid #c8dce8;
         }
-
         .status-active {
             background: #fff8df;
             color: #7a6000;
         }
-
         .status-used {
             background: #edf8f2;
             color: #17643d;
         }
-
         .status-cancelled {
             background: #fff0f1;
             color: #b02a37;
         }
-
         .status-pending {
             background: #f0f2f4;
             color: #68747c;
         }
-
         /* ================================
            ACTIONS
         ================================= */
-
         .confirm-btn,
         .done-btn {
             min-height: 38px;
@@ -689,33 +598,27 @@
             justify-content: center;
             text-decoration: none;
         }
-
         .confirm-btn {
             border: none;
             background: var(--success);
             color: white;
             cursor: pointer;
         }
-
         .confirm-btn:hover {
             background: #157347;
         }
-
         .done-btn {
             border: 1px solid #bddfc9;
             background: #edf8f2;
             color: #17643d;
         }
-
         /* ================================
            EMPTY
         ================================= */
-
         .empty {
             padding: 52px 20px;
             text-align: center;
         }
-
         .empty-icon {
             width: 48px;
             height: 48px;
@@ -727,7 +630,6 @@
             align-items: center;
             justify-content: center;
         }
-
         .empty-icon svg {
             width: 23px;
             height: 23px;
@@ -735,43 +637,35 @@
             stroke: currentColor;
             stroke-width: 1.6;
         }
-
         .empty h3 {
             margin-bottom: 7px;
             color: var(--primary-dark);
             font-size: 14px;
         }
-
         .empty p {
             margin-bottom: 13px;
             color: var(--muted);
             font-size: 9px;
         }
-
         .empty a {
             color: var(--primary);
             font-size: 9px;
             font-weight: bold;
         }
-
         /* ================================
            FOOTER
         ================================= */
-
         .bottom-back {
             margin-top: 20px;
         }
-
         .bottom-back a {
             color: var(--primary);
             font-size: 10px;
             font-weight: bold;
         }
-
         .bottom-back a:hover {
             text-decoration: underline;
         }
-
         .footer {
             margin-top: 28px;
             padding-top: 18px;
@@ -781,79 +675,70 @@
             color: #919ca4;
             font-size: 9px;
         }
-
         /* ================================
            RESPONSIVE
         ================================= */
-
         @media (max-width: 900px) {
             .employee-layout {
                 display: block;
             }
-
             .sidebar {
                 position: relative;
                 width: 100%;
                 height: auto;
             }
-
             .menu {
                 grid-template-columns: repeat(2, 1fr);
             }
-
             .main {
                 margin-left: 0;
             }
         }
-
         @media (max-width: 700px) {
             .content {
                 padding: 20px 15px 35px;
             }
-
             .page-heading {
                 align-items: flex-start;
                 flex-direction: column;
             }
-
+            .topbar {
+                height: auto;
+                padding: 16px;
+                gap: 15px;
+                align-items: flex-start;
+                flex-direction: column;
+            }
             .search-form {
                 flex-direction: column;
             }
-
             .search-btn,
             .reset-btn {
                 width: 100%;
             }
-
             .panel-header {
                 align-items: flex-start;
                 flex-direction: column;
             }
-
             .menu {
                 grid-template-columns: 1fr;
             }
         }
-
         /* ================================
            BỘ LỌC TRA CỨU VÉ
         ================================= */
-
         .search-form.ticket-filter-form {
             display: block;
         }
-
         .ticket-filter-grid {
             display: grid;
             grid-template-columns: 2fr 1.1fr 1.2fr 1.5fr 1fr;
             gap: 14px;
             align-items: end;
         }
-
         .ticket-filter-field {
             min-width: 0;
         }
-
         .ticket-filter-field label {
             display: block;
             margin-bottom: 7px;
@@ -861,7 +746,6 @@
             font-size: 10px;
             font-weight: bold;
         }
-
         .ticket-filter-field select,
         .ticket-filter-field input[type="date"] {
             width: 100%;
@@ -874,48 +758,40 @@
             font-family: inherit;
             font-size: 10px;
         }
-
         .ticket-filter-field select:focus,
         .ticket-filter-field input[type="date"]:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(0, 59, 112, 0.06);
         }
-
         .ticket-filter-actions {
             display: flex;
             gap: 9px;
             margin-top: 16px;
         }
-
         .confirmation-panel {
             margin-bottom: 20px;
         }
-
         .confirmation-summary {
             display: flex;
             flex-wrap: wrap;
             gap: 10px 24px;
         }
-
         @media (max-width: 1200px) {
             .ticket-filter-grid {
                 grid-template-columns: repeat(3, minmax(0, 1fr));
             }
         }
-
         @media (max-width: 700px) {
             .ticket-filter-grid {
                 grid-template-columns: 1fr;
             }
-
             .ticket-filter-actions {
                 flex-direction: column;
             }
         }
     </style>
 </head>
-
 <body>
 @php
     $selectedFlightDate = request('flight_date', '');
@@ -1003,13 +879,17 @@
     $confirmedTickets = $filteredTickets
         ->where('ticket_status', 'used')
         ->values();
+
+    // Lấy thời gian check-in bằng một truy vấn cho các vé đã xác nhận.
+    $checkInTimes = \Illuminate\Support\Facades\DB::table('ticket_check_ins')
+        ->whereIn('ticket_id', $confirmedTickets->pluck('id')->all())
+        ->pluck('checked_in_at', 'ticket_id');
 @endphp
 
 <div class="employee-layout">
     {{-- ========================= --}}
     {{-- SIDEBAR --}}
     {{-- ========================= --}}
-
     <aside class="sidebar">
         <a
             href="{{ route('nhanvien.trang-chu') }}"
@@ -1040,7 +920,6 @@
                         <rect x="14" y="14" width="7" height="7"/>
                     </svg>
                 </span>
-
                 Tổng quan
             </a>
 
@@ -1056,7 +935,6 @@
                         <path d="M8 13h5"/>
                     </svg>
                 </span>
-
                 Tra cứu vé
             </a>
 
@@ -1072,7 +950,6 @@
                         <path d="M16 11a4 4 0 0 1 5 4"/>
                     </svg>
                 </span>
-
                 Hành khách chưa kiểm tra
             </a>
 
@@ -1086,7 +963,6 @@
                         <path d="M2 16l20-5-20-5 3 5-3 5z"/>
                     </svg>
                 </span>
-
                 Danh sách chuyến bay
             </a>
 
@@ -1099,7 +975,6 @@
                 <strong>
                     {{ auth()->user()->name }}
                 </strong>
-
                 <span>
                     Nhân viên sân bay
                 </span>
@@ -1124,14 +999,12 @@
     {{-- ========================= --}}
     {{-- MAIN --}}
     {{-- ========================= --}}
-
     <main class="main">
         {{-- TOPBAR --}}
         <header class="topbar">
             <div class="topbar-left">
                 <h2>
                 </h2>
-
                 <p>
                     Tra cứu và xác nhận thông tin vé hành khách
                 </p>
@@ -1146,13 +1019,11 @@
             {{-- ========================= --}}
             {{-- PAGE HEADING --}}
             {{-- ========================= --}}
-
             <div class="page-heading">
                 <div>
                     <h1>
                         Tra cứu vé
                     </h1>
-
                     <p>
                         Danh sách các vé đã thanh toán.
                         Có thể tìm kiếm bằng mã vé,
@@ -1171,7 +1042,6 @@
             {{-- ========================= --}}
             {{-- ALERT --}}
             {{-- ========================= --}}
-
             @if(session('success'))
                 <div class="alert alert-success">
                     {{ session('success') }}
@@ -1187,13 +1057,11 @@
             {{-- ========================= --}}
             {{-- SEARCH --}}
             {{-- ========================= --}}
-
             <section class="search-card">
                 <div class="search-header">
                     <h3>
                         Tìm kiếm và lọc vé
                     </h3>
-
                     <p>
                         Kết hợp từ khóa, ngày bay, trạng thái xác nhận,
                         chuyến bay và hạng ghế để lọc danh sách vé.
@@ -1349,7 +1217,6 @@
             {{-- ========================= --}}
             {{-- SUMMARY --}}
             {{-- ========================= --}}
-
             <div class="summary confirmation-summary">
                 <span>
                     Tổng số vé đang hiển thị:
@@ -1370,7 +1237,6 @@
             {{-- ========================= --}}
             {{-- TABLE --}}
             {{-- ========================= --}}
-
             @foreach([
                 [
                     'title' => 'Vé chưa xác nhận',
@@ -1383,7 +1249,6 @@
                     'empty' => 'Không có vé đã xác nhận phù hợp',
                 ],
             ] as $ticketSection)
-
                 @php
                     $tableTickets = $ticketSection['tickets'];
                 @endphp
@@ -1394,7 +1259,6 @@
                             <h3>
                                 {{ $ticketSection['title'] }}
                             </h3>
-
                             <p>
                                 Chỉ hiển thị các vé thuộc
                                 đơn đặt vé đã thanh toán.
@@ -1424,6 +1288,7 @@
                                         <th>Hành lý ký gửi</th>
                                         <th>Phí hành lý</th>
                                         <th>Trạng thái</th>
+                                        <th>Thời gian check-in</th>
                                         <th>Thao tác</th>
                                     </tr>
                                 </thead>
@@ -1477,17 +1342,13 @@
                                         <td>
                                             <span class="route-code">
                                                 {{ $ticket->flight->departureAirport->code ?? '---' }}
-
                                                 →
-
                                                 {{ $ticket->flight->arrivalAirport->code ?? '---' }}
                                             </span>
 
                                             <span class="route-city">
                                                 {{ $ticket->flight->departureAirport->city ?? '---' }}
-
                                                 →
-
                                                 {{ $ticket->flight->arrivalAirport->city ?? '---' }}
                                             </span>
                                         </td>
@@ -1591,6 +1452,29 @@
                                             @endif
                                         </td>
 
+                                        {{-- CHECK-IN TIME --}}
+                                        <td>
+                                            @if($ticket->ticket_status === 'used')
+                                                @php
+                                                    $checkedInAt = $checkInTimes->get($ticket->id);
+                                                @endphp
+
+                                                @if($checkedInAt)
+                                                    <span class="check-in-time">
+                                                        {{ \Carbon\Carbon::parse($checkedInAt, config('app.timezone'))->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y H:i:s') }}
+                                                    </span>
+                                                @else
+                                                    <span class="check-in-unavailable">
+                                                        Chưa có dữ liệu
+                                                    </span>
+                                                @endif
+                                            @else
+                                                <span class="check-in-unavailable">
+                                                    —
+                                                </span>
+                                            @endif
+                                        </td>
+
                                         {{-- ACTION --}}
                                         <td>
                                             @if($ticket->ticket_status === 'active')
@@ -1649,7 +1533,6 @@
             {{-- ========================= --}}
             {{-- BACK --}}
             {{-- ========================= --}}
-
             <div class="bottom-back">
                 <a href="{{ route('nhanvien.trang-chu') }}">
                     ← Quay lại trang nhân viên

@@ -748,11 +748,21 @@ class BookingController extends Controller
                 }
             }
 
+            $ocr['receipt_path'] = $receiptPath;
+
+            $receiptCheck = $this->receiptCheckReport(
+                $booking,
+                $ocr,
+                $hasCorrectContent,
+                $hasCorrectAmount,
+                $transactionCode && !Payment::where('receipt_transaction_code', $transactionCode)->exists()
+            );
+
             if (!$transactionCode) {
                 return back()->with(
                     'error',
                     'Không đọc được mã giao dịch trên hóa đơn. Vui lòng sử dụng ảnh hóa đơn rõ hơn.'
-                );
+                )->with('receipt_check', $receiptCheck);
             }
 
             if (
@@ -764,21 +774,21 @@ class BookingController extends Controller
                 return back()->with(
                     'error',
                     'Mã giao dịch này đã được sử dụng cho một thanh toán khác.'
-                );
+                )->with('receipt_check', $receiptCheck);
             }
 
             if (!$hasCorrectContent) {
                 return back()->with(
                     'error',
                     'Hóa đơn không hợp lệ. Nội dung chuyển khoản không đúng.'
-                );
+                )->with('receipt_check', $receiptCheck);
             }
 
             if (!$hasCorrectAmount) {
                 return back()->with(
                     'error',
                     'Hóa đơn không hợp lệ. Số tiền chuyển khoản không đúng.'
-                );
+                )->with('receipt_check', $receiptCheck);
             }
 
             DB::transaction(
@@ -921,8 +931,148 @@ class BookingController extends Controller
                 ->with(
                     'error',
                     $e->getMessage()
-                );
+                )->with('receipt_check', isset($receiptCheck) ? $receiptCheck : [
+                    'booking_id' => $booking->id,
+                    'expected_content' => 'VJ ' . $booking->booking_code,
+                    'expected_amount' => (int) $booking->total_amount,
+                    'read_content' => null,
+                    'amounts' => [],
+                    'content_matches' => false,
+                    'amount_matches' => false,
+                    'transaction_code' => null,
+                    'transaction_unused' => false,
+                    'verified' => false,
+                    'ocr_text' => '',
+                ]);
         }
+    }
+
+
+    private function receiptCheckReport(
+        Booking $booking,
+        array $ocr,
+        bool $contentMatches,
+        bool $amountMatches,
+        bool $transactionUnused,
+        bool $verified = false
+    ): array {
+        $expectedContent = $ocr['expected_content']
+            ?? ('VJ ' . $booking->booking_code);
+
+        $expectedAmount = (int) (
+            $ocr['expected_amount'] ?? $booking->total_amount
+        );
+
+        $text = (string) ($ocr['text'] ?? '');
+
+        $normalized = strtoupper(
+            preg_replace(
+                '/[^A-Za-z0-9]/',
+                '',
+                Str::ascii($text)
+            )
+        );
+
+        $expected = strtoupper(
+            preg_replace(
+                '/[^A-Za-z0-9]/',
+                '',
+                $expectedContent
+            )
+        );
+
+        $readContent = null;
+        $length = strlen($expected);
+        $map = ['O' => '0', 'S' => '5'];
+
+        // Hiển thị đoạn OCR tìm được, không lấy nội dung yêu cầu
+        // điền vào cột dữ liệu đọc từ hóa đơn.
+        if ($length > 0 && $contentMatches) {
+            for (
+                $i = 0;
+                $i <= strlen($normalized) - $length;
+                $i++
+            ) {
+                $part = substr($normalized, $i, $length);
+
+                if (
+                    $part === $expected
+                    || strtr($part, $map)
+                        === strtr($expected, $map)
+                    || levenshtein($expected, $part) <= 1
+                ) {
+                    $readContent = $part;
+                    break;
+                }
+            }
+        }
+
+        // Khi không khớp, thử lấy nội dung theo nhãn trên bill.
+        if ($readContent === null) {
+            $lines = preg_split('/\R/u', $text) ?: [];
+
+            foreach ($lines as $index => $line) {
+                $plain = strtoupper(
+                    trim(Str::ascii($line))
+                );
+
+                if (
+                    preg_match(
+                        '/^NOI\s+DUNG(?:\s+CHUYEN\s+(?:KHOAN|TIEN))?\s*[:\-]?\s*(.*)$/',
+                        $plain,
+                        $match
+                    )
+                ) {
+                    $candidate = trim($match[1]);
+
+                    if ($candidate === '') {
+                        for (
+                            $next = $index + 1;
+                            $next < count($lines);
+                            $next++
+                        ) {
+                            if (trim($lines[$next]) !== '') {
+                                $candidate = trim($lines[$next]);
+                                break;
+                            }
+                        }
+                    }
+
+                    $readContent = $candidate !== ''
+                        ? $candidate
+                        : null;
+
+                    break;
+                }
+            }
+        }
+
+        $amounts = array_values(
+            array_unique(
+                array_map(
+                    'intval',
+                    array_filter(
+                        $ocr['amounts'] ?? [],
+                        'is_numeric'
+                    )
+                )
+            )
+        );
+
+        return [
+            'booking_id' => $booking->id,
+            'receipt_path' => $ocr['receipt_path'] ?? null,
+            'expected_content' => $expectedContent,
+            'expected_amount' => $expectedAmount,
+            'read_content' => $readContent,
+            'amounts' => $amounts,
+            'content_matches' => $contentMatches,
+            'amount_matches' => $amountMatches,
+            'transaction_code' => $ocr['transaction_code'] ?? null,
+            'transaction_unused' => $transactionUnused,
+            'verified' => $verified,
+            'ocr_text' => $text,
+        ];
     }
 
     public function ticket(Booking $booking)
@@ -975,9 +1125,40 @@ class BookingController extends Controller
             'tickets.flightSeat',
         ]);
 
+        $receiptCheck = null;
+
+        $payment = Payment::where('booking_id', $booking->id)
+            ->where('payment_status', 'paid')
+            ->where('payment_method', 'bank_transfer')
+            ->orderByDesc('id')
+            ->first();
+
+        if (
+            $payment
+            && $payment->ocr_text
+            && $payment->receipt_content
+            && $payment->receipt_amount !== null
+            && $payment->receipt_transaction_code
+        ) {
+            $receiptCheck = $this->receiptCheckReport(
+                $booking,
+                [
+                    'text' => $payment->ocr_text,
+                    'amounts' => [(int) $payment->receipt_amount],
+                    'transaction_code' => $payment->receipt_transaction_code,
+                    'expected_content' => $payment->receipt_content,
+                    'expected_amount' => (int) $payment->amount,
+                ],
+                true,
+                (int) $payment->receipt_amount === (int) $payment->amount,
+                true,
+                true
+            );
+        }
+
         return view(
             'user.ve-dien-tu',
-            compact('booking')
+            compact('booking', 'receiptCheck')
         );
     }
 

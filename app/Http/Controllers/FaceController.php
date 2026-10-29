@@ -2,16 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\EnsureBookingFaceVerified;
 use App\Models\Flight;
 use App\Models\FlightSeat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Str;
 
 class FaceController extends Controller
 {
     public function create()
     {
+        session()->forget([
+            'booking.face_status',
+            'booking.face_verification_hash',
+        ]);
+
         $tripType = session('flight_search.trip_type', 'one_way');
         $passenger = session('booking.passenger');
 
@@ -193,78 +200,255 @@ class FaceController extends Controller
 
     public function store(Request $request)
     {
+        set_time_limit(120);
+
+        session()->forget([
+            'booking.face_status',
+            'booking.face_verification_hash',
+        ]);
+
+        // Chụp lại thì hủy kết quả xác thực của ảnh trước trên máy chủ.
+        if ($request->input('action') === 'reset') {
+            return response()->json(['success' => true]);
+        }
+
         $passenger = session('booking.passenger');
 
-        if (!$passenger) {
-            return redirect()
-                ->route('passenger.create')
-                ->with('error', 'Thông tin hành khách chưa đầy đủ.');
+        if (!$passenger || empty($passenger['cccd_image'])) {
+            return $this->verificationFailure(
+                $request,
+                'Vui lòng nhập thông tin và tải ảnh mặt trước CCCD.',
+                'passenger.create'
+            );
         }
 
         $request->validate(
-            [
-                'face_image' => ['required', 'string'],
-            ],
+            ['face_image' => ['required', 'string', 'max:7000000']],
             [
                 'face_image.required' => 'Vui lòng chụp khuôn mặt trước khi tiếp tục.',
                 'face_image.string' => 'Dữ liệu khuôn mặt không hợp lệ.',
+                'face_image.max' => 'Ảnh khuôn mặt vượt quá dung lượng cho phép.',
             ]
         );
 
         $imageData = $request->input('face_image');
 
-        if (!preg_match('/^data:image\/(jpeg|jpg|png|webp);base64,/', $imageData, $matches)) {
-            return back()->with('error', 'Ảnh khuôn mặt không hợp lệ. Vui lòng chụp lại.');
+        if (!preg_match('/^data:image\/(jpeg|jpg|png|webp);base64,/', $imageData)) {
+            return $this->verificationFailure(
+                $request,
+                'Ảnh khuôn mặt không hợp lệ. Vui lòng chụp lại.'
+            );
         }
 
-        $base64Data = substr($imageData, strpos($imageData, ',') + 1);
-        $decodedImage = base64_decode($base64Data, true);
+        $decodedImage = base64_decode(
+            substr($imageData, strpos($imageData, ',') + 1),
+            true
+        );
 
-        if ($decodedImage === false) {
-            return back()->with('error', 'Không thể xử lý ảnh khuôn mặt. Vui lòng chụp lại.');
+        if ($decodedImage === false || strlen($decodedImage) > 5 * 1024 * 1024) {
+            return $this->verificationFailure(
+                $request,
+                'Ảnh khuôn mặt không hợp lệ hoặc vượt quá 5MB.'
+            );
         }
 
-        if (strlen($decodedImage) > 5 * 1024 * 1024) {
-            return back()->with('error', 'Ảnh khuôn mặt vượt quá dung lượng cho phép.');
+        $imageInfo = @getimagesizefromstring($decodedImage);
+
+        $extensions = [
+            IMAGETYPE_JPEG => 'jpg',
+            IMAGETYPE_PNG => 'png',
+            IMAGETYPE_WEBP => 'webp',
+        ];
+
+        if (!$imageInfo || !isset($extensions[$imageInfo[2]])) {
+            return $this->verificationFailure(
+                $request,
+                'Không đọc được ảnh khuôn mặt. Vui lòng chụp lại.'
+            );
         }
 
-        $oldFaceImage = session('booking.face_image');
+        $cccdPath = EnsureBookingFaceVerified::imagePath(
+            $passenger['cccd_image'],
+            'uploads/cccd'
+        );
 
-        if ($oldFaceImage) {
-            $oldPath = public_path($oldFaceImage);
+        if (!$cccdPath) {
+            return $this->verificationFailure(
+                $request,
+                'Không tìm thấy ảnh CCCD. Vui lòng quay lại thông tin hành khách và tải ảnh mặt trước.',
+                'passenger.create'
+            );
+        }
 
-            if (File::exists($oldPath)) {
-                File::delete($oldPath);
+        $pythonPath = 'C:\Users\tring\AppData\Local\Programs\Python\Python312\python.exe';
+
+        $scriptPath = base_path('python/face_verify.py');
+
+        $detectorModel = storage_path(
+            'app/face-models/face_detection_yunet_2023mar.onnx'
+        );
+
+        $recognizerModel = storage_path(
+            'app/face-models/face_recognition_sface_2021dec.onnx'
+        );
+
+        foreach ([$pythonPath, $scriptPath, $detectorModel, $recognizerModel] as $requiredFile) {
+            if (!is_file($requiredFile)) {
+                return $this->verificationFailure(
+                    $request,
+                    'Thiếu Python, script hoặc model nhận diện. Vui lòng kiểm tra cấu hình hệ thống.'
+                );
             }
         }
 
-        $directory = public_path('uploads/faces');
+        $relativePath = 'uploads/faces/face_' . auth()->id() . '_'
+            . now()->format('YmdHis') . '_' . Str::lower(Str::random(8))
+            . '.' . $extensions[$imageInfo[2]];
 
-        if (!File::exists($directory)) {
-            File::makeDirectory($directory, 0755, true);
-        }
-
-        $extension = strtolower($matches[1]);
-
-        if ($extension === 'jpg') {
-            $extension = 'jpeg';
-        }
-
-        $fileExtension = $extension === 'jpeg' ? 'jpg' : $extension;
-
-        $fileName = 'face_' . auth()->id() . '_' . now()->format('YmdHis') . '_' . Str::lower(Str::random(8)) . '.' . $fileExtension;
-        $relativePath = 'uploads/faces/' . $fileName;
         $fullPath = public_path($relativePath);
+        $verified = false;
 
-        if (File::put($fullPath, $decodedImage) === false) {
-            return back()->with('error', 'Không thể lưu ảnh khuôn mặt. Vui lòng thử lại.');
+        try {
+            File::ensureDirectoryExists(
+                public_path('uploads/faces'),
+                0755,
+                true
+            );
+
+            if (File::put($fullPath, $decodedImage) === false) {
+                return $this->verificationFailure(
+                    $request,
+                    'Không thể lưu ảnh khuôn mặt. Vui lòng thử lại.'
+                );
+            }
+
+            $result = Process::timeout(90)
+                ->env([
+                    'PYTHONUTF8' => '1',
+                    'PYTHONIOENCODING' => 'utf-8',
+                ])
+                ->run([
+                    $pythonPath,
+                    $scriptPath,
+                    $cccdPath,
+                    $fullPath,
+                    $detectorModel,
+                    $recognizerModel,
+                ]);
+
+            $verification = json_decode(trim($result->output()), true);
+
+            if (
+                !$result->successful()
+                || !is_array($verification)
+                || ($verification['success'] ?? false) !== true
+            ) {
+                $message = is_array($verification)
+                    ? ($verification['message'] ?? '')
+                    : '';
+
+                if (str_contains($message, 'anh da dang ky')) {
+                    return $this->verificationFailure(
+                        $request,
+                        'Không nhận diện được khuôn mặt trên CCCD. Hãy quay lại tải ảnh mặt trước rõ nét, không bị lóa.'
+                    );
+                }
+
+                if (str_contains($message, 'anh vua chup')) {
+                    return $this->verificationFailure(
+                        $request,
+                        'Không nhận diện được khuôn mặt vừa chụp. Hãy nhìn thẳng, đủ sáng và chụp lại.'
+                    );
+                }
+
+                return $this->verificationFailure(
+                    $request,
+                    'Chưa thể đối chiếu khuôn mặt. Vui lòng thử lại hoặc kiểm tra Python và model nhận diện.'
+                );
+            }
+
+            if (($verification['matched'] ?? false) !== true) {
+                return $this->verificationFailure(
+                    $request,
+                    'Khuôn mặt không khớp với ảnh CCCD. Vui lòng dùng đúng CCCD của hành khách và chụp lại; tháo kính nếu bị phản sáng.'
+                );
+            }
+
+            $fingerprint = EnsureBookingFaceVerified::fingerprint(
+                $passenger,
+                $relativePath
+            );
+
+            if (!$fingerprint) {
+                return $this->verificationFailure(
+                    $request,
+                    'Không xác nhận được dữ liệu ảnh. Vui lòng thực hiện lại.'
+                );
+            }
+
+            $oldFaceImage = session('booking.face_image');
+
+            session([
+                'booking.face_image' => $relativePath,
+                'booking.face_status' => 'verified',
+                'booking.face_verification_hash' => $fingerprint,
+            ]);
+
+            $verified = true;
+
+            if ($oldFaceImage && $oldFaceImage !== $relativePath) {
+                $oldPath = EnsureBookingFaceVerified::imagePath(
+                    $oldFaceImage,
+                    'uploads/faces'
+                );
+
+                if ($oldPath) {
+                    File::delete($oldPath);
+                }
+            }
+
+            $message = 'Khuôn mặt khớp với CCCD. Xác thực thành công! Bạn có thể tiếp tục đặt vé.';
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'matched' => true,
+                    'message' => $message,
+                ]);
+            }
+
+            return redirect()
+                ->route('booking.confirm')
+                ->with('success', $message);
+        } catch (\Throwable $exception) {
+            report($exception);
+
+            return $this->verificationFailure(
+                $request,
+                'Đối chiếu khuôn mặt chưa hoàn tất. Vui lòng thử lại và kiểm tra Python nếu lỗi tiếp tục.'
+            );
+        } finally {
+            if (!$verified && is_file($fullPath)) {
+                File::delete($fullPath);
+            }
+        }
+    }
+
+    private function verificationFailure(
+        Request $request,
+        string $message,
+        ?string $route = null
+    ) {
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => false,
+                'matched' => false,
+                'message' => $message,
+            ], 422);
         }
 
-        session([
-            'booking.face_image' => $relativePath,
-            'booking.face_status' => 'captured',
-        ]);
+        $response = $route ? redirect()->route($route) : back();
 
-        return redirect()->route('booking.confirm');
+        return $response->with('error', $message);
     }
 }

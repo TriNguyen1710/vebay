@@ -6,16 +6,13 @@
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
-
     <title>Quản lý vé - Vietjet Admin</title>
-
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         :root {
             --primary: #003b70;
             --primary-dark: #00294f;
@@ -30,30 +27,25 @@
             --warning: #b88700;
             --danger: #dc3545;
         }
-
         body {
             min-height: 100vh;
             font-family: Arial, Helvetica, sans-serif;
             background: var(--background);
             color: var(--text);
         }
-
         a {
             text-decoration: none;
         }
-
         button,
         input,
         select {
             font-family: inherit;
         }
-
         .admin-layout {
             min-height: 100vh;
             display: grid;
             grid-template-columns: 245px 1fr;
         }
-
         .sidebar {
             position: fixed;
             top: 0;
@@ -66,7 +58,6 @@
             background: var(--primary-dark);
             color: white;
         }
-
         .logo {
             display: block;
             padding: 0 10px;
@@ -76,11 +67,9 @@
             font-weight: 800;
             letter-spacing: -1px;
         }
-
         .logo span {
             color: var(--secondary);
         }
-
         .menu-title {
             padding: 0 11px;
             margin-bottom: 10px;
@@ -89,12 +78,10 @@
             font-weight: bold;
             letter-spacing: 1.3px;
         }
-
         .menu {
             display: grid;
             gap: 4px;
         }
-
         .menu-link {
             min-height: 44px;
             padding: 0 13px;
@@ -107,13 +94,11 @@
             font-weight: 600;
             transition: 0.2s;
         }
-
         .menu-link:hover,
         .menu-link.active {
             background: rgba(255, 255, 255, 0.1);
             color: white;
         }
-
         .menu-icon {
             width: 17px;
             height: 17px;
@@ -122,7 +107,6 @@
             justify-content: center;
             flex-shrink: 0;
         }
-
         .menu-icon svg {
             width: 17px;
             height: 17px;
@@ -130,32 +114,26 @@
             stroke: currentColor;
             stroke-width: 1.8;
         }
-
         .menu-link.active .menu-icon {
             color: var(--secondary);
         }
-
         .sidebar-bottom {
             margin-top: auto;
             padding-top: 22px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
-
         .admin-info {
             padding: 0 11px 16px;
         }
-
         .admin-info strong {
             display: block;
             margin-bottom: 4px;
             font-size: 12px;
         }
-
         .admin-info span {
             color: #8fa5b5;
             font-size: 10px;
         }
-
         .logout-btn {
             width: 100%;
             padding: 10px;
@@ -167,17 +145,14 @@
             font-size: 11px;
             font-weight: bold;
         }
-
         .logout-btn:hover {
             background: var(--danger);
             border-color: var(--danger);
         }
-
         .main {
             grid-column: 2;
             min-width: 0;
         }
-
         .topbar {
             height: 70px;
             padding: 0 30px;
@@ -187,28 +162,23 @@
             justify-content: space-between;
             align-items: center;
         }
-
         .topbar-left h2 {
             margin-bottom: 3px;
             color: var(--primary);
             font-size: 19px;
         }
-
         .topbar-left p {
             color: var(--muted);
             font-size: 10px;
         }
-
         .topbar-right {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-
         .notification-wrapper {
             position: relative;
         }
-
         .notification-button {
             position: relative;
             padding: 7px 12px;
@@ -220,11 +190,9 @@
             font-weight: bold;
             cursor: pointer;
         }
-
         .notification-button:hover {
             background: var(--primary-light);
         }
-
         .notification-count {
             position: absolute;
             top: -8px;
@@ -240,7 +208,6 @@
             align-items: center;
             justify-content: center;
         }
-
         .notification-dropdown {
             display: none;
             position: absolute;
@@ -255,11 +222,9 @@
             box-shadow: 0 10px 30px rgba(0, 41, 79, 0.15);
             z-index: 9999;
         }
-
         .notification-dropdown.show {
             display: block;
         }
-
         .notification-header {
             padding: 15px 17px;
             border-bottom: 1px solid var(--border);
@@ -267,47 +232,39 @@
             font-size: 13px;
             font-weight: bold;
         }
-
         .notification-item {
             display: block;
             padding: 14px 17px;
             border-bottom: 1px solid #edf0f2;
             color: var(--text);
         }
-
         .notification-item.unread {
             background: #fff9e8;
         }
-
         .notification-item:hover {
             background: #f5f8fa;
         }
-
         .notification-title {
             margin-bottom: 5px;
             font-size: 11px;
             font-weight: bold;
         }
-
         .notification-message {
             color: #63717c;
             font-size: 10px;
             line-height: 1.5;
         }
-
         .notification-time {
             margin-top: 6px;
             color: #9aa5ad;
             font-size: 9px;
         }
-
         .notification-empty {
             padding: 25px;
             color: var(--muted);
             font-size: 11px;
             text-align: center;
         }
-
         .admin-notification-popup {
             position: fixed;
             top: 85px;
@@ -323,45 +280,38 @@
             z-index: 10000;
             animation: popupSlideDown 0.35s ease;
         }
-
         .admin-notification-popup-header {
             color: #003b70;
             font-size: 14px;
             font-weight: 800;
             margin-bottom: 14px;
         }
-
         .admin-notification-popup-title {
             color: #22313f;
             font-size: 13px;
             font-weight: bold;
             margin-bottom: 7px;
         }
-
         .admin-notification-popup-message {
             color: #63717c;
             font-size: 12px;
             line-height: 1.6;
         }
-
         .admin-notification-popup-time {
             margin-top: 10px;
             color: #9aa5ad;
             font-size: 10px;
         }
-
         @keyframes popupSlideDown {
             from {
                 opacity: 0;
                 transform: translate(-50%, -15px);
             }
-
             to {
                 opacity: 1;
                 transform: translate(-50%, 0);
             }
         }
-
         .admin-badge {
             padding: 7px 11px;
             border: 1px solid #cbdce7;
@@ -371,13 +321,11 @@
             font-size: 10px;
             font-weight: bold;
         }
-
         .content {
             max-width: 1550px;
             margin: auto;
             padding: 28px 30px 45px;
         }
-
         .page-heading {
             margin-bottom: 22px;
             display: flex;
@@ -385,18 +333,15 @@
             align-items: flex-end;
             gap: 20px;
         }
-
         .page-heading h1 {
             margin-bottom: 6px;
             color: var(--text);
             font-size: 24px;
         }
-
         .page-heading p {
             color: var(--muted);
             font-size: 11px;
         }
-
         .back-btn {
             min-height: 38px;
             padding: 0 15px;
@@ -410,11 +355,9 @@
             font-size: 11px;
             font-weight: bold;
         }
-
         .back-btn:hover {
             background: #f6f8fa;
         }
-
         .panel {
             margin-bottom: 20px;
             background: white;
@@ -423,7 +366,6 @@
             box-shadow: 0 3px 12px rgba(20, 45, 65, 0.04);
             overflow: hidden;
         }
-
         .panel-header {
             min-height: 68px;
             padding: 17px 20px;
@@ -433,18 +375,15 @@
             align-items: center;
             gap: 15px;
         }
-
         .panel-header h3 {
             margin-bottom: 4px;
             color: var(--primary);
             font-size: 14px;
         }
-
         .panel-header p {
             color: var(--muted);
             font-size: 9px;
         }
-
         .count-box {
             padding: 6px 10px;
             border-radius: 5px;
@@ -453,17 +392,14 @@
             font-size: 10px;
             font-weight: bold;
         }
-
         .filter-body {
             padding: 20px;
         }
-
         .filter-grid {
             display: grid;
             grid-template-columns: 1.8fr 1fr 1fr 1fr 1.4fr 1fr;
             gap: 14px;
         }
-
         .form-group label {
             display: block;
             margin-bottom: 7px;
@@ -471,7 +407,6 @@
             font-size: 10px;
             font-weight: bold;
         }
-
         .form-group input,
         .form-group select {
             width: 100%;
@@ -483,21 +418,18 @@
             color: #394b58;
             font-size: 10px;
         }
-
         .form-group input:focus,
         .form-group select:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(0, 59, 112, 0.06);
         }
-
         .filter-actions {
             margin-top: 16px;
             display: flex;
             align-items: center;
             gap: 9px;
         }
-
         .btn-filter,
         .btn-reset {
             min-height: 39px;
@@ -509,43 +441,35 @@
             font-size: 10px;
             font-weight: bold;
         }
-
         .btn-filter {
             border: none;
             background: var(--secondary);
             color: var(--primary-dark);
             cursor: pointer;
         }
-
         .btn-filter:hover {
             background: #ffc31a;
         }
-
         .btn-reset {
             border: 1px solid var(--border);
             background: white;
             color: #687781;
         }
-
         .btn-reset:hover {
             background: #f6f8fa;
         }
-
         .table-wrapper {
             width: 100%;
             overflow-x: auto;
         }
-
         table {
             width: 100%;
             min-width: 1750px;
             border-collapse: collapse;
         }
-
         thead {
             background: #f8fafc;
         }
-
         th {
             padding: 13px 12px;
             text-align: left;
@@ -555,7 +479,6 @@
             font-weight: 800;
             white-space: nowrap;
         }
-
         td {
             padding: 13px 12px;
             border-bottom: 1px solid #edf0f2;
@@ -563,15 +486,12 @@
             font-size: 10px;
             vertical-align: middle;
         }
-
         tbody tr:hover {
             background: #fbfcfd;
         }
-
         tbody tr:last-child td {
             border-bottom: none;
         }
-
         .booking-code,
         .ticket-code,
         .flight-code,
@@ -579,53 +499,44 @@
             color: var(--primary);
             font-weight: 800;
         }
-
         .user-name {
             display: block;
             margin-bottom: 4px;
             color: #344652;
             font-weight: 700;
         }
-
         .user-email {
             color: #8b969e;
             font-size: 9px;
         }
-
         .route-text {
             white-space: nowrap;
             color: #4d606d;
         }
-
         .price {
             white-space: nowrap;
             color: var(--primary-dark);
             font-weight: 800;
         }
-
         .baggage-text {
             white-space: nowrap;
             color: #465763;
             font-weight: 700;
         }
-
         .baggage-price {
             white-space: nowrap;
             color: #9b7200;
             font-weight: 800;
         }
-
         .order-total {
             white-space: nowrap;
             color: #b42318;
             font-weight: 800;
         }
-
         .date-text {
             white-space: nowrap;
             color: #64737e;
         }
-
         .badge {
             display: inline-flex;
             align-items: center;
@@ -635,48 +546,39 @@
             font-weight: bold;
             white-space: nowrap;
         }
-
         .paid {
             background: #edf8f2;
             color: #17643d;
         }
-
         .unpaid {
             background: #fff8df;
             color: #806300;
         }
-
         .active {
             background: #edf8f2;
             color: #17643d;
         }
-
         .used {
             background: #f1f3f5;
             color: #66717a;
         }
-
         .cancelled {
             background: #fff0f1;
             color: #b02a37;
         }
-
         .pending {
             background: #f1f3f5;
             color: #66717a;
         }
-
         .vip {
             background: #fff7dc;
             color: #8b6800;
             border: 1px solid #ead68b;
         }
-
         .economy {
             background: #edf5fb;
             color: var(--primary);
         }
-
         .btn-view {
             min-height: 31px;
             padding: 0 11px;
@@ -691,32 +593,26 @@
             font-weight: bold;
             white-space: nowrap;
         }
-
         .btn-view:hover {
             background: #dcecf6;
         }
-
         .empty {
             padding: 45px 20px;
             text-align: center;
             color: var(--muted);
             font-size: 11px;
         }
-
         .bottom-actions {
             margin-top: 20px;
         }
-
         .bottom-back {
             color: var(--primary);
             font-size: 11px;
             font-weight: bold;
         }
-
         .bottom-back:hover {
             text-decoration: underline;
         }
-
         .footer {
             margin-top: 28px;
             padding-top: 18px;
@@ -726,41 +622,33 @@
             color: #919ca4;
             font-size: 9px;
         }
-
         @media (max-width: 1250px) {
             .filter-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
         }
-
         @media (max-width: 900px) {
             .admin-notification-popup {
                 left: 50%;
             }
-
             .admin-layout {
                 display: block;
             }
-
             .sidebar {
                 position: relative;
                 width: 100%;
                 height: auto;
             }
-
             .menu {
                 grid-template-columns: repeat(2, 1fr);
             }
-
             .main {
                 margin-left: 0;
             }
-
             .filter-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
-
         @media (max-width: 650px) {
             .notification-dropdown {
                 position: fixed;
@@ -768,42 +656,35 @@
                 right: 15px;
                 width: calc(100% - 30px);
             }
-
             .admin-notification-popup {
                 left: 50%;
             }
-
             .content {
                 padding: 20px 15px 35px;
             }
-
             .page-heading {
                 align-items: flex-start;
                 flex-direction: column;
             }
-
             .filter-grid {
                 grid-template-columns: 1fr;
             }
-
             .filter-actions {
                 flex-direction: column;
                 align-items: stretch;
             }
-
             .btn-filter,
             .btn-reset {
                 width: 100%;
             }
-
             .menu {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
-
 <body>
+
 @php
     $unreadNotificationCount = \App\Models\Notification::where(
         'user_id',
@@ -936,7 +817,6 @@
                         <path d="M8 8h8M8 12h8M8 16h5"/>
                     </svg>
                 </span>
-
                 Quản lý vé
 
                 @if($unreadNotificationCount > 0)
@@ -972,6 +852,7 @@
                 </span>
                 Quản lý người dùng
             </a>
+
             <a
                 href="{{ route('admin.employees.index') }}"
                 class="menu-link"
@@ -983,9 +864,31 @@
                         <path d="M16 11a4 4 0 0 1 5 4"/>
                     </svg>
                 </span>
-
                 Quản lý nhân viên
             </a>
+
+            <a href="{{ route('admin.payment-reviews.index') }}" class="menu-link">
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="3" y="5" width="18" height="14" rx="2"/>
+                        <path d="M3 10h18M7 15h5"/>
+                    </svg>
+                </span>
+                Đối soát thanh toán
+            </a>
+            <a
+                href="{{ route('admin.check-ins.index') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="9"/>
+                        <path d="M12 7v5l3 2"/>
+                    </svg>
+                </span>
+                Lịch sử check-in
+            </a>
+
             <a
                 href="{{ route('admin.baggage.index') }}"
                 class="menu-link"
@@ -1065,6 +968,7 @@
                 method="POST"
             >
                 @csrf
+
                 <button
                     type="submit"
                     class="logout-btn"
@@ -1125,11 +1029,9 @@
                                     <div class="notification-title">
                                         {{ $notification->title }}
                                     </div>
-
                                     <div class="notification-message">
                                         {{ $notification->message }}
                                     </div>
-
                                     <div class="notification-time">
                                         {{ $notification->created_at->diffForHumans() }}
                                     </div>
@@ -1196,6 +1098,7 @@
                                 <label for="keyword">
                                     Tìm kiếm
                                 </label>
+
                                 <input
                                     type="text"
                                     id="keyword"
@@ -1209,6 +1112,7 @@
                                 <label for="payment_status">
                                     Thanh toán
                                 </label>
+
                                 <select
                                     id="payment_status"
                                     name="payment_status"
@@ -1216,12 +1120,14 @@
                                     <option value="">
                                         Tất cả
                                     </option>
+
                                     <option
                                         value="paid"
                                         {{ request('payment_status') === 'paid' ? 'selected' : '' }}
                                     >
                                         Đã thanh toán
                                     </option>
+
                                     <option
                                         value="unpaid"
                                         {{ request('payment_status') === 'unpaid' ? 'selected' : '' }}
@@ -1235,6 +1141,7 @@
                                 <label for="ticket_status">
                                     Trạng thái vé
                                 </label>
+
                                 <select
                                     id="ticket_status"
                                     name="ticket_status"
@@ -1242,24 +1149,28 @@
                                     <option value="">
                                         Tất cả
                                     </option>
+
                                     <option
                                         value="pending"
                                         {{ request('ticket_status') === 'pending' ? 'selected' : '' }}
                                     >
                                         Chờ xác nhận
                                     </option>
+
                                     <option
                                         value="active"
                                         {{ request('ticket_status') === 'active' ? 'selected' : '' }}
                                     >
                                         Có hiệu lực
                                     </option>
+
                                     <option
                                         value="used"
                                         {{ request('ticket_status') === 'used' ? 'selected' : '' }}
                                     >
-                                        Đã sử dụng
+                                        Đã check-in
                                     </option>
+
                                     <option
                                         value="cancelled"
                                         {{ request('ticket_status') === 'cancelled' ? 'selected' : '' }}
@@ -1273,6 +1184,7 @@
                                 <label for="seat_class">
                                     Hạng ghế
                                 </label>
+
                                 <select
                                     id="seat_class"
                                     name="seat_class"
@@ -1280,12 +1192,14 @@
                                     <option value="">
                                         Tất cả
                                     </option>
+
                                     <option
                                         value="vip"
                                         {{ request('seat_class') === 'vip' ? 'selected' : '' }}
                                     >
                                         VIP
                                     </option>
+
                                     <option
                                         value="economy"
                                         {{ request('seat_class') === 'economy' ? 'selected' : '' }}
@@ -1299,6 +1213,7 @@
                                 <label for="flight_id">
                                     Chuyến bay
                                 </label>
+
                                 <select
                                     id="flight_id"
                                     name="flight_id"
@@ -1326,6 +1241,7 @@
                                 <label for="flight_date">
                                     Ngày bay
                                 </label>
+
                                 <input
                                     type="date"
                                     id="flight_date"
@@ -1358,7 +1274,7 @@
                 <div class="panel-header">
                     <div>
                         <h3>
-                            Vé có hiệu lực
+                            Vé có hiệu lực — chưa check-in
                         </h3>
                         <p>
                             Mỗi dòng tương ứng với một vé hành khách.
@@ -1592,7 +1508,7 @@
                 <div class="panel-header">
                     <div>
                         <h3>
-                            Vé chưa / không có hiệu lực
+                            Vé chờ thanh toán / đã sử dụng / đã hủy.
                         </h3>
                         <p>
                             Mỗi dòng tương ứng với một vé hành khách.
@@ -1754,7 +1670,7 @@
                                         </span>
                                     @elseif($ticket->ticket_status === 'used')
                                         <span class="badge used">
-                                            Đã sử dụng
+                                            Đã check-in
                                         </span>
                                     @elseif($ticket->ticket_status === 'cancelled')
                                         <span class="badge cancelled">
@@ -1855,6 +1771,7 @@
             event.stopPropagation();
 
             const isOpen = notificationDropdown.classList.toggle('show');
+
             notificationButton.setAttribute('aria-expanded', String(isOpen));
         });
 
@@ -1881,5 +1798,6 @@
         }, 5000);
     }
 </script>
+
 </body>
 </html>

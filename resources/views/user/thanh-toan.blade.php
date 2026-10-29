@@ -1139,9 +1139,9 @@
 
     
 
-    $bankCode = 'MB';
+    $bankCode = 'Vietcombank';
 
-    $bankAccount = '0769707943';
+    $bankAccount = '1029213953';
 
     $bankOwner = 'NGUYEN MINH TRI';
 
@@ -1449,6 +1449,8 @@
 
     @endif
 
+
+    @include('user.partials.ket-qua-hoa-don', ['receiptCheck' => session('receipt_check')])
 
     <div class="payment-layout">
 

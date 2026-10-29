@@ -612,3 +612,5 @@ Route::prefix('nhan-vien')
 
 
     });
+
+require __DIR__ . '/payment-reviews.php';

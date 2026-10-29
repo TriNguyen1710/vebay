@@ -610,6 +610,22 @@
 
             </a>
 
+            <a
+                href="{{ route('profile.edit') }}"
+                class="menu-link"
+            >
+
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="8" r="4"/>
+                        <path d="M4 21v-2a8 8 0 0 1 16 0v2"/>
+                    </svg>
+                </span>
+
+                Thông tin cá nhân
+
+            </a>
+
         </nav>
 
         <div class="sidebar-bottom">

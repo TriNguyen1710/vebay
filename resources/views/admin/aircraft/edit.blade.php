@@ -884,6 +884,27 @@
 
                 Quản lý nhân viên
             </a>
+            <a href="{{ route('admin.payment-reviews.index') }}" class="menu-link">
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="3" y="5" width="18" height="14" rx="2"/>
+                        <path d="M3 10h18M7 15h5"/>
+                    </svg>
+                </span>
+                Đối soát thanh toán
+            </a>
+            <a
+                href="{{ route('admin.check-ins.index') }}"
+                class="menu-link"
+            >
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="9"/>
+                        <path d="M12 7v5l3 2"/>
+                    </svg>
+                </span>
+                Lịch sử check-in
+            </a>
             {{-- QUẢN LÝ HÀNH LÝ --}}
             <a
                 href="{{ route('admin.baggage.index') }}"

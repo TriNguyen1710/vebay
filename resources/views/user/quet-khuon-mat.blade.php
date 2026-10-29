@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quét khuôn mặt - Vietjet</title>
+
     <style>
         * {
             margin: 0;
@@ -540,7 +541,8 @@
 
         .camera-button,
         .confirm-button,
-        .retake-button {
+        .retake-button,
+        .continue-button {
             width: 100%;
             border: none;
             border-radius: 6px;
@@ -571,6 +573,24 @@
             color: white;
         }
 
+        .continue-button {
+            background: var(--primary);
+            color: white;
+        }
+
+        .verification-info {
+            display: none;
+            padding: 13px 15px;
+            margin-bottom: 18px;
+            background: #edf5ff;
+            border: 1px solid #bfd6f0;
+            color: #174a7e;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .continue-button:disabled,
+        .retake-button:disabled,
         .confirm-button:disabled,
         .camera-button:disabled {
             opacity: 0.55;
@@ -731,7 +751,7 @@
         <h1>Quét khuôn mặt</h1>
 
         <p>
-            Đăng ký hình ảnh khuôn mặt của hành khách để sử dụng khi kiểm tra vé tại sân bay.
+            Đối chiếu khuôn mặt với ảnh CCCD trước khi tiếp tục đặt vé.
         </p>
     </div>
 </section>
@@ -866,18 +886,34 @@
 
         <section class="card">
             <div class="face-header">
-                <h2>Đăng ký khuôn mặt</h2>
+                <h2>Xác thực khuôn mặt với CCCD</h2>
+
                 <p>
-                    Cho phép trình duyệt sử dụng camera, nhìn thẳng vào camera và chụp một ảnh rõ khuôn mặt.
+                    Chụp ảnh rõ khuôn mặt, sau đó bấm xác thực để hệ thống
+                    đối chiếu với ảnh mặt trước CCCD.
                 </p>
             </div>
 
             <div class="face-body">
-                <div id="cameraError" class="camera-error"></div>
+                <div
+                    id="cameraError"
+                    class="camera-error"
+                    role="alert"
+                ></div>
 
-                <div id="successBox" class="success-box">
-                    Đã chụp khuôn mặt. Bạn có thể xác nhận hoặc chụp lại.
-                </div>
+                <div
+                    id="pendingBox"
+                    class="verification-info"
+                    role="status"
+                    aria-live="polite"
+                ></div>
+
+                <div
+                    id="successBox"
+                    class="success-box"
+                    role="status"
+                    aria-live="polite"
+                ></div>
 
                 <div class="scanner">
                     <video id="video" autoplay playsinline muted></video>
@@ -916,10 +952,18 @@
                     </div>
                 </div>
 
-                <form id="faceForm" action="{{ route('face.store') }}" method="POST">
+                <form
+                    id="faceForm"
+                    action="{{ route('face.store') }}"
+                    method="POST"
+                >
                     @csrf
 
-                    <input type="hidden" id="faceImage" name="face_image">
+                    <input
+                        type="hidden"
+                        id="faceImage"
+                        name="face_image"
+                    >
 
                     <div class="action-area">
                         <div class="button-row">
@@ -945,12 +989,24 @@
                                 id="confirmButton"
                                 class="confirm-button"
                             >
-                                Xác nhận khuôn mặt
+                                Xác thực khuôn mặt
+                            </button>
+
+                            <button
+                                type="button"
+                                id="continueButton"
+                                class="continue-button"
+                                data-url="{{ route('booking.confirm') }}"
+                                disabled
+                            >
+                                Tiếp tục đặt vé
                             </button>
                         </div>
 
                         <p class="action-note">
-                            Sau khi xác nhận, hệ thống sẽ lưu ảnh khuôn mặt và chuyển đến bước xác nhận đặt vé.
+                            Chỉ khi khuôn mặt khớp với CCCD,
+                            nút “Tiếp tục đặt vé” mới được bật.
+                            Nếu chụp lại, bạn cần xác thực lại.
                         </p>
                     </div>
                 </form>
@@ -959,7 +1015,10 @@
     </div>
 
     <div class="back-area">
-        <a href="{{ route('passenger.create') }}" class="back-button">
+        <a
+            href="{{ route('passenger.create') }}"
+            class="back-button"
+        >
             ← Quay lại thông tin hành khách
         </a>
     </div>
@@ -983,61 +1042,152 @@
     const captureButton = document.getElementById('captureButton');
     const retakeButton = document.getElementById('retakeButton');
     const confirmButton = document.getElementById('confirmButton');
+    const continueButton = document.getElementById('continueButton');
     const scannerStatus = document.getElementById('scannerStatus');
     const cameraError = document.getElementById('cameraError');
     const successBox = document.getElementById('successBox');
+    const pendingBox = document.getElementById('pendingBox');
     const faceForm = document.getElementById('faceForm');
 
     let stream = null;
+    let busy = false;
+    let verified = false;
 
-    async function startCamera() {
+    function hideMessages() {
         cameraError.style.display = 'none';
         successBox.style.display = 'none';
+        pendingBox.style.display = 'none';
+    }
+
+    function showError(message) {
+        hideMessages();
+
+        cameraError.textContent = message;
+        cameraError.style.display = 'block';
+    }
+
+    function setBusy(value) {
+        busy = value;
+
+        retakeButton.disabled = value;
+        confirmButton.disabled = value;
+        continueButton.disabled = value || !verified;
+
+        faceForm.setAttribute('aria-busy', String(value));
+    }
+
+    async function postFace(data) {
+        const response = await fetch(faceForm.action, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            credentials: 'same-origin',
+            body: data
+        });
+
+        if (response.status === 419) {
+            throw new Error(
+                'Phiên làm việc đã hết hạn. Vui lòng tải lại trang.'
+            );
+        }
+
+        const contentType = response.headers.get('content-type') || '';
+
+        if (!contentType.includes('application/json')) {
+            throw new Error(
+                'Không nhận được kết quả xác thực. Vui lòng tải lại trang và kiểm tra đăng nhập.'
+            );
+        }
+
+        const result = await response.json();
+
+        if (!response.ok || result.success !== true) {
+            const validationMessage = result.errors
+                ? Object.values(result.errors).flat()[0]
+                : null;
+
+            throw new Error(
+                validationMessage
+                || result.message
+                || 'Xác thực chưa thành công. Vui lòng thử lại.'
+            );
+        }
+
+        return result;
+    }
+
+    async function startCamera() {
+        hideMessages();
+
         scannerStatus.textContent = 'Đang khởi động camera...';
         captureButton.disabled = true;
 
         try {
-            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                throw new Error('Trình duyệt không hỗ trợ truy cập camera.');
+            if (
+                !navigator.mediaDevices
+                || !navigator.mediaDevices.getUserMedia
+            ) {
+                throw new Error(
+                    'Trình duyệt không hỗ trợ truy cập camera.'
+                );
             }
 
             stream = await navigator.mediaDevices.getUserMedia({
                 video: {
                     facingMode: 'user',
-                    width: { ideal: 1280 },
-                    height: { ideal: 960 }
+                    width: {
+                        ideal: 1280
+                    },
+                    height: {
+                        ideal: 960
+                    }
                 },
                 audio: false
             });
 
             video.srcObject = stream;
 
-            await new Promise((resolve) => {
-                video.onloadedmetadata = () => resolve();
-            });
-
             await video.play();
 
             scannerStatus.textContent = 'Camera đã sẵn sàng';
             captureButton.disabled = false;
         } catch (error) {
+            stopCamera();
+
             scannerStatus.textContent = 'Không thể mở camera';
-            cameraError.textContent = 'Không thể truy cập camera. Hãy cho phép trình duyệt sử dụng camera rồi tải lại trang.';
-            cameraError.style.display = 'block';
+
+            showError(
+                'Không thể truy cập camera. Hãy cho phép trình duyệt sử dụng camera rồi tải lại trang.'
+            );
         }
     }
 
     function stopCamera() {
         if (stream) {
-            stream.getTracks().forEach(track => track.stop());
+            stream.getTracks().forEach(function (track) {
+                track.stop();
+            });
+
             stream = null;
         }
     }
 
-    captureButton.addEventListener('click', () => {
-        if (!stream || video.videoWidth === 0 || video.videoHeight === 0) {
-            cameraError.textContent = 'Camera chưa sẵn sàng. Vui lòng thử lại.';
-            cameraError.style.display = 'block';
+    captureButton.addEventListener('click', function () {
+        if (busy) {
+            return;
+        }
+
+        if (
+            !stream
+            || video.videoWidth === 0
+            || video.videoHeight === 0
+        ) {
+            showError(
+                'Camera chưa sẵn sàng. Vui lòng thử lại.'
+            );
+
             return;
         }
 
@@ -1062,42 +1212,167 @@
         faceImage.value = imageData;
         preview.src = imageData;
 
+        verified = false;
+        continueButton.disabled = true;
+
         video.style.display = 'none';
         preview.style.display = 'block';
 
         captureButton.style.display = 'none';
         retakeButton.style.display = 'block';
         confirmButton.style.display = 'block';
+        confirmButton.disabled = false;
 
-        scannerStatus.textContent = 'Đã chụp khuôn mặt';
-        successBox.style.display = 'block';
-        cameraError.style.display = 'none';
+        hideMessages();
+
+        pendingBox.textContent =
+            'Đã chụp ảnh. Hãy bấm “Xác thực khuôn mặt” để đối chiếu với CCCD.';
+
+        pendingBox.style.display = 'block';
+
+        scannerStatus.textContent =
+            'Đã chụp ảnh, chưa xác thực';
 
         stopCamera();
     });
 
-    retakeButton.addEventListener('click', async () => {
-        faceImage.value = '';
-        preview.src = '';
-        preview.style.display = 'none';
-        video.style.display = 'block';
+    retakeButton.addEventListener('click', async function () {
+        if (busy) {
+            return;
+        }
 
-        retakeButton.style.display = 'none';
-        confirmButton.style.display = 'none';
-        captureButton.style.display = 'block';
+        verified = false;
 
-        await startCamera();
-    });
+        setBusy(true);
+        hideMessages();
 
-    faceForm.addEventListener('submit', (event) => {
-        if (!faceImage.value) {
-            event.preventDefault();
-            cameraError.textContent = 'Vui lòng chụp khuôn mặt trước khi xác nhận.';
-            cameraError.style.display = 'block';
+        scannerStatus.textContent =
+            'Đang chuẩn bị chụp lại...';
+
+        try {
+            const data = new FormData(faceForm);
+
+            data.delete('face_image');
+            data.set('action', 'reset');
+
+            await postFace(data);
+
+            faceImage.value = '';
+
+            preview.removeAttribute('src');
+            preview.style.display = 'none';
+            video.style.display = 'block';
+
+            retakeButton.style.display = 'none';
+            confirmButton.style.display = 'none';
+            captureButton.style.display = 'block';
+
+            await startCamera();
+        } catch (error) {
+            showError(
+                error.message
+                || 'Chưa thể chụp lại. Vui lòng thử lại.'
+            );
+
+            scannerStatus.textContent =
+                'Chưa thể chụp lại';
+        } finally {
+            setBusy(false);
         }
     });
 
-    window.addEventListener('beforeunload', stopCamera);
+    faceForm.addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        if (busy) {
+            return;
+        }
+
+        verified = false;
+        continueButton.disabled = true;
+
+        if (!faceImage.value) {
+            showError(
+                'Vui lòng chụp khuôn mặt trước khi xác thực.'
+            );
+
+            return;
+        }
+
+        setBusy(true);
+        hideMessages();
+
+        pendingBox.textContent =
+            'Đang đối chiếu khuôn mặt với CCCD. Vui lòng chờ...';
+
+        pendingBox.style.display = 'block';
+
+        scannerStatus.textContent =
+            'Đang đối chiếu với CCCD...';
+
+        confirmButton.textContent =
+            'Đang xác thực...';
+
+        try {
+            const result = await postFace(
+                new FormData(faceForm)
+            );
+
+            if (result.matched !== true) {
+                throw new Error(
+                    'Khuôn mặt chưa được xác nhận khớp với CCCD. Vui lòng chụp lại.'
+                );
+            }
+
+            verified = true;
+
+            hideMessages();
+
+            successBox.textContent = result.message;
+            successBox.style.display = 'block';
+
+            scannerStatus.textContent =
+                'Xác thực CCCD thành công';
+
+            confirmButton.style.display = 'none';
+        } catch (error) {
+            verified = false;
+
+            showError(
+                error.message
+                || 'Không thể kết nối để xác thực. Vui lòng thử lại.'
+            );
+
+            scannerStatus.textContent =
+                'Xác thực chưa thành công';
+        } finally {
+            confirmButton.textContent =
+                'Xác thực khuôn mặt';
+
+            setBusy(false);
+        }
+    });
+
+    continueButton.addEventListener('click', function () {
+        if (busy || !verified) {
+            return;
+        }
+
+        window.location.assign(
+            continueButton.dataset.url
+        );
+    });
+
+    window.addEventListener(
+        'beforeunload',
+        stopCamera
+    );
+
+    window.addEventListener('pageshow', function (event) {
+        if (event.persisted) {
+            window.location.reload();
+        }
+    });
 
     startCamera();
 </script>

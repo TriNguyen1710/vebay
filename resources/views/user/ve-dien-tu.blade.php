@@ -1244,6 +1244,8 @@
     {{-- BOOKING SUMMARY --}}
     {{-- ========================================================= --}}
 
+    @include('user.partials.ket-qua-hoa-don')
+
     <section class="booking-summary">
 
         <div class="booking-summary-header">
