@@ -1068,9 +1068,7 @@
 
             @endauth
 
-            <span>
-                Tiếng Việt
-            </span>
+            
 
         </div>
 
@@ -1091,7 +1089,7 @@
             href="{{ route('trang-chu') }}"
             class="logo"
         >
-            Sky<span>Go</span>
+            Viet<span>Jet</span>
         </a>
 
 
@@ -1117,7 +1115,7 @@
                     href="{{ route('tickets.mine') }}"
                     class="nav-link active"
                 >
-                    Vé của tôi
+                    Lịch sử vé
                 </a>
 
                 <a
@@ -1128,7 +1126,9 @@
                 </a>
 
             @endauth
-
+<a href="{{ route('contact') }}" class="nav-link">
+                Liên hệ
+            </a>
         </div>
 
 
@@ -1257,7 +1257,7 @@
                 </h2>
 
                 <p>
-                    Thông tin chung của đơn đặt vé SkyGo.
+                    Thông tin chung của đơn đặt vé Vietjet.
                 </p>
 
             </div>

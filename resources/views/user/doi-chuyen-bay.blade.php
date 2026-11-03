@@ -293,7 +293,7 @@
         </a>
 
         <a href="{{ route('tickets.mine') }}" class="back">
-            ← Quay lại Vé của tôi
+            ← Quay lại Lịch sử vé
         </a>
 
     </div>

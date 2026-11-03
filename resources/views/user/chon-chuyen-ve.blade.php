@@ -868,9 +868,7 @@
 
             @endauth
 
-            <span>
-                Tiếng Việt
-            </span>
+           
 
         </div>
 
@@ -917,7 +915,7 @@
                     href="{{ route('tickets.mine') }}"
                     class="nav-link"
                 >
-                    Vé của tôi
+                    Lịch sử vé
                 </a>
 
                 <a

@@ -270,7 +270,7 @@
             href="{{ route('tickets.mine') }}"
             class="back-link"
         >
-            ← Quay lại Vé của tôi
+            ← Quay lại Lịch sử vé
         </a>
 
     </div>

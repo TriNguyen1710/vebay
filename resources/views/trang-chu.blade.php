@@ -1324,7 +1324,7 @@
 
             @auth
                 <a href="{{ route('tickets.mine') }}" class="nav-link">
-                    Vé của tôi
+                    Lịch sử vé
                 </a>
 
                 <a
@@ -1426,7 +1426,7 @@
                         href="{{ route('tickets.mine') }}"
                         class="hero-btn-secondary"
                     >
-                        Xem vé của tôi
+                        Xem lịch sử vé
                     </a>
                 @else
                     <a
@@ -2010,7 +2010,7 @@
 
                 @auth
                     <a href="{{ route('tickets.mine') }}">
-                        Vé của tôi
+                        Lịch sử vé
                     </a>
 
                     <a href="{{ route('notifications.index') }}">

@@ -622,7 +622,7 @@
                 <a href="{{ route('profile.edit') }}">Thông tin cá nhân</a>
                 <a href="{{ route('notifications.index') }}">Thông báo</a>
             @endauth
-            <span>Tiếng Việt</span>
+           
         </div>
     </div>
 </div>
@@ -644,13 +644,16 @@
 
             @auth
                 <a href="{{ route('tickets.mine') }}" class="nav-link">
-                    Vé của tôi
+                    Lịch sử vé
                 </a>
 
                 <a href="{{ route('notifications.index') }}" class="nav-link">
                     Thông báo
                 </a>
             @endauth
+            <a href="{{ route('contact') }}" class="nav-link">
+                Liên hệ
+            </a>
         </div>
 
         <div class="nav-actions">

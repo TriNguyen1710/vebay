@@ -1112,7 +1112,7 @@
 
                         <div class="ticket-filter-field">
                             <label for="ticket_status">
-                                Trạng thái xác nhận
+                                Trạng thái Check-in
                             </label>
 
                             <select
@@ -1127,14 +1127,14 @@
                                     value="active"
                                     {{ $selectedTicketStatus === 'active' ? 'selected' : '' }}
                                 >
-                                    Chưa xác nhận
+                                    Chưa check-in
                                 </option>
 
                                 <option
                                     value="used"
                                     {{ $selectedTicketStatus === 'used' ? 'selected' : '' }}
                                 >
-                                    Đã xác nhận
+                                    Đã check_in
                                 </option>
                             </select>
                         </div>
@@ -1435,11 +1435,11 @@
                                         <td>
                                             @if($ticket->ticket_status === 'active')
                                                 <span class="badge status-active">
-                                                    Chưa xác nhận
+                                                    Chưa check-in
                                                 </span>
                                             @elseif($ticket->ticket_status === 'used')
                                                 <span class="badge status-used">
-                                                    Đã xác nhận
+                                                    Đã check-in
                                                 </span>
                                             @elseif($ticket->ticket_status === 'cancelled')
                                                 <span class="badge status-cancelled">
@@ -1485,7 +1485,7 @@
                                                     ) }}"
                                                     class="confirm-btn"
                                                 >
-                                                    Xác nhận
+                                                    Check-in
                                                 </a>
                                             @elseif($ticket->ticket_status === 'used')
                                                 <button
@@ -1493,7 +1493,7 @@
                                                     class="done-btn"
                                                     disabled
                                                 >
-                                                    Đã xác nhận
+                                                    Đã check-in
                                                 </button>
                                             @else
                                                 ---

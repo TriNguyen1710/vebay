@@ -429,7 +429,7 @@
 
         <nav class="header-links" aria-label="Menu khách hàng">
             <a href="{{ route('trang-chu') }}">Trang chủ</a>
-            <a href="{{ route('tickets.mine') }}">Vé của tôi</a>
+            <a href="{{ route('tickets.mine') }}">Lịch sử vé</a>
         </nav>
     </div>
 </header>
@@ -438,7 +438,7 @@
     <nav class="breadcrumb" aria-label="Đường dẫn">
         <a href="{{ route('trang-chu') }}">Trang chủ</a>
         <span>/</span>
-        <a href="{{ route('tickets.mine') }}">Vé của tôi</a>
+        <a href="{{ route('tickets.mine') }}">Lịch sử vé</a>
         <span>/</span>
         <span>Kiểm tra thanh toán</span>
     </nav>
@@ -500,7 +500,7 @@
                 </a>
 
                 <a class="button secondary" href="{{ route('tickets.mine') }}">
-                    Vé của tôi
+                    Lịch sử vé
                 </a>
             </div>
         @else
@@ -560,7 +560,7 @@
                             class="button secondary"
                             href="{{ route('tickets.mine') }}"
                         >
-                            Vé của tôi
+                            Lịch sử vé
                         </a>
                     </div>
                 </form>
@@ -587,7 +587,7 @@
                         class="button secondary"
                         href="{{ route('tickets.mine') }}"
                     >
-                        Vé của tôi
+                        Lịch sử vé
                     </a>
                 </div>
             @endif

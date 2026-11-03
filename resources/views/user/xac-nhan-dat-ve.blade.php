@@ -10,7 +10,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Xác nhận đặt vé - SkyGo</title>
+    <title>Xác nhận đặt vé - Vietjet</title>
 
     <style>
         * {
@@ -967,9 +967,7 @@
 
             @endauth
 
-            <span>
-                Tiếng Việt
-            </span>
+            
 
         </div>
 
@@ -1016,7 +1014,7 @@
                     href="{{ route('tickets.mine') }}"
                     class="nav-link"
                 >
-                    Vé của tôi
+                    Lịch sử vé
                 </a>
 
                 <a

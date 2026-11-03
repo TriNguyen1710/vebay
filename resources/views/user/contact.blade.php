@@ -443,7 +443,7 @@
             @auth
 
                 <a href="{{ route('tickets.mine') }}" class="nav-link">
-                    Vé của tôi
+                    Lịch sử vé
                 </a>
 
                 <a href="{{ route('notifications.index') }}" class="nav-link">

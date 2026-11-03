@@ -10,7 +10,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Vé của tôi - Vietjet</title>
+    <title>Lịch sử vé - Vietjet</title>
 
     <style>
         * {
@@ -996,9 +996,7 @@
 
             @endauth
 
-            <span>
-                Tiếng Việt
-            </span>
+           
 
         </div>
 
@@ -1042,7 +1040,7 @@
                 href="{{ route('tickets.mine') }}"
                 class="nav-link active"
             >
-                Vé của tôi
+                Lịch sử vé
             </a>
 
             <a
@@ -1051,7 +1049,9 @@
             >
                 Thông báo
             </a>
-
+<a href="{{ route('contact') }}" class="nav-link">
+                Liên hệ
+            </a>
         </div>
 
         <div class="nav-actions">
@@ -1104,13 +1104,13 @@
             <span>/</span>
 
             <span>
-                Vé của tôi
+                Lịch sử vé
             </span>
 
         </div>
 
         <h1>
-            Vé của tôi
+           Lịch sử vé
         </h1>
 
         <p>
