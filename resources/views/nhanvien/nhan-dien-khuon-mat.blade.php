@@ -1,15 +1,12 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Nhận diện khuôn mặt - Vietjet</title>
+    <title>Nhận diện khuôn mặt - VietJet</title>
 
     <style>
         * {
@@ -68,7 +65,7 @@
         }
 
         .container {
-            width: min(100% - 40px, 950px);
+            width: min(100% - 40px, 1240px);
             margin: 0 auto;
             padding: 28px 0 50px;
         }
@@ -88,7 +85,7 @@
         }
 
         .heading {
-            margin-bottom: 22px;
+            margin-bottom: 24px;
         }
 
         .heading h1 {
@@ -109,6 +106,7 @@
             border-radius: 7px;
             font-size: 12px;
             font-weight: 600;
+            line-height: 1.6;
         }
 
         .alert-success {
@@ -123,12 +121,14 @@
             color: #a52a36;
         }
 
+        /* CAMERA */
+
         .card {
             overflow: hidden;
             border: 1px solid var(--border);
             border-radius: 11px;
             background: white;
-            box-shadow: 0 4px 18px rgba(25, 45, 65, 0.06);
+            box-shadow: 0 4px 18px rgba(25, 45, 65, .06);
         }
 
         .card-header {
@@ -229,155 +229,24 @@
 
         .btn:disabled {
             cursor: not-allowed;
-            opacity: 0.5;
+            opacity: .5;
         }
+
+        /* KẾT QUẢ XÁC THỰC */
 
         .result-card {
             overflow: hidden;
-            border: 1px solid #b9dfc8;
-            border-radius: 11px;
-            background: white;
-            box-shadow: 0 4px 18px rgba(25, 45, 65, 0.06);
-        }
-
-        .result-title {
-            padding: 20px 22px;
-            background: #eaf7ef;
-            border-bottom: 1px solid #c9e6d4;
-        }
-
-        .result-title h2 {
-            margin-bottom: 5px;
-            color: var(--success);
-            font-size: 18px;
-        }
-
-        .result-title p {
-            color: #537062;
-            font-size: 11px;
-        }
-
-        .information {
-            padding: 20px 22px;
-        }
-
-        .information-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 18px;
-        }
-
-        .info-group {
-            overflow: hidden;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            background: #fbfcfd;
-        }
-
-        .info-group-title {
-            padding: 11px 14px;
-            border-bottom: 1px solid var(--border);
-            background: #f3f7fa;
-            color: var(--primary);
-            font-size: 11px;
-            font-weight: 800;
-            text-transform: uppercase;
-        }
-
-        .info-group .info-row {
-            padding: 12px 14px;
-            grid-template-columns: 145px 1fr;
-        }
-
-        .info-row {
-            padding: 14px 0;
-            display: grid;
-            grid-template-columns: 180px 1fr;
-            gap: 15px;
-            border-bottom: 1px solid #edf0f2;
-        }
-
-        .info-row:last-child {
-            border-bottom: none;
-        }
-
-        .label {
-            color: var(--muted);
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .value {
-            color: var(--primary-dark);
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        .similarity {
-            padding: 12px 22px;
-            border-top: 1px solid var(--border);
-            background: #f8fafb;
-            color: var(--muted);
-            font-size: 11px;
-        }
-
-        .confirm-area {
-            padding: 18px 22px;
-            border-top: 1px solid var(--border);
-        }
-
-        .confirm-area form {
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        canvas {
-            display: none;
-        }
-
-        @media (max-width: 650px) {
-            .container {
-                width: min(100% - 24px, 950px);
-            }
-
-            .topbar {
-                padding: 0 16px;
-            }
-
-            .information-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .info-group .info-row,
-            .info-row {
-                grid-template-columns: 1fr;
-                gap: 5px;
-            }
-        }
-
-        .container {
-            width: min(100% - 40px, 1120px);
-        }
-
-        .heading {
-            margin-bottom: 24px;
-        }
-
-        .result-card {
             border: 1px solid #d9e4eb;
             border-radius: 16px;
-            box-shadow: 0 12px 32px rgba(0, 41, 79, 0.08);
+            background: white;
+            box-shadow: 0 12px 32px rgba(0, 41, 79, .08);
         }
 
         .result-title {
-            position: relative;
             padding: 24px 28px;
             background: var(--primary-dark);
             border-bottom: 4px solid var(--secondary);
         }
-
-
 
         .result-title h2 {
             margin-bottom: 6px;
@@ -388,6 +257,7 @@
         .result-title p {
             color: #b8cad8;
             font-size: 11px;
+            line-height: 1.6;
         }
 
         .information {
@@ -395,23 +265,28 @@
         }
 
         .information-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 20px;
         }
 
         .info-group {
+            overflow: hidden;
             border: 1px solid #dce6ed;
             border-radius: 12px;
             background: white;
-            box-shadow: 0 4px 14px rgba(0, 41, 79, 0.035);
+            box-shadow: 0 4px 14px rgba(0, 41, 79, .035);
         }
 
         .info-group-title {
             position: relative;
             padding: 14px 17px 14px 21px;
+            border-bottom: 1px solid var(--border);
             background: #f6f9fb;
             color: var(--primary-dark);
             font-size: 11px;
-            letter-spacing: 0.45px;
+            font-weight: 800;
+            text-transform: uppercase;
         }
 
         .info-group-title::before {
@@ -424,36 +299,144 @@
             background: var(--secondary);
         }
 
-        .info-group .info-row {
+        .info-row {
             min-height: 54px;
             padding: 13px 16px;
+            display: grid;
             grid-template-columns: 135px minmax(0, 1fr);
+            gap: 15px;
             align-items: center;
+            border-bottom: 1px solid #edf0f2;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
         }
 
         .label {
             color: #7d8b96;
             font-size: 9px;
-            letter-spacing: 0.35px;
+            font-weight: 700;
+            text-transform: uppercase;
         }
 
         .value {
             color: var(--primary-dark);
             font-size: 12px;
+            font-weight: 700;
             line-height: 1.5;
+            overflow-wrap: anywhere;
         }
 
-        .information > .info-row {
-            margin-top: 20px !important;
+        .status-row {
+            margin-top: 20px;
             padding: 15px 17px;
             border: 1px solid #c7e5d2;
             border-radius: 9px;
             background: #f0faf4;
-            grid-template-columns: 180px 1fr;
         }
 
-        .information > .info-row .value {
+        .status-row .value {
             color: var(--success);
+        }
+
+        /* BA ẢNH ĐỐI CHIẾU */
+
+        .compare-section {
+            padding: 0 28px 24px;
+        }
+
+        .compare-heading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .compare-heading::before {
+            content: "";
+            width: 4px;
+            height: 21px;
+            border-radius: 6px;
+            background: var(--secondary);
+        }
+
+        .compare-heading h3 {
+            color: var(--primary-dark);
+            font-size: 15px;
+        }
+
+        .compare-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .compare-card {
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            background: #fbfcfd;
+        }
+
+        .compare-card-title {
+            min-height: 54px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            background: #f2f7fb;
+            border-bottom: 1px solid var(--border);
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 800;
+            line-height: 1.5;
+        }
+
+        .compare-image-area {
+            padding: 13px;
+        }
+
+        .compare-image {
+            width: 100%;
+            height: 245px;
+            display: block;
+            object-fit: contain;
+            border-radius: 8px;
+            border: 1px solid #dce5eb;
+            background: #eef3f7;
+        }
+
+        .compare-empty {
+            min-height: 245px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed #ccd8e2;
+            border-radius: 8px;
+            background: #f8fafc;
+            color: var(--muted);
+            text-align: center;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .compare-caption {
+            margin-top: 11px;
+            color: #667b8c;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .compare-success {
+            margin-top: 15px;
+            padding: 13px 15px;
+            background: #eaf7ef;
+            color: #17643d;
+            border: 1px solid #b9dfc8;
+            border-radius: 8px;
+            font-size: 11px;
+            line-height: 1.7;
         }
 
         .similarity {
@@ -478,32 +461,68 @@
 
         .confirm-area {
             padding: 20px 28px;
+            border-top: 1px solid var(--border);
             background: #f8fafc;
+        }
+
+        .confirm-area form {
+            display: flex;
+            justify-content: flex-end;
         }
 
         .confirm-area .btn-success {
             min-height: 46px;
             padding: 0 26px;
             border-radius: 8px;
-            box-shadow: 0 5px 12px rgba(25, 135, 84, 0.18);
         }
 
         .confirm-area .btn-success:hover {
             background: #157347;
         }
 
+        canvas {
+            display: none;
+        }
+
+        @media (max-width: 950px) {
+            .compare-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .compare-card:last-child {
+                grid-column: span 2;
+            }
+        }
+
         @media (max-width: 650px) {
-            .result-title {
-                padding: 20px;
+            .container {
+                width: min(100% - 24px, 1240px);
             }
 
-            .information {
-                padding: 20px;
+            .topbar {
+                padding: 0 16px;
             }
 
-            .information > .info-row,
-            .info-group .info-row {
+            .result-title,
+            .information,
+            .compare-section,
+            .confirm-area {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .information-grid,
+            .compare-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .compare-card:last-child {
+                grid-column: auto;
+            }
+
+            .info-row {
+                grid-template-columns: 1fr;
+                gap: 5px;
             }
 
             .similarity {
@@ -516,16 +535,15 @@
                 margin: 8px 0 0;
             }
 
-            .confirm-area {
-                padding: 18px 20px;
-            }
-
             .confirm-area form,
             .confirm-area .btn-success {
                 width: 100%;
             }
-        }
 
+            .compare-image {
+                height: 250px;
+            }
+        }
     </style>
 </head>
 
@@ -537,7 +555,7 @@
         href="{{ route('nhanvien.trang-chu') }}"
         class="logo"
     >
-        Viet<span>jet</span>
+        Viet<span>Jet</span>
     </a>
 
     <div class="employee-label">
@@ -564,19 +582,25 @@
         @if(!$verified)
 
             <p>
-                Chụp khuôn mặt hành khách để hệ thống đối chiếu.
-                Thông tin hành khách chỉ xuất hiện sau khi nhận diện thành công.
+                Chụp khuôn mặt hành khách để đối chiếu với
+                ảnh đã xác thực khi đặt vé.
+                Thông tin hành khách chỉ hiển thị khi
+                nhận diện thành công.
             </p>
 
         @else
 
             <p>
                 Khuôn mặt đã được xác minh thành công.
+                Vui lòng kiểm tra ba hình ảnh trước khi
+                xác nhận hành khách.
             </p>
 
         @endif
 
     </div>
+
+    <!-- THÔNG BÁO -->
 
     @if(session('success'))
 
@@ -594,11 +618,13 @@
 
             @if(session('similarity') !== null)
 
-                Mức tương đồng:
-                {{ number_format(
-                    (float) session('similarity') * 100,
-                    2
-                ) }}%
+                <div>
+                    Mức tương đồng:
+                    {{ number_format(
+                        (float) session('similarity') * 100,
+                        2
+                    ) }}%
+                </div>
 
             @endif
 
@@ -614,18 +640,21 @@
 
     @endif
 
+    <!-- ===================================
+         CHƯA XÁC THỰC: HIỆN CAMERA
+    ==================================== -->
+
     @if(!$verified)
 
         <section class="card">
 
             <div class="card-header">
 
-                <h2>
-                    Camera nhận diện
-                </h2>
+                <h2>Camera nhận diện</h2>
 
                 <p>
-                    Đưa khuôn mặt vào giữa khung và nhìn thẳng về phía camera.
+                    Đưa khuôn mặt vào giữa khung,
+                    nhìn thẳng và giữ ổn định khi chụp.
                 </p>
 
             </div>
@@ -633,10 +662,7 @@
             <div class="card-body">
 
                 <form
-                    action="{{ route(
-                        'nhanvien.tickets.face.verify',
-                        $ticket
-                    ) }}"
+                    action="{{ route('nhanvien.tickets.face.verify', $ticket) }}"
                     method="POST"
                     id="faceForm"
                 >
@@ -655,11 +681,12 @@
                             id="video"
                             autoplay
                             playsinline
+                            muted
                         ></video>
 
                         <img
                             id="preview"
-                            alt="Ảnh vừa chụp"
+                            alt="Ảnh khuôn mặt vừa chụp"
                         >
 
                         <div
@@ -691,7 +718,7 @@
                             type="button"
                             id="retakeButton"
                             class="btn btn-secondary"
-                            style="display: none;"
+                            style="display:none;"
                         >
                             Chụp lại
                         </button>
@@ -700,7 +727,7 @@
                             type="submit"
                             id="verifyButton"
                             class="btn btn-success"
-                            style="display: none;"
+                            style="display:none;"
                         >
                             Kiểm tra khuôn mặt
                         </button>
@@ -715,6 +742,10 @@
 
         </section>
 
+    <!-- ===================================
+         ĐÃ XÁC THỰC: HIỆN KẾT QUẢ
+    ==================================== -->
+
     @else
 
         <section class="result-card">
@@ -722,14 +753,17 @@
             <div class="result-title">
 
                 <h2>
-                    Nhận diện thành công
+                    ✓ Nhận diện thành công
                 </h2>
 
                 <p>
-                    Hệ thống đã tìm thấy hành khách tương ứng.
+                    Hệ thống đã so khớp khuôn mặt vừa quét
+                    với khuôn mặt đã đăng ký khi đặt vé.
                 </p>
 
             </div>
+
+            <!-- THÔNG TIN HÀNH KHÁCH -->
 
             <div class="information">
 
@@ -742,22 +776,40 @@
                         </div>
 
                         <div class="info-row">
-                            <div class="label">Mã vé</div>
-                            <div class="value">{{ $ticket->ticket_code }}</div>
+                            <div class="label">
+                                Mã vé
+                            </div>
+
+                            <div class="value">
+                                {{ $ticket->ticket_code }}
+                            </div>
                         </div>
 
                         <div class="info-row">
-                            <div class="label">Họ tên hành khách</div>
-                            <div class="value">{{ $ticket->passenger_name }}</div>
+                            <div class="label">
+                                Họ tên hành khách
+                            </div>
+
+                            <div class="value">
+                                {{ $ticket->passenger_name }}
+                            </div>
                         </div>
 
                         <div class="info-row">
-                            <div class="label">CCCD / Hộ chiếu</div>
-                            <div class="value">{{ $ticket->identity_number ?? '---' }}</div>
+                            <div class="label">
+                                CCCD / Hộ chiếu
+                            </div>
+
+                            <div class="value">
+                                {{ $ticket->identity_number ?? '---' }}
+                            </div>
                         </div>
 
                         <div class="info-row">
-                            <div class="label">Ngày sinh</div>
+                            <div class="label">
+                                Ngày sinh
+                            </div>
+
                             <div class="value">
                                 {{ $ticket->date_of_birth
                                     ? $ticket->date_of_birth->format('d/m/Y')
@@ -766,31 +818,56 @@
                         </div>
 
                         <div class="info-row">
-                            <div class="label">Giới tính</div>
+                            <div class="label">
+                                Giới tính
+                            </div>
+
                             <div class="value">
-                                @if($ticket->gender === 'nam')
+
+                                @if(in_array($ticket->gender, ['nam', 'male']))
+
                                     Nam
-                                @elseif($ticket->gender === 'nu')
+
+                                @elseif(in_array($ticket->gender, ['nu', 'female']))
+
                                     Nữ
+
                                 @elseif($ticket->gender)
+
                                     Khác
+
                                 @else
+
                                     ---
+
                                 @endif
+
                             </div>
                         </div>
 
                         <div class="info-row">
-                            <div class="label">Số điện thoại</div>
-                            <div class="value">{{ $ticket->phone ?? '---' }}</div>
+                            <div class="label">
+                                Số điện thoại
+                            </div>
+
+                            <div class="value">
+                                {{ $ticket->phone ?? '---' }}
+                            </div>
                         </div>
 
                         <div class="info-row">
-                            <div class="label">Email</div>
-                            <div class="value">{{ $ticket->email ?? '---' }}</div>
+                            <div class="label">
+                                Email
+                            </div>
+
+                            <div class="value">
+                                {{ $ticket->email ?? '---' }}
+                            </div>
                         </div>
 
                     </div>
+
+                    <!-- THÔNG TIN CHUYẾN BAY -->
 
                     <div class="info-group">
 
@@ -799,14 +876,20 @@
                         </div>
 
                         <div class="info-row">
-                            <div class="label">Chuyến bay</div>
+                            <div class="label">
+                                Chuyến bay
+                            </div>
+
                             <div class="value">
                                 {{ optional($ticket->flight)->flight_code ?? '---' }}
                             </div>
                         </div>
 
                         <div class="info-row">
-                            <div class="label">Hành trình</div>
+                            <div class="label">
+                                Hành trình
+                            </div>
+
                             <div class="value">
                                 {{ optional(
                                     optional($ticket->flight)->departureAirport
@@ -827,48 +910,85 @@
                         </div>
 
                         <div class="info-row">
-                            <div class="label">Ngày bay</div>
+                            <div class="label">
+                                Ngày bay
+                            </div>
+
                             <div class="value">
-                                {{ optional(optional($ticket->flight)->flight_date)->format('d/m/Y') ?? '---' }}
+                                {{ optional(
+                                    optional($ticket->flight)->flight_date
+                                )->format('d/m/Y') ?? '---' }}
                             </div>
                         </div>
 
                         <div class="info-row">
-                            <div class="label">Giờ bay</div>
+                            <div class="label">
+                                Giờ bay
+                            </div>
+
                             <div class="value">
+
                                 {{ optional($ticket->flight)->departure_time
-                                    ? substr(optional($ticket->flight)->departure_time, 0, 5)
+                                    ? substr($ticket->flight->departure_time, 0, 5)
                                     : '---' }}
+
                                 →
+
                                 {{ optional($ticket->flight)->arrival_time
-                                    ? substr(optional($ticket->flight)->arrival_time, 0, 5)
+                                    ? substr($ticket->flight->arrival_time, 0, 5)
                                     : '---' }}
+
                             </div>
                         </div>
 
                         <div class="info-row">
-                            <div class="label">Ghế</div>
+                            <div class="label">
+                                Ghế
+                            </div>
+
                             <div class="value">
                                 {{ optional($ticket->flightSeat)->seat_number ?? '---' }}
                             </div>
                         </div>
 
                         <div class="info-row">
-                            <div class="label">Hạng ghế</div>
+                            <div class="label">
+                                Hạng ghế
+                            </div>
+
                             <div class="value">
-                                {{ $ticket->seat_class === 'vip' ? 'VIP' : 'Phổ thông' }}
+                                {{ $ticket->seat_class === 'vip'
+                                    ? 'VIP'
+                                    : 'Phổ thông' }}
                             </div>
                         </div>
 
                         <div class="info-row">
-                            <div class="label">Hành lý ký gửi</div>
+                            <div class="label">
+                                Hành lý ký gửi
+                            </div>
+
                             <div class="value">
+
                                 @if((int) ($ticket->baggage_weight ?? 0) > 0)
+
                                     {{ (int) $ticket->baggage_weight }} kg
-                                    - {{ number_format((float) ($ticket->baggage_price ?? 0), 0, ',', '.') }} đ
+
+                                    -
+
+                                    {{ number_format(
+                                        (float) ($ticket->baggage_price ?? 0),
+                                        0,
+                                        ',',
+                                        '.'
+                                    ) }} đ
+
                                 @else
+
                                     Không mua thêm
+
                                 @endif
+
                             </div>
                         </div>
 
@@ -876,12 +996,165 @@
 
                 </div>
 
-                <div class="info-row" style="margin-top:18px;">
-                    <div class="label">Trạng thái</div>
-                    <div class="value">Vé hợp lệ - Chưa kiểm tra</div>
+                <div class="status-row info-row">
+
+                    <div class="label">
+                        Trạng thái
+                    </div>
+
+                    <div class="value">
+                        Vé hợp lệ - Chưa kiểm tra
+                    </div>
+
                 </div>
 
             </div>
+
+            <!-- ===================================
+                 BA HÌNH ẢNH ĐỐI CHIẾU
+            ==================================== -->
+
+            <div class="compare-section">
+
+                <div class="compare-heading">
+
+                    <h3>
+                        Hình ảnh đối chiếu hành khách
+                    </h3>
+
+                </div>
+
+                <div class="compare-grid">
+
+                    <!-- ẢNH 1: CCCD KHI ĐẶT VÉ -->
+
+                    <div class="compare-card">
+
+                        <div class="compare-card-title">
+                            1. Ảnh CCCD / Hộ chiếu khi đặt vé
+                        </div>
+
+                        <div class="compare-image-area">
+
+                            @if(!empty($ticket->cccd_image))
+
+                                <img
+                                    src="{{ asset($ticket->cccd_image) }}"
+                                    alt="Ảnh CCCD khi đặt vé"
+                                    class="compare-image"
+                                >
+
+                            @else
+
+                                <div class="compare-empty">
+                                    Không có ảnh CCCD /
+                                    Hộ chiếu trong hồ sơ vé.
+                                </div>
+
+                            @endif
+
+                            <p class="compare-caption">
+                                Ảnh giấy tờ hành khách đã tải lên
+                                khi nhập thông tin đặt vé.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ẢNH 2: KHUÔN MẶT XÁC THỰC VỚI CCCD -->
+
+                    <div class="compare-card">
+
+                        <div class="compare-card-title">
+                            2. Ảnh khuôn mặt xác thực với CCCD
+                        </div>
+
+                        <div class="compare-image-area">
+
+                            @if(!empty($ticket->face_image))
+
+                                <img
+                                    src="{{ asset($ticket->face_image) }}"
+                                    alt="Khuôn mặt đã xác thực với CCCD lúc đặt vé"
+                                    class="compare-image"
+                                >
+
+                            @else
+
+                                <div class="compare-empty">
+                                    Không tìm thấy ảnh khuôn mặt
+                                    đã xác thực khi đặt vé.
+                                </div>
+
+                            @endif
+
+                            <p class="compare-caption">
+                                Ảnh được lưu khi hành khách xác thực
+                                khuôn mặt thành công với CCCD
+                                trong quá trình đặt vé.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ẢNH 3: KHUÔN MẶT VỪA QUÉT TẠI QUẦY -->
+
+                    <div class="compare-card">
+
+                        <div class="compare-card-title">
+                            3. Ảnh khuôn mặt vừa quét check-in
+                        </div>
+
+                        <div class="compare-image-area">
+
+                            <img
+                                id="successfulFaceImage"
+                                src=""
+                                alt="Ảnh khuôn mặt vừa quét tại quầy"
+                                class="compare-image"
+                                style="display:none;"
+                            >
+
+                            <div
+                                id="faceImageEmpty"
+                                class="compare-empty"
+                            >
+                                Không tìm thấy ảnh quét check-in
+                                của lần xác thực hiện tại.
+                            </div>
+
+                            <p
+                                id="successfulFaceNote"
+                                class="compare-caption"
+                            >
+                                Ảnh mới được chụp tại quầy
+                                và đã được hệ thống xác minh.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="compare-success">
+
+                    ✓ Hệ thống đã xác thực khuôn mặt thành công.
+
+                    Nhân viên hãy đối chiếu:
+
+                    ảnh CCCD, ảnh khuôn mặt đã đăng ký
+                    và ảnh khuôn mặt vừa quét tại quầy
+
+                    trước khi xác nhận hành khách.
+
+                </div>
+
+            </div>
+
+            <!-- MỨC ĐỘ TƯƠNG ĐỒNG -->
 
             @if($similarity !== null)
 
@@ -900,14 +1173,14 @@
 
             @endif
 
+            <!-- XÁC NHẬN HÀNH KHÁCH -->
+
             <div class="confirm-area">
 
                 <form
-                    action="{{ route(
-                        'nhanvien.tickets.confirm',
-                        $ticket
-                    ) }}"
+                    action="{{ route('nhanvien.tickets.confirm', $ticket) }}"
                     method="POST"
+                    id="confirmPassengerForm"
                 >
 
                     @csrf
@@ -929,53 +1202,51 @@
 
 </div>
 
+<!-- ===================================
+     JAVASCRIPT KHI CHƯA XÁC THỰC
+==================================== -->
+
 @if(!$verified)
 
 <script>
-    const video =
-        document.getElementById('video');
+    const video = document.getElementById('video');
+    const preview = document.getElementById('preview');
+    const canvas = document.getElementById('canvas');
+    const faceImage = document.getElementById('faceImage');
 
-    const preview =
-        document.getElementById('preview');
+    const captureButton = document.getElementById('captureButton');
+    const retakeButton = document.getElementById('retakeButton');
+    const verifyButton = document.getElementById('verifyButton');
 
-    const canvas =
-        document.getElementById('canvas');
+    const cameraStatus = document.getElementById('cameraStatus');
+    const faceFrame = document.getElementById('faceFrame');
+    const faceForm = document.getElementById('faceForm');
 
-    const faceImage =
-        document.getElementById('faceImage');
+    const faceStorageKey =
+        @json('employee_face_capture_' . $ticket->id);
 
-    const captureButton =
-        document.getElementById('captureButton');
-
-    const retakeButton =
-        document.getElementById('retakeButton');
-
-    const verifyButton =
-        document.getElementById('verifyButton');
-
-    const cameraStatus =
-        document.getElementById('cameraStatus');
-
-    const faceFrame =
-        document.getElementById('faceFrame');
+    const faceStorageTimeKey =
+        @json('employee_face_capture_time_' . $ticket->id);
 
     let stream = null;
 
+    /*
+     * MỞ CAMERA
+     */
     async function startCamera() {
         try {
-            stream =
-                await navigator.mediaDevices.getUserMedia({
-                    video: {
-                        facingMode: 'user',
-                        width: {
-                            ideal: 1280
-                        },
-                        height: {
-                            ideal: 720
-                        }
+            stream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: 'user',
+                    width: {
+                        ideal: 1280
                     },
-                    audio: false
-                });
+                    height: {
+                        ideal: 720
+                    }
+                },
+                audio: false
+            });
 
             video.srcObject = stream;
 
@@ -994,35 +1265,23 @@
         }
     }
 
+    /*
+     * CHỤP KHUÔN MẶT
+     */
     function captureFace() {
-        if (
-            !video.videoWidth
-            ||
-            !video.videoHeight
-        ) {
+        if (!video.videoWidth || !video.videoHeight) {
             return;
         }
 
-        canvas.width =
-            video.videoWidth;
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
 
-        canvas.height =
-            video.videoHeight;
-
-        const context =
-            canvas.getContext('2d');
+        const context = canvas.getContext('2d');
 
         context.save();
 
-        context.translate(
-            canvas.width,
-            0
-        );
-
-        context.scale(
-            -1,
-            1
-        );
+        context.translate(canvas.width, 0);
+        context.scale(-1, 1);
 
         context.drawImage(
             video,
@@ -1034,62 +1293,42 @@
 
         context.restore();
 
-        const imageData =
-            canvas.toDataURL(
-                'image/jpeg',
-                0.9
-            );
+        const imageData = canvas.toDataURL(
+            'image/jpeg',
+            0.85
+        );
 
-        faceImage.value =
-            imageData;
+        faceImage.value = imageData;
+        preview.src = imageData;
 
-        preview.src =
-            imageData;
+        video.style.display = 'none';
+        preview.style.display = 'block';
 
-        video.style.display =
-            'none';
+        faceFrame.style.display = 'none';
 
-        preview.style.display =
-            'block';
-
-        faceFrame.style.display =
-            'none';
-
-        captureButton.style.display =
-            'none';
-
-        retakeButton.style.display =
-            'inline-block';
-
-        verifyButton.style.display =
-            'inline-block';
+        captureButton.style.display = 'none';
+        retakeButton.style.display = 'inline-block';
+        verifyButton.style.display = 'inline-block';
 
         cameraStatus.textContent =
             'Đã chụp ảnh. Bấm Kiểm tra khuôn mặt để nhận diện.';
     }
 
+    /*
+     * CHỤP LẠI
+     */
     function retakeFace() {
         faceImage.value = '';
-
         preview.src = '';
 
-        preview.style.display =
-            'none';
+        preview.style.display = 'none';
+        video.style.display = 'block';
 
-        video.style.display =
-            'block';
+        faceFrame.style.display = 'block';
 
-        faceFrame.style.display =
-            'block';
-
-        captureButton.style.display =
-            'inline-block';
-
-        retakeButton.style.display =
-            'none';
-
-        verifyButton.style.display =
-            'none';
+        captureButton.style.display = 'inline-block';
+        retakeButton.style.display = 'none';
+        verifyButton.style.display = 'none';
 
         cameraStatus.textContent =
             'Đưa khuôn mặt vào giữa khung và chụp lại.';
@@ -1105,24 +1344,179 @@
         retakeFace
     );
 
+    /*
+     * LƯU TẠM ẢNH CHECK-IN TRONG TAB
+     *
+     * Ảnh khuôn mặt đăng ký khi đặt vé
+     * đã được lưu riêng trong tickets.face_image.
+     *
+     * Đây là ảnh MỚI chụp tại quầy.
+     */
+    faceForm.addEventListener('submit', function (event) {
+
+        if (!faceImage.value) {
+            event.preventDefault();
+
+            cameraStatus.textContent =
+                'Vui lòng chụp khuôn mặt trước.';
+
+            return;
+        }
+
+        try {
+            sessionStorage.setItem(
+                faceStorageKey,
+                faceImage.value
+            );
+
+            sessionStorage.setItem(
+                faceStorageTimeKey,
+                String(Date.now())
+            );
+
+        } catch (error) {
+            // Không cản trở việc gửi ảnh lên server.
+        }
+
+        verifyButton.disabled = true;
+
+        verifyButton.textContent =
+            'Đang kiểm tra...';
+    });
+
+    /*
+     * DỪNG CAMERA KHI RỜI TRANG
+     */
     window.addEventListener(
         'beforeunload',
         function () {
             if (stream) {
-                stream
-                    .getTracks()
-                    .forEach(function (track) {
-                        track.stop();
-                    });
+                stream.getTracks().forEach(function (track) {
+                    track.stop();
+                });
             }
         }
     );
 
+    /*
+     * XÓA ẢNH CHECK-IN CŨ KHI BẮT ĐẦU LẦN QUÉT MỚI
+     */
+    try {
+        sessionStorage.removeItem(faceStorageKey);
+        sessionStorage.removeItem(faceStorageTimeKey);
+    } catch (error) {
+        // Không ảnh hưởng đến hoạt động camera.
+    }
+
     startCamera();
+</script>
+
+<!-- ===================================
+     JAVASCRIPT SAU KHI XÁC THỰC
+==================================== -->
+
+@else
+
+<script>
+    const successfulImage =
+        document.getElementById('successfulFaceImage');
+
+    const emptyImage =
+        document.getElementById('faceImageEmpty');
+
+    const successfulFaceNote =
+        document.getElementById('successfulFaceNote');
+
+    const faceStorageKey =
+        @json('employee_face_capture_' . $ticket->id);
+
+    const faceStorageTimeKey =
+        @json('employee_face_capture_time_' . $ticket->id);
+
+    const confirmPassengerForm =
+        document.getElementById('confirmPassengerForm');
+
+    let capturedImage = null;
+    let capturedAt = 0;
+
+    /*
+     * LẤY ẢNH VỪA QUÉT TẠI QUẦY.
+     * ẢNH NÀY KHÁC VỚI tickets.face_image.
+     */
+    try {
+        capturedImage =
+            sessionStorage.getItem(faceStorageKey);
+
+        capturedAt = Number(
+            sessionStorage.getItem(faceStorageTimeKey) || 0
+        );
+
+    } catch (error) {
+        capturedImage = null;
+    }
+
+    /*
+     * CHỈ DÙNG ẢNH TẠM CỦA LẦN QUÉT GẦN ĐÂY.
+     * Thời hạn tương ứng với cửa sổ xác thực 5 phút.
+     */
+    const captureIsRecent =
+        capturedAt > 0 &&
+        Date.now() - capturedAt <= 5 * 60 * 1000;
+
+    if (capturedImage && captureIsRecent) {
+
+        successfulImage.src = capturedImage;
+        successfulImage.style.display = 'block';
+
+        emptyImage.style.display = 'none';
+
+        successfulFaceNote.textContent =
+            'Đây là ảnh vừa quét tại quầy và được xác thực thành công.';
+
+    } else {
+
+        successfulImage.style.display = 'none';
+        emptyImage.style.display = 'flex';
+
+        emptyImage.textContent =
+            'Ảnh check-in vừa chụp không còn trong tab này.';
+
+        successfulFaceNote.textContent =
+            'Ảnh đã đăng ký khi đặt vé vẫn được hiển thị ở ô số 2.';
+    }
+
+    successfulImage.addEventListener(
+        'error',
+        function () {
+
+            successfulImage.style.display = 'none';
+            emptyImage.style.display = 'flex';
+
+            emptyImage.textContent =
+                'Không thể tải ảnh khuôn mặt vừa quét.';
+
+        }
+    );
+
+    /*
+     * KHI NHÂN VIÊN XÁC NHẬN, XÓA ẢNH TẠM.
+     */
+    confirmPassengerForm.addEventListener(
+        'submit',
+        function () {
+
+            try {
+                sessionStorage.removeItem(faceStorageKey);
+                sessionStorage.removeItem(faceStorageTimeKey);
+            } catch (error) {
+                // Không ảnh hưởng đến xác nhận hành khách.
+            }
+
+        }
+    );
 </script>
 
 @endif
 
 </body>
-
 </html>

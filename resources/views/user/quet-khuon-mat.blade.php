@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -352,6 +353,40 @@
 
         .face-body {
             padding: 27px;
+        }
+
+        .face-comparison {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 18px;
+            margin-bottom: 22px;
+        }
+
+        .face-comparison.is-verified .scanner {
+            flex: 1 1 0;
+            min-width: 0;
+            margin: 0;
+        }
+
+        .cccd-result {
+            display: none;
+            flex: 1 1 0;
+            min-width: 0;
+            padding: 12px;
+            border: 1px solid #b9dec9;
+            background: #f1faf5;
+            border-radius: 8px;
+        }
+
+        .face-comparison.is-verified .cccd-result { display: flex; flex-direction: column; }
+        .cccd-result-title { color: #11633b; font-weight: 700; font-size: 14px; margin-bottom: 10px; }
+        .cccd-result img { width: 100%; max-height: 280px; object-fit: contain; border-radius: 6px; background: #e6edf2; }
+        .cccd-result-note { color: #17633e; font-size: 12px; line-height: 1.5; margin-top: 10px; }
+
+        @media (max-width: 700px) {
+            .face-comparison.is-verified { flex-direction: column; }
+            .face-comparison.is-verified .scanner { width: 100%; }
         }
 
         .scanner {
@@ -918,6 +953,7 @@
                     aria-live="polite"
                 ></div>
 
+                <div class="face-comparison" id="faceComparison">
                 <div class="scanner">
                     <video id="video" autoplay playsinline muted></video>
                     <img id="preview" alt="Ảnh khuôn mặt đã chụp">
@@ -930,6 +966,13 @@
                     <div id="scannerStatus" class="scanner-status">
                         Đang khởi động camera...
                     </div>
+                </div>
+
+                <div class="cccd-result" id="cccdResult" aria-live="polite">
+                    <div class="cccd-result-title">✓ Ảnh CCCD đã đối chiếu</div>
+                    <img src="{{ asset($passenger['cccd_image']) }}" alt="Ảnh mặt trước CCCD của hành khách">
+                    <p class="cccd-result-note">Khuôn mặt đã được hệ thống xác nhận khớp với ảnh trên CCCD.</p>
+                </div>
                 </div>
 
                 <div class="guide">
@@ -1051,6 +1094,7 @@
     const successBox = document.getElementById('successBox');
     const pendingBox = document.getElementById('pendingBox');
     const faceForm = document.getElementById('faceForm');
+    const faceComparison = document.getElementById('faceComparison');
 
     let stream = null;
     let busy = false;
@@ -1216,6 +1260,7 @@
         preview.src = imageData;
 
         verified = false;
+        faceComparison.classList.remove('is-verified');
         continueButton.disabled = true;
 
         video.style.display = 'none';
@@ -1245,6 +1290,7 @@
         }
 
         verified = false;
+        faceComparison.classList.remove('is-verified');
 
         setBusy(true);
         hideMessages();
@@ -1292,6 +1338,7 @@
         }
 
         verified = false;
+        faceComparison.classList.remove('is-verified');
         continueButton.disabled = true;
 
         if (!faceImage.value) {
@@ -1328,6 +1375,7 @@
             }
 
             verified = true;
+            faceComparison.classList.add('is-verified');
 
             hideMessages();
 
@@ -1340,6 +1388,7 @@
             confirmButton.style.display = 'none';
         } catch (error) {
             verified = false;
+            faceComparison.classList.remove('is-verified');
 
             showError(
                 error.message

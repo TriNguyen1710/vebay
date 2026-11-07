@@ -1,14 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xác nhận hành khách thủ công</title>
 
     <style>
@@ -23,29 +18,24 @@
             --primary-dark: #00345f;
             --primary-light: #eaf4fb;
             --yellow: #f7b500;
-            --yellow-light: #fff7dc;
             --success: #16945f;
             --success-dark: #107447;
-            --success-light: #eaf8f1;
             --danger: #dc3545;
-            --danger-light: #fff0f1;
             --text: #203443;
             --muted: #6e7f8d;
             --border: #dce5eb;
-            --background: #eef3f7;
             --white: #ffffff;
         }
 
         body {
             min-height: 100vh;
             font-family: Arial, Helvetica, sans-serif;
-            background:
-                linear-gradient(
-                    135deg,
-                    #eef5fa 0%,
-                    #f7f9fb 45%,
-                    #eef3f7 100%
-                );
+            background: linear-gradient(
+                135deg,
+                #eef5fa 0%,
+                #f7f9fb 45%,
+                #eef3f7 100%
+            );
             color: var(--text);
         }
 
@@ -71,33 +61,30 @@
             text-decoration: none;
             font-size: 13px;
             font-weight: 700;
-            transition: 0.2s;
         }
 
         .back-link:hover {
-            transform: translateX(-3px);
+            text-decoration: underline;
         }
 
         .main-card {
             overflow: hidden;
-            background: var(--white);
-            border: 1px solid #dce5eb;
+            background: white;
+            border: 1px solid var(--border);
             border-radius: 18px;
-            box-shadow:
-                0 16px 45px rgba(28, 61, 84, 0.10);
+            box-shadow: 0 16px 45px rgba(28, 61, 84, .10);
         }
 
         .header {
             position: relative;
             padding: 35px 35px 32px;
             overflow: hidden;
-            background:
-                linear-gradient(
-                    135deg,
-                    #003b70 0%,
-                    #00589b 65%,
-                    #0070b5 100%
-                );
+            background: linear-gradient(
+                135deg,
+                #003b70 0%,
+                #00589b 65%,
+                #0070b5 100%
+            );
             color: white;
             text-align: center;
         }
@@ -110,7 +97,7 @@
             top: -100px;
             right: -50px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255,255,255,.06);
         }
 
         .header::after {
@@ -121,7 +108,7 @@
             bottom: -80px;
             left: -25px;
             border-radius: 50%;
-            background: rgba(247, 181, 0, 0.13);
+            background: rgba(247,181,0,.13);
         }
 
         .header-content {
@@ -136,28 +123,29 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid rgba(255, 255, 255, 0.28);
+            border: 1px solid rgba(255,255,255,.28);
             border-radius: 17px;
-            background: rgba(255, 255, 255, 0.13);
-            color: white;
+            background: rgba(255,255,255,.13);
         }
 
         .header-icon svg {
             width: 29px;
             height: 29px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
         }
 
         .header-badge {
-            display: inline-flex;
-            align-items: center;
+            display: inline-block;
             margin-bottom: 10px;
             padding: 5px 12px;
             border-radius: 20px;
-            background: rgba(255, 255, 255, 0.14);
-            color: #ffffff;
+            background: rgba(255,255,255,.14);
+            color: white;
             font-size: 10px;
             font-weight: 800;
-            letter-spacing: 0.6px;
+            letter-spacing: .6px;
             text-transform: uppercase;
         }
 
@@ -170,7 +158,7 @@
         .header p {
             max-width: 620px;
             margin: 0 auto;
-            color: rgba(255, 255, 255, 0.82);
+            color: rgba(255,255,255,.82);
             font-size: 12px;
             line-height: 1.7;
         }
@@ -188,7 +176,7 @@
         }
 
         .alert-error {
-            background: var(--danger-light);
+            background: #fff0f1;
             border: 1px solid #efc0c5;
             border-left: 4px solid var(--danger);
             color: #a52a36;
@@ -228,14 +216,15 @@
             line-height: 1.5;
         }
 
+        /* NHẬP CCCD THỦ CÔNG */
+
         .input-card {
             padding: 23px;
-            background:
-                linear-gradient(
-                    135deg,
-                    #f7fbfe,
-                    #edf6fc
-                );
+            background: linear-gradient(
+                135deg,
+                #f7fbfe,
+                #edf6fc
+            );
             border: 1px solid #d8e9f5;
             border-radius: 12px;
         }
@@ -253,7 +242,9 @@
         .input-label svg {
             width: 18px;
             height: 18px;
-            color: var(--primary);
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
         }
 
         .required {
@@ -273,14 +264,12 @@
             background: white;
             color: var(--text);
             font-size: 13px;
-            transition: 0.2s;
         }
 
         .form-control:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow:
-                0 0 0 3px rgba(0, 75, 135, 0.10);
+            box-shadow: 0 0 0 3px rgba(0,75,135,.1);
         }
 
         .input-icon {
@@ -294,6 +283,9 @@
         .input-icon svg {
             width: 19px;
             height: 19px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
         }
 
         .input-note {
@@ -310,7 +302,9 @@
             width: 14px;
             height: 14px;
             flex-shrink: 0;
-            margin-top: 1px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
         }
 
         .actions {
@@ -332,10 +326,7 @@
             font-size: 12px;
             font-weight: 800;
             cursor: pointer;
-            transition:
-                transform 0.2s,
-                background 0.2s,
-                box-shadow 0.2s;
+            transition: .2s;
         }
 
         .btn svg {
@@ -353,31 +344,31 @@
             color: var(--primary);
         }
 
-        .btn-back:hover {
-            background: #f5f8fa;
-        }
-
         .btn-check {
             flex: 1;
-            background:
-                linear-gradient(
-                    135deg,
-                    #004b87,
-                    #0067a8
-                );
+            background: linear-gradient(
+                135deg,
+                #004b87,
+                #0067a8
+            );
             color: white;
-            box-shadow:
-                0 6px 15px rgba(0, 75, 135, 0.17);
         }
 
-        .btn-check:hover {
-            background:
-                linear-gradient(
-                    135deg,
-                    #003b70,
-                    #00558c
-                );
+        .btn-confirm {
+            flex: 1;
+            background: linear-gradient(
+                135deg,
+                #16945f,
+                #20a96f
+            );
+            color: white;
         }
+
+        .btn-confirm:hover {
+            background: var(--success-dark);
+        }
+
+        /* THÔNG BÁO THÀNH CÔNG */
 
         .success-banner {
             margin-bottom: 24px;
@@ -385,12 +376,11 @@
             display: flex;
             align-items: center;
             gap: 14px;
-            background:
-                linear-gradient(
-                    135deg,
-                    #eaf8f1,
-                    #f5fcf8
-                );
+            background: linear-gradient(
+                135deg,
+                #eaf8f1,
+                #f5fcf8
+            );
             border: 1px solid #bfe5d0;
             border-radius: 11px;
         }
@@ -405,18 +395,14 @@
             border-radius: 50%;
             background: var(--success);
             color: white;
-        }
-
-        .success-icon svg {
-            width: 22px;
-            height: 22px;
+            font-size: 25px;
+            font-weight: 800;
         }
 
         .success-banner h3 {
             margin-bottom: 4px;
             color: var(--success-dark);
             font-size: 14px;
-            font-weight: 800;
         }
 
         .success-banner p {
@@ -424,6 +410,8 @@
             font-size: 11px;
             line-height: 1.5;
         }
+
+        /* THÔNG TIN HÀNH KHÁCH */
 
         .passenger-card {
             overflow: hidden;
@@ -438,12 +426,11 @@
             align-items: center;
             justify-content: space-between;
             gap: 15px;
-            background:
-                linear-gradient(
-                    135deg,
-                    #edf6fc,
-                    #f8fbfd
-                );
+            background: linear-gradient(
+                135deg,
+                #edf6fc,
+                #f8fbfd
+            );
             border-bottom: 1px solid #dce7ee;
         }
 
@@ -468,6 +455,9 @@
         .passenger-avatar svg {
             width: 21px;
             height: 21px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
         }
 
         .passenger-header h3 {
@@ -489,7 +479,7 @@
             color: var(--success-dark);
             font-size: 9px;
             font-weight: 800;
-            letter-spacing: 0.3px;
+            white-space: nowrap;
         }
 
         .section-label {
@@ -498,7 +488,7 @@
             font-size: 11px;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: .5px;
         }
 
         .info-grid {
@@ -522,7 +512,6 @@
             font-size: 9px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.4px;
         }
 
         .info-value {
@@ -530,22 +519,23 @@
             font-size: 13px;
             font-weight: 800;
             line-height: 1.4;
-            word-break: break-word;
+            overflow-wrap: anywhere;
         }
 
         .info-value.success {
             color: var(--success);
         }
 
+        /* THÔNG TIN CHUYẾN BAY */
+
         .flight-box {
             margin: 0 20px 20px;
             padding: 19px 20px;
-            background:
-                linear-gradient(
-                    135deg,
-                    #003b70,
-                    #005b9c
-                );
+            background: linear-gradient(
+                135deg,
+                #003b70,
+                #005b9c
+            );
             border-radius: 11px;
             color: white;
         }
@@ -553,17 +543,16 @@
         .flight-top {
             margin-bottom: 17px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             gap: 15px;
         }
 
         .flight-label {
-            color: rgba(255, 255, 255, 0.68);
+            color: rgba(255,255,255,.68);
             font-size: 9px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .flight-code {
@@ -602,7 +591,7 @@
         .route-line {
             height: 1px;
             flex: 1;
-            background: rgba(255, 255, 255, 0.35);
+            background: rgba(255,255,255,.35);
         }
 
         .plane {
@@ -619,6 +608,9 @@
         .plane svg {
             width: 17px;
             height: 17px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
         }
 
         .ticket-extra {
@@ -654,8 +646,73 @@
             color: var(--success);
         }
 
+        /* CHỈ 1 ẢNH CCCD */
+
+        .document-section {
+            padding: 0 20px 20px;
+        }
+
+        .document-card {
+            overflow: hidden;
+            border: 1px solid #e3e9ed;
+            border-radius: 10px;
+            background: #fbfcfd;
+        }
+
+        .document-card-header {
+            padding: 12px 14px;
+            border-bottom: 1px solid #e3e9ed;
+            background: #f3f7fa;
+            color: var(--primary-dark);
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .document-card-body {
+            padding: 16px;
+        }
+
+        .document-image {
+            width: 100%;
+            max-width: 550px;
+            height: 320px;
+            display: block;
+            margin: 0 auto;
+            object-fit: contain;
+            border-radius: 8px;
+            border: 1px solid #dce5eb;
+            background: #eef3f7;
+        }
+
+        .document-empty {
+            max-width: 550px;
+            min-height: 240px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed #ccd8e2;
+            border-radius: 8px;
+            background: #f8fafc;
+            color: var(--muted);
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .document-note {
+            margin-top: 13px;
+            color: var(--muted);
+            text-align: center;
+            font-size: 11px;
+            line-height: 1.7;
+        }
+
+        /* XÁC NHẬN CUỐI */
+
         .confirm-area {
-            margin-top: 22px;
+            margin: 0 20px 22px;
             padding: 18px;
             background: #f8fafb;
             border: 1px solid #e3e9ed;
@@ -676,30 +733,10 @@
             width: 16px;
             height: 16px;
             flex-shrink: 0;
-            margin-top: 1px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
             color: var(--primary);
-        }
-
-        .btn-confirm {
-            flex: 1;
-            background:
-                linear-gradient(
-                    135deg,
-                    #16945f,
-                    #20a96f
-                );
-            color: white;
-            box-shadow:
-                0 6px 15px rgba(22, 148, 95, 0.18);
-        }
-
-        .btn-confirm:hover {
-            background:
-                linear-gradient(
-                    135deg,
-                    #107447,
-                    #168c5b
-                );
         }
 
         @media (max-width: 700px) {
@@ -720,10 +757,7 @@
                 padding: 24px 19px 26px;
             }
 
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
-
+            .info-grid,
             .ticket-extra {
                 grid-template-columns: 1fr;
             }
@@ -748,6 +782,10 @@
             .btn {
                 width: 100%;
             }
+
+            .document-image {
+                height: 230px;
+            }
         }
     </style>
 </head>
@@ -755,14 +793,10 @@
 <body>
 
 <div class="page">
-
     <div class="container">
 
         <a
-            href="{{ route(
-                'nhanvien.tickets.verification.choose',
-                $ticket->id
-            ) }}"
+            href="{{ route('nhanvien.tickets.verification.choose', $ticket->id) }}"
             class="back-link"
         >
             ← Quay lại chọn cách xác nhận
@@ -770,129 +804,84 @@
 
         <div class="main-card">
 
-            <div class="header">
+            <!-- HEADER -->
 
+            <div class="header">
                 <div class="header-content">
 
                     <div class="header-icon">
-
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="1.8"
-                        >
-                            <rect
-                                x="3"
-                                y="5"
-                                width="18"
-                                height="14"
-                                rx="2"
-                            ></rect>
-
-                            <circle
-                                cx="8"
-                                cy="11"
-                                r="2"
-                            ></circle>
-
-                            <path
-                                d="M5.5 16c.6-1.7 1.4-2.5 2.5-2.5s1.9.8 2.5 2.5"
-                            ></path>
-
-                            <path d="M13 9h5"></path>
-                            <path d="M13 12h5"></path>
-                            <path d="M13 15h3"></path>
+                        <svg viewBox="0 0 24 24">
+                            <rect x="3" y="5" width="18" height="14" rx="2"/>
+                            <circle cx="8" cy="11" r="2"/>
+                            <path d="M5.5 16c.6-1.7 1.4-2.5 2.5-2.5s1.9.8 2.5 2.5"/>
+                            <path d="M13 9h5"/>
+                            <path d="M13 12h5"/>
+                            <path d="M13 15h3"/>
                         </svg>
-
                     </div>
 
                     <div class="header-badge">
                         Kiểm tra giấy tờ
                     </div>
 
-                    <h1>
-                        Xác nhận hành khách thủ công
-                    </h1>
+                    <h1>Xác nhận hành khách thủ công</h1>
 
                     @if(!$manualVerified)
-
                         <p>
-                            Nhập CCCD / Hộ chiếu mà hành khách xuất trình.
-                            Thông tin hành khách chỉ hiển thị sau khi
-                            đối chiếu thành công.
+                            Nhập số CCCD / Hộ chiếu mà hành khách xuất trình.
+                            Thông tin chỉ hiển thị khi đối chiếu thành công.
                         </p>
-
                     @else
-
                         <p>
                             Giấy tờ đã được đối chiếu thành công.
-                            Vui lòng kiểm tra thông tin trước khi xác nhận hành khách.
+                            Vui lòng kiểm tra ảnh CCCD và thông tin
+                            trước khi xác nhận hành khách.
                         </p>
-
                     @endif
 
                 </div>
-
             </div>
 
             <div class="content">
 
-                @if(session('error'))
+                <!-- THÔNG BÁO LỖI -->
 
+                @if(session('error'))
                     <div class="alert alert-error">
                         {{ session('error') }}
                     </div>
-
                 @endif
 
                 @if($errors->any())
-
                     <div class="alert alert-error">
-
                         @foreach($errors->all() as $error)
-
-                            <div>
-                                {{ $error }}
-                            </div>
-
+                            <div>{{ $error }}</div>
                         @endforeach
-
                     </div>
-
                 @endif
 
                 @if(!$manualVerified)
 
+                    <!-- BƯỚC 1: NHẬP GIẤY TỜ -->
+
                     <div class="step-heading">
 
-                        <div class="step-number">
-                            01
-                        </div>
+                        <div class="step-number">01</div>
 
                         <div>
-
-                            <h2>
-                                Nhập thông tin giấy tờ
-                            </h2>
-
+                            <h2>Nhập thông tin giấy tờ</h2>
                             <p>
-                                Hệ thống sẽ đối chiếu CCCD / Hộ chiếu
+                                Hệ thống đối chiếu CCCD / Hộ chiếu
                                 với thông tin hành khách của vé.
                             </p>
-
                         </div>
 
                     </div>
 
                     <form
-                        action="{{ route(
-                            'nhanvien.tickets.manual.check',
-                            $ticket->id
-                        ) }}"
+                        action="{{ route('nhanvien.tickets.manual.check', $ticket->id) }}"
                         method="POST"
                     >
-
                         @csrf
 
                         <div class="input-card">
@@ -901,58 +890,24 @@
                                 for="identity_number"
                                 class="input-label"
                             >
-
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                >
-                                    <rect
-                                        x="3"
-                                        y="5"
-                                        width="18"
-                                        height="14"
-                                        rx="2"
-                                    ></rect>
-
-                                    <circle
-                                        cx="8"
-                                        cy="11"
-                                        r="2"
-                                    ></circle>
-
-                                    <path d="M13 9h5"></path>
-                                    <path d="M13 13h5"></path>
+                                <svg viewBox="0 0 24 24">
+                                    <rect x="3" y="5" width="18" height="14" rx="2"/>
+                                    <circle cx="8" cy="11" r="2"/>
+                                    <path d="M13 9h5"/>
+                                    <path d="M13 13h5"/>
                                 </svg>
 
                                 CCCD / Hộ chiếu
-
-                                <span class="required">
-                                    *
-                                </span>
-
+                                <span class="required">*</span>
                             </label>
 
                             <div class="input-wrapper">
 
                                 <div class="input-icon">
-
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                    >
-                                        <circle
-                                            cx="11"
-                                            cy="11"
-                                            r="7"
-                                        ></circle>
-
-                                        <path d="m20 20-3.5-3.5"></path>
+                                    <svg viewBox="0 0 24 24">
+                                        <circle cx="11" cy="11" r="7"/>
+                                        <path d="m20 20-3.5-3.5"/>
                                     </svg>
-
                                 </div>
 
                                 <input
@@ -971,24 +926,14 @@
 
                             <div class="input-note">
 
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                >
-                                    <circle
-                                        cx="12"
-                                        cy="12"
-                                        r="9"
-                                    ></circle>
-
-                                    <path d="M12 11v5"></path>
-                                    <path d="M12 8h.01"></path>
+                                <svg viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="9"/>
+                                    <path d="M12 11v5"/>
+                                    <path d="M12 8h.01"/>
                                 </svg>
 
                                 <span>
-                                    Nhập đúng thông tin trên giấy tờ
+                                    Nhập đúng số trên giấy tờ
                                     mà hành khách đang xuất trình tại quầy.
                                 </span>
 
@@ -999,10 +944,7 @@
                         <div class="actions">
 
                             <a
-                                href="{{ route(
-                                    'nhanvien.tickets.verification.choose',
-                                    $ticket->id
-                                ) }}"
+                                href="{{ route('nhanvien.tickets.verification.choose', $ticket->id) }}"
                                 class="btn btn-back"
                             >
                                 ← Quay lại
@@ -1012,24 +954,17 @@
                                 type="submit"
                                 class="btn btn-check"
                             >
-
                                 <svg
                                     viewBox="0 0 24 24"
                                     fill="none"
                                     stroke="currentColor"
                                     stroke-width="2"
                                 >
-                                    <circle
-                                        cx="11"
-                                        cy="11"
-                                        r="7"
-                                    ></circle>
-
-                                    <path d="m20 20-3.5-3.5"></path>
+                                    <circle cx="11" cy="11" r="7"/>
+                                    <path d="m20 20-3.5-3.5"/>
                                 </svg>
 
                                 Kiểm tra thông tin
-
                             </button>
 
                         </div>
@@ -1038,86 +973,52 @@
 
                 @else
 
+                    <!-- BƯỚC 2: KẾT QUẢ ĐỐI CHIẾU -->
+
                     <div class="success-banner">
 
-                        <div class="success-icon">
-
-                            <svg
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2.5"
-                            >
-                                <path d="m5 12 4 4L19 6"></path>
-                            </svg>
-
-                        </div>
+                        <div class="success-icon">✓</div>
 
                         <div>
-
-                            <h3>
-                                Xác minh thông tin thành công
-                            </h3>
-
+                            <h3>Xác minh thông tin thành công</h3>
                             <p>
-                                CCCD / Hộ chiếu đã khớp với
+                                Số CCCD / Hộ chiếu đã khớp với
                                 thông tin hành khách trong hệ thống.
                             </p>
-
                         </div>
 
                     </div>
 
                     <div class="step-heading">
 
-                        <div class="step-number">
-                            02
-                        </div>
+                        <div class="step-number">02</div>
 
                         <div>
-
-                            <h2>
-                                Kiểm tra thông tin hành khách
-                            </h2>
-
+                            <h2>Kiểm tra thông tin hành khách</h2>
                             <p>
-                                Đối chiếu lại thông tin trước khi
-                                thực hiện xác nhận cuối cùng.
+                                Đối chiếu giấy tờ và thông tin
+                                trước khi thực hiện xác nhận cuối cùng.
                             </p>
-
                         </div>
 
                     </div>
 
                     <div class="passenger-card">
 
+                        <!-- HEADER HÀNH KHÁCH -->
+
                         <div class="passenger-header">
 
                             <div class="passenger-header-left">
 
                                 <div class="passenger-avatar">
-
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                    >
-                                        <circle
-                                            cx="12"
-                                            cy="8"
-                                            r="4"
-                                        ></circle>
-
-                                        <path
-                                            d="M4 21a8 8 0 0 1 16 0"
-                                        ></path>
+                                    <svg viewBox="0 0 24 24">
+                                        <circle cx="12" cy="8" r="4"/>
+                                        <path d="M4 21a8 8 0 0 1 16 0"/>
                                     </svg>
-
                                 </div>
 
                                 <div>
-
                                     <h3>
                                         {{ $ticket->passenger_name }}
                                     </h3>
@@ -1125,7 +1026,6 @@
                                     <p>
                                         Thông tin hành khách đã được đối chiếu
                                     </p>
-
                                 </div>
 
                             </div>
@@ -1136,6 +1036,8 @@
 
                         </div>
 
+                        <!-- THÔNG TIN CÁ NHÂN -->
+
                         <div class="section-label">
                             Thông tin cá nhân
                         </div>
@@ -1143,98 +1045,66 @@
                         <div class="info-grid">
 
                             <div class="info-box">
-
-                                <div class="info-label">
-                                    Họ và tên
-                                </div>
+                                <div class="info-label">Họ và tên</div>
 
                                 <div class="info-value">
                                     {{ $ticket->passenger_name ?? '---' }}
                                 </div>
-
                             </div>
 
                             <div class="info-box">
-
-                                <div class="info-label">
-                                    CCCD / Hộ chiếu
-                                </div>
+                                <div class="info-label">CCCD / Hộ chiếu</div>
 
                                 <div class="info-value">
                                     {{ $ticket->identity_number ?? '---' }}
                                 </div>
-
                             </div>
 
                             <div class="info-box">
-
-                                <div class="info-label">
-                                    Ngày sinh
-                                </div>
+                                <div class="info-label">Ngày sinh</div>
 
                                 <div class="info-value">
                                     {{ $ticket->date_of_birth
                                         ? $ticket->date_of_birth->format('d/m/Y')
                                         : '---' }}
                                 </div>
-
                             </div>
 
                             <div class="info-box">
-
-                                <div class="info-label">
-                                    Giới tính
-                                </div>
+                                <div class="info-label">Giới tính</div>
 
                                 <div class="info-value">
-
-                                    @if($ticket->gender === 'male')
-
+                                    @if(in_array($ticket->gender, ['nam', 'male']))
                                         Nam
-
-                                    @elseif($ticket->gender === 'female')
-
+                                    @elseif(in_array($ticket->gender, ['nu', 'female']))
                                         Nữ
-
                                     @elseif($ticket->gender)
-
-                                        {{ $ticket->gender }}
-
+                                        Khác
                                     @else
-
                                         ---
-
                                     @endif
-
                                 </div>
-
                             </div>
 
                             <div class="info-box">
-
-                                <div class="info-label">
-                                    Số điện thoại
-                                </div>
+                                <div class="info-label">Số điện thoại</div>
 
                                 <div class="info-value">
                                     {{ $ticket->phone ?? '---' }}
                                 </div>
-
                             </div>
 
                             <div class="info-box">
-
-                                <div class="info-label">
-                                    Email
-                                </div>
+                                <div class="info-label">Email</div>
 
                                 <div class="info-value">
                                     {{ $ticket->email ?? '---' }}
                                 </div>
-
                             </div>
 
                         </div>
+
+                        <!-- THÔNG TIN VÉ -->
 
                         <div class="section-label">
                             Thông tin vé
@@ -1243,34 +1113,23 @@
                         <div class="info-grid">
 
                             <div class="info-box">
-
-                                <div class="info-label">
-                                    Mã vé
-                                </div>
+                                <div class="info-label">Mã vé</div>
 
                                 <div class="info-value">
                                     {{ $ticket->ticket_code ?? '---' }}
                                 </div>
-
                             </div>
 
                             <div class="info-box">
-
-                                <div class="info-label">
-                                    Mã đặt vé
-                                </div>
+                                <div class="info-label">Mã đặt vé</div>
 
                                 <div class="info-value">
-                                    {{ $ticket->booking->booking_code ?? '---' }}
+                                    {{ optional($ticket->booking)->booking_code ?? '---' }}
                                 </div>
-
                             </div>
 
                             <div class="info-box">
-
-                                <div class="info-label">
-                                    Giá vé
-                                </div>
+                                <div class="info-label">Giá vé</div>
 
                                 <div class="info-value">
                                     {{ number_format(
@@ -1280,67 +1139,52 @@
                                         '.'
                                     ) }} đ
                                 </div>
-
                             </div>
 
                             <div class="info-box">
-
-                                <div class="info-label">
-                                    Trạng thái vé
-                                </div>
+                                <div class="info-label">Trạng thái vé</div>
 
                                 <div class="info-value success">
 
                                     @if($ticket->ticket_status === 'active')
-
                                         Có hiệu lực
-
                                     @elseif($ticket->ticket_status === 'used')
-
                                         Đã xác nhận
-
                                     @elseif($ticket->ticket_status === 'cancelled')
-
                                         Đã hủy
-
                                     @else
-
                                         {{ $ticket->ticket_status ?? '---' }}
-
                                     @endif
 
                                 </div>
-
                             </div>
 
                         </div>
+
+                        <!-- THÔNG TIN CHUYẾN BAY -->
 
                         <div class="flight-box">
 
                             <div class="flight-top">
 
                                 <div>
-
                                     <div class="flight-label">
                                         Chuyến bay
                                     </div>
 
                                     <div class="flight-code">
-                                        {{ $ticket->flight->flight_code ?? '---' }}
+                                        {{ optional($ticket->flight)->flight_code ?? '---' }}
                                     </div>
-
                                 </div>
 
                                 <div class="seat">
-
                                     <div class="flight-label">
                                         Ghế
                                     </div>
 
                                     <div class="flight-code">
-                                        {{ $ticket->flightSeat->seat_number ?? '---' }}
+                                        {{ optional($ticket->flightSeat)->seat_number ?? '---' }}
                                     </div>
-
                                 </div>
 
                             </div>
@@ -1348,7 +1192,7 @@
                             <div class="route">
 
                                 <div class="airport">
-                                    {{ $ticket->flight->departureAirport->code ?? '---' }}
+                                    {{ optional(optional($ticket->flight)->departureAirport)->code ?? '---' }}
                                 </div>
 
                                 <div class="route-middle">
@@ -1356,20 +1200,10 @@
                                     <div class="route-line"></div>
 
                                     <div class="plane">
-
-                                        <svg
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            stroke-width="2"
-                                        >
-                                            <path d="M22 2 9 15"></path>
-
-                                            <path
-                                                d="m22 2-7 20-4-9-9-4Z"
-                                            ></path>
+                                        <svg viewBox="0 0 24 24">
+                                            <path d="M22 2 9 15"/>
+                                            <path d="m22 2-7 20-4-9-9-4Z"/>
                                         </svg>
-
                                     </div>
 
                                     <div class="route-line"></div>
@@ -1377,12 +1211,14 @@
                                 </div>
 
                                 <div class="airport">
-                                    {{ $ticket->flight->arrivalAirport->code ?? '---' }}
+                                    {{ optional(optional($ticket->flight)->arrivalAirport)->code ?? '---' }}
                                 </div>
 
                             </div>
 
                         </div>
+
+                        <!-- HÀNH LÝ VÀ THANH TOÁN -->
 
                         <div class="ticket-extra">
 
@@ -1393,17 +1229,11 @@
                                 </div>
 
                                 <div class="extra-value">
-
-                                    @if((int) $ticket->baggage_weight > 0)
-
+                                    @if((int) ($ticket->baggage_weight ?? 0) > 0)
                                         {{ (int) $ticket->baggage_weight }} kg
-
                                     @else
-
                                         Không có
-
                                     @endif
-
                                 </div>
 
                             </div>
@@ -1432,20 +1262,59 @@
                                 </div>
 
                                 <div class="extra-value green">
-
                                     @if(
-                                        $ticket->booking
-                                        &&
+                                        $ticket->booking &&
                                         $ticket->booking->payment_status === 'paid'
                                     )
-
                                         Đã thanh toán
+                                    @else
+                                        Chưa thanh toán
+                                    @endif
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- CHỈ HIỂN THỊ MỘT ẢNH CCCD -->
+
+                        <div class="section-label">
+                            Ảnh giấy tờ đối chiếu
+                        </div>
+
+                        <div class="document-section">
+
+                            <div class="document-card">
+
+                                <div class="document-card-header">
+                                    Ảnh CCCD / Hộ chiếu của hành khách
+                                </div>
+
+                                <div class="document-card-body">
+
+                                    @if(!empty($ticket->cccd_image))
+
+                                        <img
+                                            src="{{ asset($ticket->cccd_image) }}"
+                                            alt="Ảnh CCCD của hành khách"
+                                            class="document-image"
+                                        >
 
                                     @else
 
-                                        Chưa thanh toán
+                                        <div class="document-empty">
+                                            Không có ảnh CCCD / Hộ chiếu
+                                            để hiển thị.
+                                        </div>
 
                                     @endif
+
+                                    <p class="document-note">
+                                        Nhân viên kiểm tra ảnh CCCD
+                                        trong hệ thống và đối chiếu
+                                        trực tiếp với giấy tờ mà
+                                        hành khách xuất trình.
+                                    </p>
 
                                 </div>
 
@@ -1455,24 +1324,16 @@
 
                     </div>
 
+                    <!-- XÁC NHẬN HÀNH KHÁCH -->
+
                     <div class="confirm-area">
 
                         <div class="confirm-warning">
 
-                            <svg
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                            >
-                                <circle
-                                    cx="12"
-                                    cy="12"
-                                    r="9"
-                                ></circle>
-
-                                <path d="M12 11v5"></path>
-                                <path d="M12 8h.01"></path>
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="9"/>
+                                <path d="M12 11v5"/>
+                                <path d="M12 8h.01"/>
                             </svg>
 
                             <span>
@@ -1485,22 +1346,15 @@
                         </div>
 
                         <form
-                            action="{{ route(
-                                'nhanvien.tickets.confirm.manual',
-                                $ticket->id
-                            ) }}"
+                            action="{{ route('nhanvien.tickets.confirm.manual', $ticket->id) }}"
                             method="POST"
                         >
-
                             @csrf
 
                             <div class="actions">
 
                                 <a
-                                    href="{{ route(
-                                        'nhanvien.tickets.verification.choose',
-                                        $ticket->id
-                                    ) }}"
+                                    href="{{ route('nhanvien.tickets.verification.choose', $ticket->id) }}"
                                     class="btn btn-back"
                                 >
                                     ← Quay lại
@@ -1509,24 +1363,18 @@
                                 <button
                                     type="submit"
                                     class="btn btn-confirm"
-                                    onclick="return confirm(
-                                        'Bạn chắc chắn muốn xác nhận hành khách này?'
-                                    )"
+                                    onclick="return confirm('Bạn chắc chắn muốn xác nhận hành khách này?')"
                                 >
-
                                     <svg
                                         viewBox="0 0 24 24"
                                         fill="none"
                                         stroke="currentColor"
                                         stroke-width="2.5"
                                     >
-                                        <path
-                                            d="m5 12 4 4L19 6"
-                                        ></path>
+                                        <path d="m5 12 4 4L19 6"/>
                                     </svg>
 
                                     Xác nhận hành khách
-
                                 </button>
 
                             </div>
@@ -1542,9 +1390,7 @@
         </div>
 
     </div>
-
 </div>
 
 </body>
-
 </html>

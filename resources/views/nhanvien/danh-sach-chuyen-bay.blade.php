@@ -836,7 +836,37 @@
             </a>
 
         </nav>
+        
+<a
+    href="{{ route('profile.edit') }}"
+    class="menu-link {{ request()->routeIs('profile.edit') ? 'active' : '' }}"
+    @if(request()->routeIs('profile.edit')) aria-current="page" @endif
+>
+    <span class="menu-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 21v-2a8 8 0 0 1 16 0v2"/>
+        </svg>
+    </span>
 
+    <span>Thông tin cá nhân</span>
+</a>
+
+<a
+    href="{{ route('nhanvien.tickets.statistics') }}"
+    class="menu-link"
+>
+    <span class="menu-icon">
+        <svg viewBox="0 0 24 24">
+            <path d="M4 20V11"/>
+            <path d="M10 20V5"/>
+            <path d="M16 20V14"/>
+            <path d="M22 20V8"/>
+        </svg>
+    </span>
+
+    Thống kê vé
+</a>
         <div class="sidebar-bottom">
 
             <div class="employee-info">

@@ -468,7 +468,21 @@
             <span>Thông tin cá nhân</span>
         </a>
     </nav>
+<a
+    href="{{ route('nhanvien.tickets.statistics') }}"
+    class="menu-link"
+>
+    <span class="menu-icon">
+        <svg viewBox="0 0 24 24">
+            <path d="M4 20V11"/>
+            <path d="M10 20V5"/>
+            <path d="M16 20V14"/>
+            <path d="M22 20V8"/>
+        </svg>
+    </span>
 
+    Thống kê vé
+</a>
     <div class="sidebar-bottom">
         <div class="employee-info">
             <strong>{{ $user->name }}</strong>

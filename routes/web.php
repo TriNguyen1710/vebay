@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\RefundSettingController;
 use App\Http\Controllers\Admin\BaggagePackageController;
 
 use App\Http\Controllers\NhanVien\TicketCheckController;
+use App\Http\Controllers\NhanVien\TicketStatisticsController;
 
 
 Route::get(
@@ -171,6 +172,12 @@ Route::middleware('auth')->group(function () {
         '/xac-nhan-dat-ve',
         [PassengerController::class, 'confirm']
     )->name('booking.confirm');
+
+    
+    Route::post(
+        '/xac-nhan-dat-ve/cap-nhat-hanh-khach',
+        [PassengerController::class, 'updateConfirmation']
+    )->name('booking.passenger.update');
 
 
     Route::post(
@@ -535,6 +542,11 @@ Route::prefix('admin')
 Route::prefix('nhan-vien')
     ->middleware(['auth', 'nhanvien'])
     ->group(function () {
+
+        Route::get(
+        '/thong-ke-ve',
+        [TicketStatisticsController::class, 'index']
+        )->name('nhanvien.tickets.statistics');
 
         Route::get('/trang-chu', function () {
             return view('nhanvien.trang-chu');
