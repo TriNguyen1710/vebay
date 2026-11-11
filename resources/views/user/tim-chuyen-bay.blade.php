@@ -1,9 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Tìm chuyến bay - SkyGo</title>
 
     <style>
@@ -41,9 +41,7 @@
             font-family: inherit;
         }
 
-        /* =====================================================
-           TOP BAR
-        ===================================================== */
+        /* TOP BAR */
 
         .top-bar {
             background: var(--primary-dark);
@@ -56,7 +54,6 @@
             min-height: 36px;
             margin: auto;
             padding: 0 20px;
-
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -77,9 +74,7 @@
             opacity: 1;
         }
 
-        /* =====================================================
-           HEADER
-        ===================================================== */
+        /* HEADER */
 
         .header {
             background: white;
@@ -91,7 +86,6 @@
             min-height: 76px;
             margin: auto;
             padding: 0 20px;
-
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -116,11 +110,9 @@
 
         .nav-link {
             padding: 27px 15px;
-
             color: #293241;
             font-size: 15px;
             font-weight: 600;
-
             border-bottom: 3px solid transparent;
             transition: 0.2s;
         }
@@ -153,21 +145,16 @@
             border: none;
             background: var(--danger);
             color: white;
-
             padding: 9px 14px;
             border-radius: 6px;
-
             cursor: pointer;
             font-weight: bold;
         }
 
-        /* =====================================================
-           PAGE BANNER
-        ===================================================== */
+        /* BANNER */
 
         .page-banner {
             min-height: 270px;
-
             background:
                 linear-gradient(
                     90deg,
@@ -178,7 +165,6 @@
 
             background-size: cover;
             background-position: center;
-
             color: white;
         }
 
@@ -192,7 +178,6 @@
             display: flex;
             gap: 9px;
             align-items: center;
-
             margin-bottom: 20px;
             font-size: 14px;
         }
@@ -217,15 +202,12 @@
             line-height: 1.6;
         }
 
-        /* =====================================================
-           MAIN
-        ===================================================== */
+        /* MAIN */
 
         .main {
             max-width: 1120px;
             margin: -68px auto 70px;
             padding: 0 20px;
-
             position: relative;
             z-index: 10;
         }
@@ -234,15 +216,12 @@
             background: white;
             border-radius: 16px;
             overflow: hidden;
-
-            box-shadow:
-                0 12px 40px rgba(0, 0, 0, 0.13);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.13);
         }
 
         .card-header {
             padding: 27px 30px;
             border-bottom: 1px solid #e8edf2;
-
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -271,19 +250,14 @@
             padding: 30px;
         }
 
-        /* =====================================================
-           TRIP TYPE
-        ===================================================== */
+        /* LOẠI HÀNH TRÌNH */
 
         .trip-type-title {
             display: block;
-
             margin-bottom: 11px;
-
             color: #4b5563;
             font-size: 13px;
             font-weight: bold;
-
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -306,21 +280,16 @@
 
         .trip-option label {
             min-width: 145px;
-
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 9px;
-
             padding: 11px 18px;
-
             border: 2px solid var(--border);
             border-radius: 30px;
-
             color: #4b5563;
             font-size: 14px;
             font-weight: bold;
-
             cursor: pointer;
             transition: 0.2s;
         }
@@ -338,10 +307,8 @@
         .radio-circle {
             width: 16px;
             height: 16px;
-
             border: 2px solid #9aa4b2;
             border-radius: 50%;
-
             position: relative;
         }
 
@@ -351,28 +318,22 @@
 
         .trip-option input:checked + label .radio-circle::after {
             content: "";
-
             position: absolute;
             width: 8px;
             height: 8px;
-
             top: 2px;
             left: 2px;
-
             border-radius: 50%;
             background: var(--primary);
         }
 
-        /* =====================================================
-           FORM
-        ===================================================== */
+        /* FORM */
 
         .route-grid {
             display: grid;
             grid-template-columns: 1fr 58px 1fr;
             gap: 12px;
             align-items: end;
-
             margin-bottom: 23px;
         }
 
@@ -389,7 +350,6 @@
         .form-label {
             display: block;
             margin-bottom: 8px;
-
             color: #374151;
             font-size: 14px;
             font-weight: bold;
@@ -402,17 +362,12 @@
         .form-control {
             width: 100%;
             height: 55px;
-
             padding: 0 15px;
-
             border: 1px solid var(--border);
             border-radius: 8px;
-
             background: white;
             color: var(--text);
-
             font-size: 15px;
-
             outline: none;
             transition: 0.2s;
         }
@@ -423,27 +378,20 @@
 
         .form-control:focus {
             border-color: var(--primary);
-
-            box-shadow:
-                0 0 0 3px rgba(0, 59, 112, 0.09);
+            box-shadow: 0 0 0 3px rgba(0, 59, 112, 0.09);
         }
 
         .swap-button {
             width: 46px;
             height: 46px;
-
             margin: 0 auto 5px;
-
             border: 1px solid var(--border);
             border-radius: 50%;
-
             background: white;
             color: var(--primary);
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             cursor: pointer;
             transition: 0.2s;
         }
@@ -463,15 +411,12 @@
             display: none;
         }
 
-        /* =====================================================
-           ERRORS
-        ===================================================== */
+        /* LỖI */
 
         .errors {
             background: #f8d7da;
             border: 1px solid #f1aeb5;
             color: #842029;
-
             padding: 15px 18px;
             border-radius: 9px;
             margin-bottom: 25px;
@@ -490,16 +435,12 @@
             margin: 4px 0;
         }
 
-        /* =====================================================
-           FORM FOOTER
-        ===================================================== */
+        /* FORM FOOTER */
 
         .form-footer {
             margin-top: 30px;
             padding-top: 25px;
-
             border-top: 1px solid #edf0f3;
-
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -518,52 +459,39 @@
 
         .search-btn {
             min-width: 220px;
-
             border: none;
             border-radius: 8px;
-
             padding: 15px 25px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--primary),
-                    #006ac1
-                );
-
+            background: linear-gradient(
+                135deg,
+                var(--primary),
+                #006ac1
+            );
             color: white;
             font-size: 15px;
             font-weight: bold;
-
             cursor: pointer;
             transition: 0.2s;
         }
 
         .search-btn:hover {
             transform: translateY(-2px);
-
-            box-shadow:
-                0 8px 20px rgba(0, 59, 112, 0.22);
+            box-shadow: 0 8px 20px rgba(0, 59, 112, 0.22);
         }
 
-        /* =====================================================
-           BENEFITS
-        ===================================================== */
+        /* BENEFITS */
 
         .benefits {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 18px;
-
             margin-top: 25px;
         }
 
         .benefit {
             background: white;
-
             border: 1px solid #e5e9ee;
             border-radius: 12px;
-
             padding: 22px;
         }
 
@@ -572,7 +500,6 @@
             font-size: 12px;
             font-weight: 800;
             letter-spacing: 1px;
-
             margin-bottom: 9px;
         }
 
@@ -588,14 +515,11 @@
             line-height: 1.5;
         }
 
-        /* =====================================================
-           FOOTER
-        ===================================================== */
+        /* FOOTER */
 
         footer {
             background: #031d33;
             color: white;
-
             padding: 38px 20px;
             text-align: center;
         }
@@ -615,12 +539,9 @@
             font-size: 13px;
         }
 
-        /* =====================================================
-           RESPONSIVE
-        ===================================================== */
+        /* RESPONSIVE */
 
         @media (max-width: 900px) {
-
             .nav-menu {
                 display: none;
             }
@@ -631,7 +552,6 @@
         }
 
         @media (max-width: 700px) {
-
             .top-bar {
                 display: none;
             }
@@ -681,7 +601,6 @@
         }
 
         @media (max-width: 480px) {
-
             .trip-options {
                 display: grid;
                 grid-template-columns: 1fr;
@@ -700,12 +619,9 @@
 
 <body>
 
-{{-- ========================================================= --}}
 {{-- TOP BAR --}}
-{{-- ========================================================= --}}
 
 <div class="top-bar">
-
     <div class="top-bar-inner">
 
         <div class="top-bar-group">
@@ -714,9 +630,7 @@
         </div>
 
         <div class="top-bar-group">
-
             @auth
-
                 <a href="{{ route('profile.edit') }}">
                     Thông tin cá nhân
                 </a>
@@ -724,40 +638,24 @@
                 <a href="{{ route('notifications.index') }}">
                     Thông báo
                 </a>
-
             @endauth
-
-          
-
         </div>
 
     </div>
-
 </div>
 
-
-{{-- ========================================================= --}}
 {{-- HEADER --}}
-{{-- ========================================================= --}}
 
 <header class="header">
-
     <nav class="navbar">
 
-        <a
-            href="{{ route('trang-chu') }}"
-            class="logo"
-        >
+        <a href="{{ route('trang-chu') }}" class="logo">
             Viet<span>Jet</span>
         </a>
 
-
         <div class="nav-menu">
 
-            <a
-                href="{{ route('trang-chu') }}"
-                class="nav-link"
-            >
+            <a href="{{ route('trang-chu') }}" class="nav-link">
                 Trang chủ
             </a>
 
@@ -768,41 +666,28 @@
                 Đặt vé
             </a>
 
-
             @auth
-
-                <a
-                    href="{{ route('tickets.mine') }}"
-                    class="nav-link"
-                >
+                <a href="{{ route('tickets.mine') }}" class="nav-link">
                     Lịch sử vé
                 </a>
 
-                <a
-                    href="{{ route('notifications.index') }}"
-                    class="nav-link"
-                >
+                <a href="{{ route('notifications.index') }}" class="nav-link">
                     Thông báo
                 </a>
-
             @endauth
-<a href="{{ route('contact') }}" class="nav-link">
+
+            <a href="{{ route('contact') }}" class="nav-link">
                 Liên hệ
             </a>
-        </div>
 
+        </div>
 
         <div class="nav-actions">
 
             @guest
-
-                <a
-                    href="{{ route('dang-nhap') }}"
-                    class="login-link"
-                >
+                <a href="{{ route('dang-nhap') }}" class="login-link">
                     Đăng nhập
                 </a>
-
             @else
 
                 <span class="user-name">
@@ -821,7 +706,6 @@
                     >
                         Đăng xuất
                     </button>
-
                 </form>
 
             @endguest
@@ -829,16 +713,11 @@
         </div>
 
     </nav>
-
 </header>
 
-
-{{-- ========================================================= --}}
 {{-- BANNER --}}
-{{-- ========================================================= --}}
 
 <section class="page-banner">
-
     <div class="banner-inner">
 
         <div class="breadcrumb">
@@ -849,16 +728,11 @@
 
             <span>/</span>
 
-            <span>
-                Đặt vé
-            </span>
+            <span>Đặt vé</span>
 
         </div>
 
-
-        <h1>
-            Tìm chuyến bay
-        </h1>
+        <h1>Tìm chuyến bay</h1>
 
         <p>
             Lựa chọn hành trình, ngày bay và điểm đến
@@ -866,13 +740,9 @@
         </p>
 
     </div>
-
 </section>
 
-
-{{-- ========================================================= --}}
 {{-- MAIN --}}
-{{-- ========================================================= --}}
 
 <main class="main">
 
@@ -881,27 +751,17 @@
         <div class="card-header">
 
             <div>
-
-                <h2>
-                    Thông tin hành trình
-                </h2>
-
-                <p>
-                    Chọn chuyến một chiều hoặc khứ hồi.
-                </p>
-
+                <h2>Thông tin hành trình</h2>
+                <p>Chọn chuyến một chiều hoặc khứ hồi.</p>
             </div>
 
             <div class="header-line"></div>
 
         </div>
 
-
         <div class="card-body">
 
-            {{-- ================================================= --}}
-            {{-- THÔNG BÁO LỖI --}}
-            {{-- ================================================= --}}
+            {{-- HIỂN THỊ LỖI --}}
 
             @if($errors->any())
 
@@ -912,39 +772,27 @@
                     </strong>
 
                     <ul>
-
                         @foreach($errors->all() as $error)
-
-                            <li>
-                                {{ $error }}
-                            </li>
-
+                            <li>{{ $error }}</li>
                         @endforeach
-
                     </ul>
 
                 </div>
 
             @endif
 
-
-            {{-- ================================================= --}}
-            {{-- FORM --}}
-            {{-- ================================================= --}}
+            {{-- FORM TÌM CHUYẾN BAY --}}
 
             <form
                 action="{{ route('flights.search') }}"
                 method="GET"
             >
 
-                {{-- ================================================= --}}
                 {{-- LOẠI HÀNH TRÌNH --}}
-                {{-- ================================================= --}}
 
                 <span class="trip-type-title">
                     Loại hành trình
                 </span>
-
 
                 <div class="trip-options">
 
@@ -955,29 +803,18 @@
                             name="trip_type"
                             id="one_way"
                             value="one_way"
-
                             {{ old(
                                 'trip_type',
-                                request(
-                                    'trip_type',
-                                    'one_way'
-                                )
-                            ) === 'one_way'
-                                ? 'checked'
-                                : ''
-                            }}
+                                request('trip_type', 'one_way')
+                            ) === 'one_way' ? 'checked' : '' }}
                         >
 
                         <label for="one_way">
-
                             <span class="radio-circle"></span>
-
                             Một chiều
-
                         </label>
 
                     </div>
-
 
                     <div class="trip-option">
 
@@ -986,32 +823,22 @@
                             name="trip_type"
                             id="round_trip"
                             value="round_trip"
-
                             {{ old(
                                 'trip_type',
                                 request('trip_type')
-                            ) === 'round_trip'
-                                ? 'checked'
-                                : ''
-                            }}
+                            ) === 'round_trip' ? 'checked' : '' }}
                         >
 
                         <label for="round_trip">
-
                             <span class="radio-circle"></span>
-
                             Khứ hồi
-
                         </label>
 
                     </div>
 
                 </div>
 
-
-                {{-- ================================================= --}}
                 {{-- ĐIỂM ĐI / ĐIỂM ĐẾN --}}
-                {{-- ================================================= --}}
 
                 <div class="route-grid">
 
@@ -1036,28 +863,19 @@
                                 Chọn sân bay đi
                             </option>
 
-
                             @foreach($airports as $airport)
 
                                 <option
                                     value="{{ $airport->id }}"
-
                                     {{ old(
                                         'departure_airport_id',
-                                        request(
-                                            'departure_airport_id'
-                                        )
-                                    ) == $airport->id
-                                        ? 'selected'
-                                        : ''
-                                    }}
+                                        request('departure_airport_id')
+                                    ) == $airport->id ? 'selected' : '' }}
                                 >
-
                                     {{ $airport->city }}
                                     -
                                     {{ $airport->name }}
                                     ({{ $airport->code }})
-
                                 </option>
 
                             @endforeach
@@ -1066,10 +884,7 @@
 
                     </div>
 
-
-                    {{-- ================================================= --}}
-                    {{-- NÚT ĐỔI ĐIỂM ĐI / ĐẾN --}}
-                    {{-- ================================================= --}}
+                    {{-- NÚT ĐỔI SÂN BAY --}}
 
                     <button
                         type="button"
@@ -1104,7 +919,6 @@
 
                     </button>
 
-
                     <div class="form-group">
 
                         <label
@@ -1126,28 +940,19 @@
                                 Chọn sân bay đến
                             </option>
 
-
                             @foreach($airports as $airport)
 
                                 <option
                                     value="{{ $airport->id }}"
-
                                     {{ old(
                                         'arrival_airport_id',
-                                        request(
-                                            'arrival_airport_id'
-                                        )
-                                    ) == $airport->id
-                                        ? 'selected'
-                                        : ''
-                                    }}
+                                        request('arrival_airport_id')
+                                    ) == $airport->id ? 'selected' : '' }}
                                 >
-
                                     {{ $airport->city }}
                                     -
                                     {{ $airport->name }}
                                     ({{ $airport->code }})
-
                                 </option>
 
                             @endforeach
@@ -1158,10 +963,7 @@
 
                 </div>
 
-
-                {{-- ================================================= --}}
                 {{-- NGÀY BAY --}}
-                {{-- ================================================= --}}
 
                 <div class="date-grid">
 
@@ -1180,19 +982,15 @@
                             name="flight_date"
                             id="flight_date"
                             class="form-control"
-
                             min="{{ date('Y-m-d') }}"
-
                             value="{{ old(
                                 'flight_date',
                                 request('flight_date')
                             ) }}"
-
                             required
                         >
 
                     </div>
-
 
                     <div
                         class="form-group return-date"
@@ -1212,9 +1010,7 @@
                             name="return_date"
                             id="return_date"
                             class="form-control"
-
                             min="{{ date('Y-m-d') }}"
-
                             value="{{ old(
                                 'return_date',
                                 request('return_date')
@@ -1225,10 +1021,50 @@
 
                 </div>
 
+                {{-- PHẦN MỚI: CHỌN SỐ LƯỢNG VÉ --}}
 
-                {{-- ================================================= --}}
-                {{-- BUTTON --}}
-                {{-- ================================================= --}}
+                <div
+                    class="form-group"
+                    style="margin-top: 23px;"
+                >
+
+                    <label
+                        for="passenger_count"
+                        class="form-label"
+                    >
+                        Số lượng vé
+                        <span class="required">*</span>
+                    </label>
+
+                    <select
+                        name="passenger_count"
+                        id="passenger_count"
+                        class="form-control"
+                        required
+                    >
+
+                        @for($i = 1; $i <= 5; $i++)
+
+                            <option
+                                value="{{ $i }}"
+                                {{ (int) old(
+                                    'passenger_count',
+                                    request(
+                                        'passenger_count',
+                                        $passengerCount ?? 1
+                                    )
+                                ) === $i ? 'selected' : '' }}
+                            >
+                                {{ $i }} vé
+                            </option>
+
+                        @endfor
+
+                    </select>
+
+                </div>
+
+                {{-- NÚT TÌM CHUYẾN BAY --}}
 
                 <div class="form-footer">
 
@@ -1238,7 +1074,6 @@
                     >
                         ← Quay lại trang chủ
                     </a>
-
 
                     <button
                         type="submit"
@@ -1255,10 +1090,7 @@
 
     </div>
 
-
-    {{-- ========================================================= --}}
     {{-- THÔNG TIN PHỤ --}}
-    {{-- ========================================================= --}}
 
     <div class="benefits">
 
@@ -1268,9 +1100,7 @@
                 01
             </div>
 
-            <h3>
-                Chọn ghế trực tuyến
-            </h3>
+            <h3>Chọn ghế trực tuyến</h3>
 
             <p>
                 Xem sơ đồ ghế và lựa chọn hạng ghế
@@ -1279,16 +1109,13 @@
 
         </div>
 
-
         <div class="benefit">
 
             <div class="benefit-number">
                 02
             </div>
 
-            <h3>
-                Thanh toán tiện lợi
-            </h3>
+            <h3>Thanh toán tiện lợi</h3>
 
             <p>
                 Hỗ trợ thanh toán bằng mã QR ngân hàng
@@ -1297,16 +1124,13 @@
 
         </div>
 
-
         <div class="benefit">
 
             <div class="benefit-number">
                 03
             </div>
 
-            <h3>
-                Nhận diện khuôn mặt
-            </h3>
+            <h3>Nhận diện khuôn mặt</h3>
 
             <p>
                 Hỗ trợ xác minh thông tin hành khách
@@ -1319,10 +1143,7 @@
 
 </main>
 
-
-{{-- ========================================================= --}}
 {{-- FOOTER --}}
-{{-- ========================================================= --}}
 
 <footer>
 
@@ -1330,19 +1151,13 @@
         Viet<span>Jet</span>
     </div>
 
-    <p>
-       
-    </p>
+    <p></p>
 
 </footer>
 
-
-{{-- ========================================================= --}}
-{{-- JAVASCRIPT --}}
-{{-- ========================================================= --}}
+{{-- JAVASCRIPT GIỮ NGUYÊN --}}
 
 <script>
-
     const oneWay =
         document.getElementById('one_way');
 
@@ -1367,7 +1182,6 @@
     const swapButton =
         document.getElementById('swapAirports');
 
-
     /*
     |--------------------------------------------------------------------------
     | HIỂN THỊ NGÀY VỀ
@@ -1378,37 +1192,30 @@
 
         if (roundTrip.checked) {
 
-            returnDateGroup.style.display =
-                'block';
+            returnDateGroup.style.display = 'block';
 
-            returnDate.required =
-                true;
+            returnDate.required = true;
 
         } else {
 
-            returnDateGroup.style.display =
-                'none';
+            returnDateGroup.style.display = 'none';
 
-            returnDate.required =
-                false;
+            returnDate.required = false;
 
-            returnDate.value =
-                '';
+            returnDate.value = '';
+
         }
     }
-
 
     oneWay.addEventListener(
         'change',
         updateTripType
     );
 
-
     roundTrip.addEventListener(
         'change',
         updateTripType
     );
-
 
     /*
     |--------------------------------------------------------------------------
@@ -1422,28 +1229,20 @@
             return;
         }
 
-
-        returnDate.min =
-            flightDate.value;
-
+        returnDate.min = flightDate.value;
 
         if (
-            returnDate.value
-            &&
+            returnDate.value &&
             returnDate.value < flightDate.value
         ) {
-
-            returnDate.value =
-                '';
+            returnDate.value = '';
         }
     }
-
 
     flightDate.addEventListener(
         'change',
         updateReturnMinDate
     );
-
 
     /*
     |--------------------------------------------------------------------------
@@ -1458,17 +1257,14 @@
             const departureValue =
                 departureAirport.value;
 
-
             departureAirport.value =
                 arrivalAirport.value;
-
 
             arrivalAirport.value =
                 departureValue;
 
         }
     );
-
 
     /*
     |--------------------------------------------------------------------------
@@ -1479,7 +1275,6 @@
     updateTripType();
 
     updateReturnMinDate();
-
 </script>
 
 </body>

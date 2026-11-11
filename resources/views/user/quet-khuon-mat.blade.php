@@ -379,14 +379,41 @@
             border-radius: 8px;
         }
 
-        .face-comparison.is-verified .cccd-result { display: flex; flex-direction: column; }
-        .cccd-result-title { color: #11633b; font-weight: 700; font-size: 14px; margin-bottom: 10px; }
-        .cccd-result img { width: 100%; max-height: 280px; object-fit: contain; border-radius: 6px; background: #e6edf2; }
-        .cccd-result-note { color: #17633e; font-size: 12px; line-height: 1.5; margin-top: 10px; }
+        .face-comparison.is-verified .cccd-result {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cccd-result-title {
+            color: #11633b;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .cccd-result img {
+            width: 100%;
+            max-height: 280px;
+            object-fit: contain;
+            border-radius: 6px;
+            background: #e6edf2;
+        }
+
+        .cccd-result-note {
+            color: #17633e;
+            font-size: 12px;
+            line-height: 1.5;
+            margin-top: 10px;
+        }
 
         @media (max-width: 700px) {
-            .face-comparison.is-verified { flex-direction: column; }
-            .face-comparison.is-verified .scanner { width: 100%; }
+            .face-comparison.is-verified {
+                flex-direction: column;
+            }
+
+            .face-comparison.is-verified .scanner {
+                width: 100%;
+            }
         }
 
         .scanner {
@@ -672,6 +699,29 @@
             font-size: 13px;
         }
 
+        /* Tiến độ xác thực nhiều hành khách */
+
+        .passenger-progress {
+            margin-bottom: 18px;
+            padding: 14px 16px;
+            background: #eef5fb;
+            border-left: 4px solid var(--primary);
+            color: var(--primary);
+            border-radius: 5px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .passenger-progress strong {
+            font-size: 15px;
+        }
+
+        .demo-notice {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #8a5a00;
+        }
+
         @media (max-width: 850px) {
             .nav-menu {
                 display: none;
@@ -710,6 +760,7 @@
         }
     </style>
 </head>
+
 <body>
 
 <div class="top-bar">
@@ -721,10 +772,14 @@
 
         <div class="top-group">
             @auth
-                <a href="{{ route('profile.edit') }}">Thông tin cá nhân</a>
-                <a href="{{ route('notifications.index') }}">Thông báo</a>
+                <a href="{{ route('profile.edit') }}">
+                    Thông tin cá nhân
+                </a>
+
+                <a href="{{ route('notifications.index') }}">
+                    Thông báo
+                </a>
             @endauth
-            
         </div>
     </div>
 </div>
@@ -740,7 +795,10 @@
                 Trang chủ
             </a>
 
-            <a href="{{ route('flights.search.form') }}" class="nav-link active">
+            <a
+                href="{{ route('flights.search.form') }}"
+                class="nav-link active"
+            >
                 Đặt vé
             </a>
 
@@ -753,6 +811,7 @@
                     Thông báo
                 </a>
             @endauth
+
             <a href="{{ route('contact') }}" class="nav-link">
                 Liên hệ
             </a>
@@ -764,7 +823,10 @@
                     {{ auth()->user()->name }}
                 </span>
 
-                <form action="{{ route('dang-xuat') }}" method="POST">
+                <form
+                    action="{{ route('dang-xuat') }}"
+                    method="POST"
+                >
                     @csrf
 
                     <button type="submit" class="logout-btn">
@@ -779,9 +841,16 @@
 <section class="page-banner">
     <div class="banner-inner">
         <div class="breadcrumb">
-            <a href="{{ route('trang-chu') }}">Trang chủ</a>
+            <a href="{{ route('trang-chu') }}">
+                Trang chủ
+            </a>
+
             <span>/</span>
-            <a href="{{ route('flights.search.form') }}">Đặt vé</a>
+
+            <a href="{{ route('flights.search.form') }}">
+                Đặt vé
+            </a>
+
             <span>/</span>
             <span>Quét khuôn mặt</span>
         </div>
@@ -789,12 +858,14 @@
         <h1>Quét khuôn mặt</h1>
 
         <p>
-            Đối chiếu khuôn mặt với ảnh CCCD trước khi tiếp tục đặt vé.
+            Đối chiếu khuôn mặt lần lượt cho từng hành khách
+            trước khi tiếp tục đặt vé.
         </p>
     </div>
 </section>
 
 <main class="main">
+
     <div class="steps">
         <div class="step done">
             <div class="step-number">1</div>
@@ -845,24 +916,40 @@
     @endif
 
     <div class="content-grid">
+
         <aside class="card">
             <div class="summary-header">
                 <h2>Thông tin đặt vé</h2>
-                <p>Thông tin hành khách và chuyến bay hiện tại.</p>
+                <p>
+                    Thông tin hành khách và chuyến bay hiện tại.
+                </p>
             </div>
 
             <div class="summary-body">
                 <div class="summary-section">
-                    <div class="summary-title">Hành khách</div>
-
-                    <div class="summary-row">
-                        <span class="summary-label">Họ và tên</span>
-                        <span class="summary-value">{{ $passenger['full_name'] }}</span>
+                    <div class="summary-title">
+                        Hành khách
+                        {{ $currentIndex + 1 }} / {{ $passengerCount }}
                     </div>
 
                     <div class="summary-row">
-                        <span class="summary-label">Số CCCD</span>
-                        <span class="summary-value">{{ $passenger['identity_number'] }}</span>
+                        <span class="summary-label">
+                            Họ và tên
+                        </span>
+
+                        <span class="summary-value">
+                            {{ $passenger['full_name'] }}
+                        </span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span class="summary-label">
+                            Số CCCD
+                        </span>
+
+                        <span class="summary-value">
+                            {{ $passenger['identity_number'] }}
+                        </span>
                     </div>
                 </div>
 
@@ -876,12 +963,20 @@
                     </div>
 
                     <div class="summary-row">
-                        <span class="summary-label">Mã chuyến</span>
-                        <span class="summary-value">{{ $flight->flight_code }}</span>
+                        <span class="summary-label">
+                            Mã chuyến
+                        </span>
+
+                        <span class="summary-value">
+                            {{ $flight->flight_code }}
+                        </span>
                     </div>
 
                     <div class="summary-row">
-                        <span class="summary-label">Hành trình</span>
+                        <span class="summary-label">
+                            Hành trình
+                        </span>
+
                         <span class="summary-value">
                             {{ $flight->departureAirport->city }}
                             →
@@ -890,22 +985,37 @@
                     </div>
 
                     <div class="summary-row">
-                        <span class="summary-label">Ghế</span>
-                        <span class="seat-badge">{{ $seat->seat_number }}</span>
+                        <span class="summary-label">
+                            Ghế
+                        </span>
+
+                        <span class="seat-badge">
+                            {{ $seat->seat_number }}
+                        </span>
                     </div>
                 </div>
 
                 @if(($tripType ?? 'one_way') === 'round_trip')
                     <div class="summary-section">
-                        <div class="summary-title">Chuyến về</div>
-
-                        <div class="summary-row">
-                            <span class="summary-label">Mã chuyến</span>
-                            <span class="summary-value">{{ $returnFlight->flight_code }}</span>
+                        <div class="summary-title">
+                            Chuyến về
                         </div>
 
                         <div class="summary-row">
-                            <span class="summary-label">Hành trình</span>
+                            <span class="summary-label">
+                                Mã chuyến
+                            </span>
+
+                            <span class="summary-value">
+                                {{ $returnFlight->flight_code }}
+                            </span>
+                        </div>
+
+                        <div class="summary-row">
+                            <span class="summary-label">
+                                Hành trình
+                            </span>
+
                             <span class="summary-value">
                                 {{ $returnFlight->departureAirport->city }}
                                 →
@@ -914,8 +1024,13 @@
                         </div>
 
                         <div class="summary-row">
-                            <span class="summary-label">Ghế</span>
-                            <span class="seat-badge">{{ $returnSeat->seat_number }}</span>
+                            <span class="summary-label">
+                                Ghế
+                            </span>
+
+                            <span class="seat-badge">
+                                {{ $returnSeat->seat_number }}
+                            </span>
                         </div>
                     </div>
                 @endif
@@ -923,16 +1038,42 @@
         </aside>
 
         <section class="card">
+
             <div class="face-header">
                 <h2>Xác thực khuôn mặt với CCCD</h2>
 
+                <div class="passenger-progress">
+                    <strong>
+                        Hành khách {{ $currentIndex + 1 }}
+                        / {{ $passengerCount }}:
+                    </strong>
+
+                    {{ $passenger['full_name'] }}
+
+                    <div>
+                        Đã hoàn thành:
+                        {{ count($statuses) }}/{{ $passengerCount }}
+                        người
+                    </div>
+
+                    @if(app()->environment('local') && $passengerCount > 1)
+                        <div class="demo-notice">
+                            Nếu thử bằng cùng ảnh CCCD cho nhiều
+                            danh tính khác nhau, kết quả sẽ được
+                            đánh dấu DEMO, không phải xác minh
+                            danh tính thật.
+                        </div>
+                    @endif
+                </div>
+
                 <p>
-                    Chụp ảnh rõ khuôn mặt, sau đó bấm xác thực để hệ thống
-                    đối chiếu với ảnh mặt trước CCCD.
+                    Chụp ảnh rõ khuôn mặt, sau đó bấm xác thực
+                    để hệ thống đối chiếu với ảnh mặt trước CCCD.
                 </p>
             </div>
 
             <div class="face-body">
+
                 <div
                     id="cameraError"
                     class="camera-error"
@@ -953,26 +1094,61 @@
                     aria-live="polite"
                 ></div>
 
-                <div class="face-comparison" id="faceComparison">
-                <div class="scanner">
-                    <video id="video" autoplay playsinline muted></video>
-                    <img id="preview" alt="Ảnh khuôn mặt đã chụp">
-                    <canvas id="canvas" hidden></canvas>
+                <div
+                    class="face-comparison"
+                    id="faceComparison"
+                >
 
-                    <div class="corner-top-right"></div>
-                    <div class="corner-bottom-left"></div>
-                    <div class="face-guide"></div>
+                    <div class="scanner">
+                        <video
+                            id="video"
+                            autoplay
+                            playsinline
+                            muted
+                        ></video>
 
-                    <div id="scannerStatus" class="scanner-status">
-                        Đang khởi động camera...
+                        <img
+                            id="preview"
+                            alt="Ảnh khuôn mặt đã chụp"
+                        >
+
+                        <canvas
+                            id="canvas"
+                            hidden
+                        ></canvas>
+
+                        <div class="corner-top-right"></div>
+                        <div class="corner-bottom-left"></div>
+                        <div class="face-guide"></div>
+
+                        <div
+                            id="scannerStatus"
+                            class="scanner-status"
+                        >
+                            Đang khởi động camera...
+                        </div>
                     </div>
-                </div>
 
-                <div class="cccd-result" id="cccdResult" aria-live="polite">
-                    <div class="cccd-result-title">✓ Ảnh CCCD đã đối chiếu</div>
-                    <img src="{{ asset($passenger['cccd_image']) }}" alt="Ảnh mặt trước CCCD của hành khách">
-                    <p class="cccd-result-note">Khuôn mặt đã được hệ thống xác nhận khớp với ảnh trên CCCD.</p>
-                </div>
+                    <div
+                        class="cccd-result"
+                        id="cccdResult"
+                        aria-live="polite"
+                    >
+                        <div class="cccd-result-title">
+                            ✓ Ảnh CCCD đã đối chiếu
+                        </div>
+
+                        <img
+                            src="{{ asset($passenger['cccd_image']) }}"
+                            alt="Ảnh mặt trước CCCD của hành khách"
+                        >
+
+                        <p class="cccd-result-note">
+                            Khuôn mặt đã được hệ thống xác nhận
+                            khớp với ảnh trên CCCD.
+                        </p>
+                    </div>
+
                 </div>
 
                 <div class="guide">
@@ -981,20 +1157,40 @@
                     </div>
 
                     <div class="guide-grid">
+
                         <div class="guide-item">
-                            <div class="guide-number">1</div>
-                            <p>Đưa toàn bộ khuôn mặt vào giữa khung hướng dẫn.</p>
+                            <div class="guide-number">
+                                1
+                            </div>
+
+                            <p>
+                                Đưa toàn bộ khuôn mặt
+                                vào giữa khung hướng dẫn.
+                            </p>
                         </div>
 
                         <div class="guide-item">
-                            <div class="guide-number">2</div>
-                            <p>Nhìn thẳng vào camera và giữ đầu ổn định.</p>
+                            <div class="guide-number">
+                                2
+                            </div>
+
+                            <p>
+                                Nhìn thẳng vào camera
+                                và giữ đầu ổn định.
+                            </p>
                         </div>
 
                         <div class="guide-item">
-                            <div class="guide-number">3</div>
-                            <p>Đảm bảo đủ ánh sáng và khuôn mặt không bị che.</p>
+                            <div class="guide-number">
+                                3
+                            </div>
+
+                            <p>
+                                Đảm bảo đủ ánh sáng
+                                và khuôn mặt không bị che.
+                            </p>
                         </div>
+
                     </div>
                 </div>
 
@@ -1007,12 +1203,20 @@
 
                     <input
                         type="hidden"
+                        name="passenger_index"
+                        value="{{ $currentIndex }}"
+                    >
+
+                    <input
+                        type="hidden"
                         id="faceImage"
                         name="face_image"
                     >
 
                     <div class="action-area">
+
                         <div class="button-row">
+
                             <button
                                 type="button"
                                 id="captureButton"
@@ -1038,26 +1242,38 @@
                                 Xác thực khuôn mặt
                             </button>
 
+                            <!--
+                                SỬA:
+                                Có 2 đường dẫn:
+                                1. face.create để quét người còn thiếu
+                                2. booking.confirm khi tất cả hoàn thành
+                            -->
                             <button
                                 type="button"
                                 id="continueButton"
                                 class="continue-button"
-                                data-url="{{ route('booking.confirm') }}"
+                                data-url="{{ route('face.create') }}"
+                                data-next-url="{{ route('face.create') }}"
+                                data-confirm-url="{{ route('booking.confirm') }}"
                                 disabled
                             >
-                                Tiếp tục đặt vé
+                                Tiếp tục
                             </button>
+
                         </div>
 
                         <p class="action-note">
-                            Chỉ khi khuôn mặt khớp với CCCD,
-                            nút “Tiếp tục đặt vé” mới được bật.
-                            Nếu chụp lại, bạn cần xác thực lại.
+                            Khi đối chiếu hoàn tất, hệ thống
+                            sẽ kiểm tra còn hành khách nào
+                            cần quét lại hay không.
                         </p>
+
                     </div>
                 </form>
+
             </div>
         </section>
+
     </div>
 
     <div class="back-area">
@@ -1068,6 +1284,7 @@
             ← Quay lại thông tin hành khách
         </a>
     </div>
+
 </main>
 
 <footer>
@@ -1082,29 +1299,64 @@
 
 <script>
     const video = document.getElementById('video');
+
     const canvas = document.getElementById('canvas');
+
     const preview = document.getElementById('preview');
+
     const faceImage = document.getElementById('faceImage');
-    const captureButton = document.getElementById('captureButton');
-    const retakeButton = document.getElementById('retakeButton');
-    const confirmButton = document.getElementById('confirmButton');
-    const continueButton = document.getElementById('continueButton');
-    const scannerStatus = document.getElementById('scannerStatus');
-    const cameraError = document.getElementById('cameraError');
-    const successBox = document.getElementById('successBox');
-    const pendingBox = document.getElementById('pendingBox');
-    const faceForm = document.getElementById('faceForm');
-    const faceComparison = document.getElementById('faceComparison');
+
+    const captureButton =
+        document.getElementById('captureButton');
+
+    const retakeButton =
+        document.getElementById('retakeButton');
+
+    const confirmButton =
+        document.getElementById('confirmButton');
+
+    const continueButton =
+        document.getElementById('continueButton');
+
+    const scannerStatus =
+        document.getElementById('scannerStatus');
+
+    const cameraError =
+        document.getElementById('cameraError');
+
+    const successBox =
+        document.getElementById('successBox');
+
+    const pendingBox =
+        document.getElementById('pendingBox');
+
+    const faceForm =
+        document.getElementById('faceForm');
+
+    const faceComparison =
+        document.getElementById('faceComparison');
 
     let stream = null;
     let busy = false;
     let verified = false;
+
+    /*
+    |--------------------------------------------------------------------------
+    | ẨN CÁC THÔNG BÁO
+    |--------------------------------------------------------------------------
+    */
 
     function hideMessages() {
         cameraError.style.display = 'none';
         successBox.style.display = 'none';
         pendingBox.style.display = 'none';
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | HIỂN THỊ LỖI
+    |--------------------------------------------------------------------------
+    */
 
     function showError(message) {
         hideMessages();
@@ -1113,26 +1365,54 @@
         cameraError.style.display = 'block';
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | TRẠNG THÁI ĐANG XỬ LÝ
+    |--------------------------------------------------------------------------
+    */
+
     function setBusy(value) {
         busy = value;
 
         retakeButton.disabled = value;
         confirmButton.disabled = value;
-        continueButton.disabled = value || !verified;
 
-        faceForm.setAttribute('aria-busy', String(value));
+        continueButton.disabled =
+            value || !verified;
+
+        faceForm.setAttribute(
+            'aria-busy',
+            String(value)
+        );
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | GỬI ẢNH ĐẾN FACECONTROLLER
+    |--------------------------------------------------------------------------
+    |
+    | Giữ nguyên gọi face.store.
+    | Giữ nguyên CSRF trong FormData.
+    | Không chỉnh sửa Python.
+    |
+    */
+
     async function postFace(data) {
-        const response = await fetch(faceForm.action, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            credentials: 'same-origin',
-            body: data
-        });
+        const response = await fetch(
+            faceForm.action,
+            {
+                method: 'POST',
+
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+
+                credentials: 'same-origin',
+
+                body: data
+            }
+        );
 
         if (response.status === 419) {
             throw new Error(
@@ -1140,17 +1420,24 @@
             );
         }
 
-        const contentType = response.headers.get('content-type') || '';
+        const contentType =
+            response.headers.get('content-type') || '';
 
-        if (!contentType.includes('application/json')) {
+        if (
+            !contentType.includes('application/json')
+        ) {
             throw new Error(
-                'Không nhận được kết quả xác thực. Vui lòng tải lại trang và kiểm tra đăng nhập.'
+                'Không nhận được kết quả xác thực. '
+                + 'Vui lòng tải lại trang và kiểm tra đăng nhập.'
             );
         }
 
         const result = await response.json();
 
-        if (!response.ok || result.success !== true) {
+        if (
+            !response.ok
+            || result.success !== true
+        ) {
             const validationMessage = result.errors
                 ? Object.values(result.errors).flat()[0]
                 : null;
@@ -1165,10 +1452,18 @@
         return result;
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | KHỞI ĐỘNG CAMERA
+    |--------------------------------------------------------------------------
+    */
+
     async function startCamera() {
         hideMessages();
 
-        scannerStatus.textContent = 'Đang khởi động camera...';
+        scannerStatus.textContent =
+            'Đang khởi động camera...';
+
         captureButton.disabled = true;
 
         try {
@@ -1181,250 +1476,441 @@
                 );
             }
 
-            stream = await navigator.mediaDevices.getUserMedia({
-                video: {
-                    facingMode: 'user',
-                    width: {
-                        ideal: 1280
+            stream =
+                await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: 'user',
+
+                        width: {
+                            ideal: 1280
+                        },
+
+                        height: {
+                            ideal: 960
+                        }
                     },
-                    height: {
-                        ideal: 960
-                    }
-                },
-                audio: false
-            });
+
+                    audio: false
+                });
 
             video.srcObject = stream;
 
             await video.play();
 
-            scannerStatus.textContent = 'Camera đã sẵn sàng';
+            scannerStatus.textContent =
+                'Camera đã sẵn sàng';
+
             captureButton.disabled = false;
+
         } catch (error) {
             stopCamera();
 
-            scannerStatus.textContent = 'Không thể mở camera';
+            scannerStatus.textContent =
+                'Không thể mở camera';
 
             showError(
-                'Không thể truy cập camera. Hãy cho phép trình duyệt sử dụng camera rồi tải lại trang.'
+                'Không thể truy cập camera. '
+                + 'Hãy cho phép trình duyệt sử dụng camera '
+                + 'rồi tải lại trang.'
             );
         }
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | DỪNG CAMERA
+    |--------------------------------------------------------------------------
+    */
+
     function stopCamera() {
         if (stream) {
-            stream.getTracks().forEach(function (track) {
-                track.stop();
-            });
+            stream.getTracks().forEach(
+                function (track) {
+                    track.stop();
+                }
+            );
 
             stream = null;
         }
     }
 
-    captureButton.addEventListener('click', function () {
-        if (busy) {
-            return;
-        }
+    /*
+    |--------------------------------------------------------------------------
+    | CHỤP ẢNH KHUÔN MẶT
+    |--------------------------------------------------------------------------
+    */
 
-        if (
-            !stream
-            || video.videoWidth === 0
-            || video.videoHeight === 0
-        ) {
-            showError(
-                'Camera chưa sẵn sàng. Vui lòng thử lại.'
-            );
-
-            return;
-        }
-
-        const maxWidth = 960;
-        const ratio = video.videoHeight / video.videoWidth;
-        const width = Math.min(video.videoWidth, maxWidth);
-        const height = Math.round(width * ratio);
-
-        canvas.width = width;
-        canvas.height = height;
-
-        const context = canvas.getContext('2d');
-
-        context.save();
-        context.translate(width, 0);
-        context.scale(-1, 1);
-        context.drawImage(video, 0, 0, width, height);
-        context.restore();
-
-        const imageData = canvas.toDataURL('image/jpeg', 0.9);
-
-        faceImage.value = imageData;
-        preview.src = imageData;
-
-        verified = false;
-        faceComparison.classList.remove('is-verified');
-        continueButton.disabled = true;
-
-        video.style.display = 'none';
-        preview.style.display = 'block';
-
-        captureButton.style.display = 'none';
-        retakeButton.style.display = 'block';
-        confirmButton.style.display = 'block';
-        confirmButton.disabled = false;
-
-        hideMessages();
-
-        pendingBox.textContent =
-            'Đã chụp ảnh. Hãy bấm “Xác thực khuôn mặt” để đối chiếu với CCCD.';
-
-        pendingBox.style.display = 'block';
-
-        scannerStatus.textContent =
-            'Đã chụp ảnh, chưa xác thực';
-
-        stopCamera();
-    });
-
-    retakeButton.addEventListener('click', async function () {
-        if (busy) {
-            return;
-        }
-
-        verified = false;
-        faceComparison.classList.remove('is-verified');
-
-        setBusy(true);
-        hideMessages();
-
-        scannerStatus.textContent =
-            'Đang chuẩn bị chụp lại...';
-
-        try {
-            const data = new FormData(faceForm);
-
-            data.delete('face_image');
-            data.set('action', 'reset');
-
-            await postFace(data);
-
-            faceImage.value = '';
-
-            preview.removeAttribute('src');
-            preview.style.display = 'none';
-            video.style.display = 'block';
-
-            retakeButton.style.display = 'none';
-            confirmButton.style.display = 'none';
-            captureButton.style.display = 'block';
-
-            await startCamera();
-        } catch (error) {
-            showError(
-                error.message
-                || 'Chưa thể chụp lại. Vui lòng thử lại.'
-            );
-
-            scannerStatus.textContent =
-                'Chưa thể chụp lại';
-        } finally {
-            setBusy(false);
-        }
-    });
-
-    faceForm.addEventListener('submit', async function (event) {
-        event.preventDefault();
-
-        if (busy) {
-            return;
-        }
-
-        verified = false;
-        faceComparison.classList.remove('is-verified');
-        continueButton.disabled = true;
-
-        if (!faceImage.value) {
-            showError(
-                'Vui lòng chụp khuôn mặt trước khi xác thực.'
-            );
-
-            return;
-        }
-
-        setBusy(true);
-        hideMessages();
-
-        pendingBox.textContent =
-            'Đang đối chiếu khuôn mặt với CCCD. Vui lòng chờ...';
-
-        pendingBox.style.display = 'block';
-
-        scannerStatus.textContent =
-            'Đang đối chiếu với CCCD...';
-
-        confirmButton.textContent =
-            'Đang xác thực...';
-
-        try {
-            const result = await postFace(
-                new FormData(faceForm)
-            );
-
-            if (result.matched !== true) {
-                throw new Error(
-                    'Khuôn mặt chưa được xác nhận khớp với CCCD. Vui lòng chụp lại.'
-                );
+    captureButton.addEventListener(
+        'click',
+        function () {
+            if (busy) {
+                return;
             }
 
-            verified = true;
-            faceComparison.classList.add('is-verified');
+            if (
+                !stream
+                || video.videoWidth === 0
+                || video.videoHeight === 0
+            ) {
+                showError(
+                    'Camera chưa sẵn sàng. Vui lòng thử lại.'
+                );
+
+                return;
+            }
+
+            const maxWidth = 960;
+
+            const ratio =
+                video.videoHeight / video.videoWidth;
+
+            const width = Math.min(
+                video.videoWidth,
+                maxWidth
+            );
+
+            const height = Math.round(
+                width * ratio
+            );
+
+            canvas.width = width;
+            canvas.height = height;
+
+            const context =
+                canvas.getContext('2d');
+
+            context.save();
+
+            context.translate(width, 0);
+
+            context.scale(-1, 1);
+
+            context.drawImage(
+                video,
+                0,
+                0,
+                width,
+                height
+            );
+
+            context.restore();
+
+            const imageData =
+                canvas.toDataURL(
+                    'image/jpeg',
+                    0.9
+                );
+
+            faceImage.value = imageData;
+
+            preview.src = imageData;
+
+            verified = false;
+
+            faceComparison.classList.remove(
+                'is-verified'
+            );
+
+            continueButton.disabled = true;
+
+            video.style.display = 'none';
+
+            preview.style.display = 'block';
+
+            captureButton.style.display = 'none';
+
+            retakeButton.style.display = 'block';
+
+            confirmButton.style.display = 'block';
+
+            confirmButton.disabled = false;
 
             hideMessages();
 
-            successBox.textContent = result.message;
-            successBox.style.display = 'block';
+            pendingBox.textContent =
+                'Đã chụp ảnh. '
+                + 'Hãy bấm “Xác thực khuôn mặt” '
+                + 'để đối chiếu với CCCD.';
+
+            pendingBox.style.display = 'block';
 
             scannerStatus.textContent =
-                'Xác thực CCCD thành công';
+                'Đã chụp ảnh, chưa xác thực';
 
-            confirmButton.style.display = 'none';
-        } catch (error) {
+            stopCamera();
+        }
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | CHỤP LẠI
+    |--------------------------------------------------------------------------
+    */
+
+    retakeButton.addEventListener(
+        'click',
+        async function () {
+            if (busy) {
+                return;
+            }
+
             verified = false;
-            faceComparison.classList.remove('is-verified');
 
-            showError(
-                error.message
-                || 'Không thể kết nối để xác thực. Vui lòng thử lại.'
+            faceComparison.classList.remove(
+                'is-verified'
             );
 
+            setBusy(true);
+
+            hideMessages();
+
             scannerStatus.textContent =
-                'Xác thực chưa thành công';
-        } finally {
+                'Đang chuẩn bị chụp lại...';
+
+            try {
+                const data = new FormData(
+                    faceForm
+                );
+
+                data.delete('face_image');
+
+                data.set('action', 'reset');
+
+                await postFace(data);
+
+                faceImage.value = '';
+
+                preview.removeAttribute('src');
+
+                preview.style.display = 'none';
+
+                video.style.display = 'block';
+
+                retakeButton.style.display = 'none';
+
+                confirmButton.style.display = 'none';
+
+                captureButton.style.display = 'block';
+
+                await startCamera();
+
+            } catch (error) {
+                showError(
+                    error.message
+                    || 'Chưa thể chụp lại. Vui lòng thử lại.'
+                );
+
+                scannerStatus.textContent =
+                    'Chưa thể chụp lại';
+
+            } finally {
+                setBusy(false);
+            }
+        }
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | XÁC THỰC KHUÔN MẶT
+    |--------------------------------------------------------------------------
+    |
+    | Chỉ quét người được chọn.
+    | Kết quả người khác do FaceController lưu.
+    |
+    */
+
+    faceForm.addEventListener(
+        'submit',
+        async function (event) {
+            event.preventDefault();
+
+            if (busy) {
+                return;
+            }
+
+            verified = false;
+
+            faceComparison.classList.remove(
+                'is-verified'
+            );
+
+            continueButton.disabled = true;
+
+            if (!faceImage.value) {
+                showError(
+                    'Vui lòng chụp khuôn mặt trước khi xác thực.'
+                );
+
+                return;
+            }
+
+            setBusy(true);
+
+            hideMessages();
+
+            pendingBox.textContent =
+                'Đang đối chiếu khuôn mặt với CCCD. '
+                + 'Vui lòng chờ...';
+
+            pendingBox.style.display = 'block';
+
+            scannerStatus.textContent =
+                'Đang đối chiếu với CCCD...';
+
             confirmButton.textContent =
-                'Xác thực khuôn mặt';
+                'Đang xác thực...';
 
-            setBusy(false);
+            try {
+                const result = await postFace(
+                    new FormData(faceForm)
+                );
+
+                if (result.matched !== true) {
+                    throw new Error(
+                        'Khuôn mặt chưa được xác nhận khớp với CCCD. '
+                        + 'Vui lòng chụp lại.'
+                    );
+                }
+
+                verified = true;
+
+                faceComparison.classList.add(
+                    'is-verified'
+                );
+
+                /*
+                |--------------------------------------------------------------------------
+                | PHẦN ĐÃ SỬA:
+                | CHUYỂN TRANG THEO all_verified
+                |--------------------------------------------------------------------------
+                |
+                | Nếu đã quét đủ tất cả hành khách:
+                | -> Trang xác nhận đặt vé.
+                |
+                | Nếu còn hành khách chưa xác thực:
+                | -> Trang quét khuôn mặt.
+                |
+                | Không dùng vị trí 1/2 hoặc 2/2
+                | để tự quyết định.
+                |
+                */
+
+                if (
+                    result.all_verified === true
+                ) {
+                    continueButton.textContent =
+                        'Tiếp tục đặt vé';
+
+                    continueButton.dataset.url =
+                        continueButton.dataset.confirmUrl;
+                } else {
+                    continueButton.textContent =
+                        'Quét hành khách tiếp theo';
+
+                    continueButton.dataset.url =
+                        continueButton.dataset.nextUrl;
+                }
+
+                hideMessages();
+
+                successBox.textContent =
+                    result.message
+                    + (
+                        result.all_verified
+                            ? ' Tất cả hành khách đã hoàn thành.'
+                            : ' Hãy tiếp tục với hành khách kế tiếp.'
+                    );
+
+                successBox.style.display = 'block';
+
+                scannerStatus.textContent =
+                    result.demo
+                        ? 'Đối chiếu DEMO hoàn tất'
+                        : 'Đối chiếu thành công';
+
+                confirmButton.style.display = 'none';
+
+            } catch (error) {
+                verified = false;
+
+                faceComparison.classList.remove(
+                    'is-verified'
+                );
+
+                showError(
+                    error.message
+                    || 'Không thể kết nối để xác thực. Vui lòng thử lại.'
+                );
+
+                scannerStatus.textContent =
+                    'Xác thực chưa thành công';
+
+            } finally {
+                confirmButton.textContent =
+                    'Xác thực khuôn mặt';
+
+                setBusy(false);
+            }
         }
-    });
+    );
 
-    continueButton.addEventListener('click', function () {
-        if (busy || !verified) {
-            return;
+    /*
+    |--------------------------------------------------------------------------
+    | NÚT TIẾP TỤC
+    |--------------------------------------------------------------------------
+    |
+    | data-url đã được cập nhật theo kết quả
+    | từ máy chủ.
+    |
+    */
+
+    continueButton.addEventListener(
+        'click',
+        function () {
+            if (
+                busy
+                || !verified
+            ) {
+                return;
+            }
+
+            window.location.assign(
+                continueButton.dataset.url
+            );
         }
+    );
 
-        window.location.assign(
-            continueButton.dataset.url
-        );
-    });
+    /*
+    |--------------------------------------------------------------------------
+    | DỪNG CAMERA KHI THOÁT TRANG
+    |--------------------------------------------------------------------------
+    */
 
     window.addEventListener(
         'beforeunload',
         stopCamera
     );
 
-    window.addEventListener('pageshow', function (event) {
-        if (event.persisted) {
-            window.location.reload();
+    /*
+    |--------------------------------------------------------------------------
+    | NẾU TRÌNH DUYỆT KHÔI PHỤC TRANG TỪ CACHE
+    |--------------------------------------------------------------------------
+    */
+
+    window.addEventListener(
+        'pageshow',
+        function (event) {
+            if (event.persisted) {
+                window.location.reload();
+            }
         }
-    });
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | BẮT ĐẦU CAMERA
+    |--------------------------------------------------------------------------
+    */
 
     startCamera();
 </script>

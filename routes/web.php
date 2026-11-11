@@ -143,6 +143,12 @@ Route::middleware('auth')->group(function () {
         [PassengerController::class, 'store']
     )->name('passenger.store');
 
+    Route::post(
+        '/xac-nhan-dat-ve/cap-nhat-hanh-khach/{index}',
+        [PassengerController::class, 'updateConfirmation']
+    )
+        ->whereNumber('index')
+        ->name('passenger.confirm.update');
 
     Route::get(
         '/chon-hanh-ly',

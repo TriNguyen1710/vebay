@@ -7,21 +7,65 @@ use App\Models\Flight;
 use App\Models\FlightSeat;
 use App\Models\Payment;
 use App\Models\Ticket;
+use App\Models\BaggagePackage;
+use App\Models\Notification;
+use App\Models\User;
+use App\Http\Middleware\EnsureBookingFaceVerified;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Str;
-use App\Models\Notification;
-use App\Models\User;
 
 class BookingController extends Controller
 {
     private const HOLD_MINUTES = 15;
-    private const CHANGE_FEE = 100000;
+
+    /*
+    |--------------------------------------------------------------------------
+    | LẤY PHÍ ĐỔI VÉ TỪ CÀI ĐẶT ADMIN
+    |--------------------------------------------------------------------------
+    |
+    | Bảng: settings
+    | Khóa: change_ticket_fee
+    |
+    | Ví dụ Admin lưu 10000:
+    | Phí đổi vé sẽ là 10.000 đồng.
+    |
+    | Không sử dụng mức phí 100.000 cố định.
+    |
+    */
+
+    private function getChangeFee(): int
+    {
+        $value = DB::table('settings')
+            ->where('key', 'change_ticket_fee')
+            ->value('value');
+
+        if (
+            $value === null
+            || !is_numeric($value)
+            || (float) $value < 0
+        ) {
+            throw new \RuntimeException(
+                'Phí đổi vé chưa được Admin cấu hình hợp lệ.'
+            );
+        }
+
+        return (int) round((float) $value);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | DANH SÁCH VÉ CỦA TÔI
+    |--------------------------------------------------------------------------
+    */
 
     public function myTickets()
     {
-        $expiredBookings = Booking::where('user_id', auth()->id())
+        $expiredBookings = Booking::where(
+            'user_id',
+            auth()->id()
+        )
             ->where('payment_status', 'unpaid')
             ->where('booking_status', 'pending')
             ->whereNotNull('expires_at')
@@ -32,7 +76,10 @@ class BookingController extends Controller
             $this->cancelExpiredBookingById($bookingId);
         }
 
-        $bookings = Booking::where('user_id', auth()->id())
+        $bookings = Booking::where(
+            'user_id',
+            auth()->id()
+        )
             ->with([
                 'tickets.flight.departureAirport',
                 'tickets.flight.arrivalAirport',
@@ -41,398 +88,582 @@ class BookingController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
-        return view('user.ve-cua-toi', compact('bookings'));
+        return view(
+            'user.ve-cua-toi',
+            compact('bookings')
+        );
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | SỐ LƯỢNG HÀNH KHÁCH
+    |--------------------------------------------------------------------------
+    */
+
+    private function passengerCount(): int
+    {
+        return max(
+            1,
+            min(
+                5,
+                (int) session(
+                    'flight_search.passenger_count',
+                    1
+                )
+            )
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | KIỂM TRA GÓI HÀNH LÝ
+    |--------------------------------------------------------------------------
+    |
+    | Không mua thêm hành lý:
+    | package_id = null, '', hoặc '0'.
+    |
+    | Có mua thêm:
+    | Lấy giá và trọng lượng trực tiếp từ database.
+    |
+    */
+
+    private function resolveBaggagePackage(array $bag): array
+    {
+        $packageId = $bag['package_id'] ?? null;
+
+        if (
+            $packageId === null
+            || $packageId === ''
+            || (string) $packageId === '0'
+        ) {
+            return [
+                'package_id' => null,
+                'weight' => 0,
+                'price' => 0,
+            ];
+        }
+
+        if (
+            !is_numeric($packageId)
+            || (int) $packageId <= 0
+        ) {
+            throw new \RuntimeException(
+                'Mã gói hành lý không hợp lệ.'
+            );
+        }
+
+        $package = BaggagePackage::where(
+            'id',
+            (int) $packageId
+        )
+            ->where('type', 'checked')
+            ->where('status', 1)
+            ->first();
+
+        if (!$package) {
+            throw new \RuntimeException(
+                'Gói hành lý đã chọn không còn mở bán. Vui lòng chọn lại hành lý.'
+            );
+        }
+
+        return [
+            'package_id' => $package->id,
+            'weight' => (int) $package->weight,
+            'price' => (float) $package->price,
+        ];
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | TẠO ĐƠN ĐẶT VÉ CHO 1–5 HÀNH KHÁCH
+    |--------------------------------------------------------------------------
+    */
 
     public function store(Request $request)
     {
-        $tripType = session('flight_search.trip_type', 'one_way');
+        $count = $this->passengerCount();
 
-        $passenger = session('booking.passenger');
-        $faceStatus = session('booking.face_status');
-        $faceImage = session('booking.face_image');
+        $tripType = session(
+            'flight_search.trip_type',
+            'one_way'
+        );
+
+        $passengers = session(
+            'booking.passengers',
+            []
+        );
+
+        if (!is_array($passengers)) {
+            $passengers = [];
+        }
 
         if (
-            !$passenger
-            || !$faceStatus
-            || !$faceImage
-            || empty($passenger['cccd_image'])
+            $count === 1
+            && empty($passengers)
+            && is_array(session('booking.passenger'))
         ) {
+            $passengers = [
+                session('booking.passenger')
+            ];
+        }
+
+        $passengers = array_values($passengers);
+
+        /*
+         * Lấy dữ liệu xác thực khuôn mặt.
+         */
+
+        $faceImages = session(
+            'booking.face_images',
+            []
+        );
+
+        $faceStatuses = session(
+            'booking.face_statuses',
+            []
+        );
+
+        $faceHashes = session(
+            'booking.face_verification_hashes',
+            []
+        );
+
+        if (!is_array($faceImages)) {
+            $faceImages = [];
+        }
+
+        if (!is_array($faceStatuses)) {
+            $faceStatuses = [];
+        }
+
+        if (!is_array($faceHashes)) {
+            $faceHashes = [];
+        }
+
+        /*
+         * Tương thích đặt 1 vé phiên bản cũ.
+         */
+
+        if ($count === 1 && empty($faceImages)) {
+            $faceImages = [
+                session('booking.face_image')
+            ];
+
+            $faceStatuses = [
+                session('booking.face_status')
+            ];
+
+            $faceHashes = [
+                session('booking.face_verification_hash')
+            ];
+        }
+
+        if (count($passengers) !== $count) {
             return redirect()
-                ->route('flights.search.form')
+                ->route('passenger.create')
                 ->with(
                     'error',
-                    'Thông tin đặt vé không đầy đủ. Vui lòng thực hiện lại.'
+                    'Thông tin hành khách chưa đầy đủ.'
                 );
         }
 
-        if ($tripType !== 'round_trip') {
-            $flightId = session('booking.flight_id');
-            $seatId = session('booking.seat_id');
-            $baggage = session('baggage');
+        /*
+         * Kiểm tra xác thực khuôn mặt từng người.
+         */
 
-            if (!$flightId || !$seatId) {
+        foreach ($passengers as $index => $passenger) {
+            $image = $faceImages[$index] ?? null;
+            $savedHash = $faceHashes[$index] ?? null;
+            $status = $faceStatuses[$index] ?? null;
+
+            $actualHash = is_string($image)
+                ? EnsureBookingFaceVerified::fingerprint(
+                    $passenger,
+                    $image
+                )
+                : null;
+
+            if (
+                !in_array(
+                    $status,
+                    ['verified', 'demo'],
+                    true
+                )
+                || !is_string($savedHash)
+                || !$actualHash
+                || !hash_equals(
+                    $savedHash,
+                    $actualHash
+                )
+                || (
+                    $status === 'demo'
+                    && !app()->environment('local')
+                )
+            ) {
+                return redirect()
+                    ->route('face.create')
+                    ->with(
+                        'error',
+                        'Hành khách '
+                        . ($index + 1)
+                        . ' cần xác thực khuôn mặt lại.'
+                    );
+            }
+        }
+
+        /*
+         * Danh sách chuyến bay và ghế được chọn.
+         */
+
+        $legs = $tripType === 'round_trip'
+            ? [
+                [
+                    'flight_id' => session(
+                        'booking.outbound.flight_id'
+                    ),
+                    'ids' => session(
+                        'booking.outbound.seat_ids',
+                        []
+                    ),
+                    'legacy' => session(
+                        'booking.outbound.seat_id'
+                    ),
+                    'baggage' => session(
+                        'baggage.outbound',
+                        []
+                    ),
+                ],
+                [
+                    'flight_id' => session(
+                        'booking.return.flight_id'
+                    ),
+                    'ids' => session(
+                        'booking.return.seat_ids',
+                        []
+                    ),
+                    'legacy' => session(
+                        'booking.return.seat_id'
+                    ),
+                    'baggage' => session(
+                        'baggage.return',
+                        []
+                    ),
+                ],
+            ]
+            : [
+                [
+                    'flight_id' => session(
+                        'booking.flight_id'
+                    ),
+                    'ids' => session(
+                        'booking.seat_ids',
+                        []
+                    ),
+                    'legacy' => session(
+                        'booking.seat_id'
+                    ),
+                    'baggage' => session(
+                        'baggage',
+                        []
+                    ),
+                ],
+            ];
+
+        /*
+         * Mỗi hành khách một ghế trên từng chiều bay.
+         */
+
+        foreach ($legs as &$leg) {
+            if (!is_array($leg['ids'])) {
+                $leg['ids'] = [];
+            }
+
+            if (
+                empty($leg['ids'])
+                && $count === 1
+                && !empty($leg['legacy'])
+            ) {
+                $leg['ids'] = [
+                    $leg['legacy']
+                ];
+            }
+
+            $leg['ids'] = array_map(
+                'intval',
+                array_values($leg['ids'])
+            );
+
+            if (
+                empty($leg['flight_id'])
+                || count($leg['ids']) !== $count
+                || count(array_unique($leg['ids'])) !== $count
+            ) {
                 return redirect()
                     ->route('flights.search.form')
                     ->with(
                         'error',
-                        'Thông tin chuyến bay hoặc ghế chưa đầy đủ.'
-                    );
-            }
-
-            if (!is_array($baggage)) {
-                return redirect()
-                    ->route('baggage.create')
-                    ->with(
-                        'error',
-                        'Vui lòng chọn hành lý trước khi tiếp tục.'
-                    );
-            }
-
-            $baggageWeight = (int) ($baggage['weight'] ?? 0);
-            $baggagePrice = (float) ($baggage['price'] ?? 0);
-
-            try {
-                $booking = DB::transaction(
-                    function () use (
-                        $flightId,
-                        $seatId,
-                        $passenger,
-                        $faceImage,
-                        $baggageWeight,
-                        $baggagePrice
-                    ) {
-                        $flight = Flight::where('id', $flightId)
-                            ->where('status', 'open')
-                            ->first();
-
-                        if (!$flight) {
-                            throw new \Exception(
-                                'Chuyến bay không còn mở bán.'
-                            );
-                        }
-
-                        $seat = FlightSeat::where('id', $seatId)
-                            ->where('flight_id', $flight->id)
-                            ->lockForUpdate()
-                            ->first();
-
-                        if (!$seat) {
-                            throw new \Exception(
-                                'Ghế không tồn tại.'
-                            );
-                        }
-
-                        if ($seat->status !== 'available') {
-                            throw new \Exception(
-                                'Ghế đã được người khác đặt. Vui lòng chọn ghế khác.'
-                            );
-                        }
-
-                        $ticketPrice = $this->calculateTicketPrice(
-                            $flight,
-                            $seat
-                        );
-
-                        $totalAmount =
-                            $ticketPrice
-                            + $baggagePrice;
-
-                        $booking = Booking::create([
-                            'user_id' => auth()->id(),
-                            'booking_code' => $this->generateBookingCode(),
-                            'total_amount' => $totalAmount,
-                            'booking_status' => 'pending',
-                            'payment_status' => 'unpaid',
-                            'expires_at' => now()->addMinutes(
-                                self::HOLD_MINUTES
-                            ),
-                        ]);
-
-                        $this->createTicket(
-                            $booking,
-                            $flight,
-                            $seat,
-                            $passenger,
-                            $ticketPrice,
-                            $faceImage,
-                            $baggageWeight,
-                            $baggagePrice
-                        );
-
-                        $seat->update([
-                            'status' => 'booked',
-                        ]);
-
-                        return $booking;
-                    }
-                );
-
-                session()->forget([
-                    'booking',
-                    'baggage',
-                ]);
-
-                $admins = User::where('role', 'admin')->get();
-
-                foreach ($admins as $admin) {
-                    Notification::create([
-                        'user_id' => $admin->id,
-                        'ticket_id' => $booking->tickets()->first()?->id,
-                        'sender_id' => auth()->id(),
-                        'title' => 'Có đơn đặt vé mới',
-                        'message' => 'Khách hàng vừa tạo đơn '
-                            . $booking->booking_code
-                            . '.',
-                        'status' => 'unread',
-                    ]);
-                }
-
-                return redirect()
-                    ->route(
-                        'payment.show',
-                        $booking->id
-                    );
-            } catch (\Exception $e) {
-                return redirect()
-                    ->route('flights.search.form')
-                    ->with(
-                        'error',
-                        $e->getMessage()
+                        'Số ghế đã chọn không khớp với số hành khách.'
                     );
             }
         }
 
-        $outboundFlightId = session(
-            'booking.outbound.flight_id'
-        );
+        unset($leg);
 
-        $outboundSeatId = session(
-            'booking.outbound.seat_id'
-        );
+        /*
+         * Lấy hành lý theo từng hành khách.
+         */
 
-        $returnFlightId = session(
-            'booking.return.flight_id'
-        );
-
-        $returnSeatId = session(
-            'booking.return.seat_id'
-        );
-
-        $outboundBaggage = session(
-            'baggage.outbound'
-        );
-
-        $returnBaggage = session(
-            'baggage.return'
+        $groupBaggage = session(
+            'baggage.passengers',
+            []
         );
 
         if (
-            !$outboundFlightId
-            || !$outboundSeatId
-            || !$returnFlightId
-            || !$returnSeatId
-        ) {
-            return redirect()
-                ->route('flights.search.form')
-                ->with(
-                    'error',
-                    'Thông tin đặt vé khứ hồi chưa đầy đủ.'
-                );
-        }
-
-        if (
-            !is_array($outboundBaggage)
-            || !is_array($returnBaggage)
+            $count > 1
+            && (
+                !is_array($groupBaggage)
+                || count($groupBaggage) !== $count
+            )
         ) {
             return redirect()
                 ->route('baggage.create')
                 ->with(
                     'error',
-                    'Vui lòng chọn hành lý cho chiều đi và chiều về.'
+                    'Vui lòng chọn hành lý cho đủ số hành khách.'
                 );
         }
 
-        $outboundBaggageWeight = (int) (
-            $outboundBaggage['weight'] ?? 0
-        );
-
-        $outboundBaggagePrice = (float) (
-            $outboundBaggage['price'] ?? 0
-        );
-
-        $returnBaggageWeight = (int) (
-            $returnBaggage['weight'] ?? 0
-        );
-
-        $returnBaggagePrice = (float) (
-            $returnBaggage['price'] ?? 0
-        );
+        /*
+         * Tạo booking và các vé trong transaction.
+         */
 
         try {
             $booking = DB::transaction(
                 function () use (
-                    $outboundFlightId,
-                    $outboundSeatId,
-                    $returnFlightId,
-                    $returnSeatId,
-                    $passenger,
-                    $faceImage,
-                    $outboundBaggageWeight,
-                    $outboundBaggagePrice,
-                    $returnBaggageWeight,
-                    $returnBaggagePrice
+                    $count,
+                    $tripType,
+                    $passengers,
+                    $faceImages,
+                    $legs,
+                    $groupBaggage
                 ) {
-                    $outboundFlight = Flight::where(
-                        'id',
-                        $outboundFlightId
-                    )
-                        ->where('status', 'open')
-                        ->first();
+                    $flights = [];
 
-                    if (!$outboundFlight) {
-                        throw new \Exception(
-                            'Chuyến bay chiều đi không còn mở bán.'
-                        );
-                    }
-
-                    $returnFlight = Flight::where(
-                        'id',
-                        $returnFlightId
-                    )
-                        ->where('status', 'open')
-                        ->first();
-
-                    if (!$returnFlight) {
-                        throw new \Exception(
-                            'Chuyến bay chiều về không còn mở bán.'
-                        );
-                    }
-
-                    $outboundSeat = FlightSeat::where(
-                        'id',
-                        $outboundSeatId
-                    )
-                        ->where(
-                            'flight_id',
-                            $outboundFlight->id
+                    foreach ($legs as $legIndex => $leg) {
+                        $flights[$legIndex] = Flight::where(
+                            'id',
+                            $leg['flight_id']
                         )
-                        ->lockForUpdate()
-                        ->first();
+                            ->where('status', 'open')
+                            ->first();
+
+                        if (!$flights[$legIndex]) {
+                            throw new \RuntimeException(
+                                'Chuyến bay không còn mở bán.'
+                            );
+                        }
+                    }
+
+                    /*
+                     * Khóa ghế tránh đặt trùng.
+                     */
+
+                    $allIds = collect($legs)
+                        ->flatMap(
+                            fn ($leg) => $leg['ids']
+                        )
+                        ->unique()
+                        ->sort()
+                        ->values()
+                        ->all();
 
                     if (
-                        !$outboundSeat
-                        || $outboundSeat->status !== 'available'
+                        count($allIds)
+                        !== count($legs) * $count
                     ) {
-                        throw new \Exception(
-                            'Ghế chiều đi không còn khả dụng.'
+                        throw new \RuntimeException(
+                            'Danh sách ghế có dữ liệu trùng lặp.'
                         );
                     }
 
-                    $returnSeat = FlightSeat::where(
+                    $lockedSeats = FlightSeat::whereIn(
                         'id',
-                        $returnSeatId
+                        $allIds
                     )
-                        ->where(
-                            'flight_id',
-                            $returnFlight->id
-                        )
+                        ->orderBy('id')
                         ->lockForUpdate()
-                        ->first();
+                        ->get()
+                        ->keyBy('id');
 
                     if (
-                        !$returnSeat
-                        || $returnSeat->status !== 'available'
+                        $lockedSeats->count()
+                        !== count($allIds)
                     ) {
-                        throw new \Exception(
-                            'Ghế chiều về không còn khả dụng.'
+                        throw new \RuntimeException(
+                            'Một số ghế không còn tồn tại.'
                         );
                     }
 
-                    $outboundPrice =
-                        $this->calculateTicketPrice(
-                            $outboundFlight,
-                            $outboundSeat
-                        );
+                    /*
+                     * Tính tiền và tạo dữ liệu từng vé.
+                     */
 
-                    $returnPrice =
-                        $this->calculateTicketPrice(
-                            $returnFlight,
-                            $returnSeat
-                        );
+                    $ticketRows = [];
+                    $totalAmount = 0;
 
-                    $totalAmount =
-                        $outboundPrice
-                        + $returnPrice
-                        + $outboundBaggagePrice
-                        + $returnBaggagePrice;
+                    foreach ($legs as $legIndex => $leg) {
+                        foreach (
+                            $leg['ids'] as $personIndex => $seatId
+                        ) {
+                            $seat = $lockedSeats->get($seatId);
+
+                            if (
+                                !$seat
+                                || (int) $seat->flight_id
+                                    !== (int) $flights[$legIndex]->id
+                                || $seat->status !== 'available'
+                            ) {
+                                throw new \RuntimeException(
+                                    'Ghế đã được đặt hoặc không thuộc chuyến bay. Vui lòng chọn lại.'
+                                );
+                            }
+
+                            /*
+                             * Hành lý riêng từng người và từng chiều.
+                             */
+
+                            if ($count === 1) {
+                                $bag = $leg['baggage'];
+                            } elseif ($tripType === 'round_trip') {
+                                $bagKey = $legIndex === 0
+                                    ? 'outbound'
+                                    : 'return';
+
+                                $bag = $groupBaggage[
+                                    $personIndex
+                                ][$bagKey] ?? null;
+                            } else {
+                                $bag = $groupBaggage[
+                                    $personIndex
+                                ]['one_way'] ?? null;
+                            }
+
+                            if (!is_array($bag)) {
+                                throw new \RuntimeException(
+                                    'Thiếu thông tin hành lý của hành khách '
+                                    . ($personIndex + 1)
+                                );
+                            }
+
+                            $resolvedBaggage =
+                                $this->resolveBaggagePackage($bag);
+
+                            $baggageWeight = (int) (
+                                $resolvedBaggage['weight']
+                            );
+
+                            $baggagePrice = (float) (
+                                $resolvedBaggage['price']
+                            );
+
+                            $ticketPrice =
+                                $this->calculateTicketPrice(
+                                    $flights[$legIndex],
+                                    $seat
+                                );
+
+                            $totalAmount +=
+                                $ticketPrice + $baggagePrice;
+
+                            $ticketRows[] = [
+                                'flight' => $flights[$legIndex],
+                                'seat' => $seat,
+                                'passenger' =>
+                                    $passengers[$personIndex],
+                                'face_image' =>
+                                    $faceImages[$personIndex],
+                                'price' => $ticketPrice,
+                                'baggage_weight' =>
+                                    $baggageWeight,
+                                'baggage_price' =>
+                                    $baggagePrice,
+                            ];
+                        }
+                    }
+
+                    /*
+                     * Tạo một đơn chung cho tất cả hành khách.
+                     */
 
                     $booking = Booking::create([
                         'user_id' => auth()->id(),
                         'booking_code' =>
                             $this->generateBookingCode(),
-                        'total_amount' =>
-                            $totalAmount,
-                        'booking_status' =>
-                            'pending',
-                        'payment_status' =>
-                            'unpaid',
-                        'expires_at' =>
-                            now()->addMinutes(
-                                self::HOLD_MINUTES
-                            ),
+                        'total_amount' => $totalAmount,
+                        'booking_status' => 'pending',
+                        'payment_status' => 'unpaid',
+                        'expires_at' => now()->addMinutes(
+                            self::HOLD_MINUTES
+                        ),
                     ]);
 
-                    $this->createTicket(
-                        $booking,
-                        $outboundFlight,
-                        $outboundSeat,
-                        $passenger,
-                        $outboundPrice,
-                        $faceImage,
-                        $outboundBaggageWeight,
-                        $outboundBaggagePrice
-                    );
+                    /*
+                     * Tạo từng vé và đánh dấu ghế đã đặt.
+                     */
 
-                    $this->createTicket(
-                        $booking,
-                        $returnFlight,
-                        $returnSeat,
-                        $passenger,
-                        $returnPrice,
-                        $faceImage,
-                        $returnBaggageWeight,
-                        $returnBaggagePrice
-                    );
+                    foreach ($ticketRows as $row) {
+                        $this->createTicket(
+                            $booking,
+                            $row['flight'],
+                            $row['seat'],
+                            $row['passenger'],
+                            $row['price'],
+                            $row['face_image'],
+                            $row['baggage_weight'],
+                            $row['baggage_price']
+                        );
 
-                    $outboundSeat->update([
-                        'status' => 'booked',
-                    ]);
-
-                    $returnSeat->update([
-                        'status' => 'booked',
-                    ]);
+                        $row['seat']->update([
+                            'status' => 'booked',
+                        ]);
+                    }
 
                     return $booking;
-                }
+                },
+                3
             );
+
+            /*
+             * Xóa dữ liệu đặt vé tạm.
+             */
 
             session()->forget([
                 'booking',
                 'baggage',
             ]);
 
-            $admins = User::where('role', 'admin')->get();
+            /*
+             * Thông báo Admin có đơn đặt vé mới.
+             */
+
+            $admins = User::where(
+                'role',
+                'admin'
+            )->get();
 
             foreach ($admins as $admin) {
                 Notification::create([
                     'user_id' => $admin->id,
-                    'ticket_id' => $booking->tickets()->first()?->id,
+                    'ticket_id' =>
+                        $booking->tickets()->first()?->id,
                     'sender_id' => auth()->id(),
                     'title' => 'Có đơn đặt vé mới',
-                    'message' => 'Khách hàng vừa tạo đơn '
+                    'message' =>
+                        'Khách hàng vừa tạo đơn '
                         . $booking->booking_code
-                        . '.',
+                        . ' ('
+                        . ($count * count($legs))
+                        . ' vé).',
                     'status' => 'unread',
                 ]);
             }
@@ -442,22 +673,28 @@ class BookingController extends Controller
                     'payment.show',
                     $booking->id
                 );
-        } catch (\Exception $e) {
+
+        } catch (\Throwable $exception) {
+            report($exception);
+
             return redirect()
-                ->route('flights.search.form')
+                ->route('booking.confirm')
                 ->with(
                     'error',
-                    $e->getMessage()
+                    $exception->getMessage()
                 );
         }
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | HIỂN THỊ TRANG THANH TOÁN
+    |--------------------------------------------------------------------------
+    */
+
     public function payment(Booking $booking)
     {
-        if (
-            $booking->user_id
-            !== auth()->id()
-        ) {
+        if ($booking->user_id !== auth()->id()) {
             abort(403);
         }
 
@@ -482,10 +719,7 @@ class BookingController extends Controller
             );
         }
 
-        if (
-            $booking->booking_status
-            === 'cancelled'
-        ) {
+        if ($booking->booking_status === 'cancelled') {
             return redirect()
                 ->route('flights.search.form')
                 ->with(
@@ -494,11 +728,7 @@ class BookingController extends Controller
                 );
         }
 
-        if (
-            $this->isBookingExpired(
-                $booking
-            )
-        ) {
+        if ($this->isBookingExpired($booking)) {
             $this->cancelExpiredBookingById(
                 $booking->id
             );
@@ -523,6 +753,15 @@ class BookingController extends Controller
             compact('booking')
         );
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | THANH TOÁN BẰNG ẢNH HÓA ĐƠN OCR
+    |--------------------------------------------------------------------------
+    |
+    | Giữ nguyên chức năng đọc ảnh hóa đơn bằng Python.
+    |
+    */
 
     public function pay(
         Request $request,
@@ -559,10 +798,11 @@ class BookingController extends Controller
             $booking->payment_status === 'paid'
             && $booking->booking_status === 'confirmed'
         ) {
-            return redirect()->route(
-                'ticket.show',
-                $booking->id
-            );
+            return redirect()
+                ->route(
+                    'ticket.show',
+                    $booking->id
+                );
         }
 
         if ($booking->booking_status === 'cancelled') {
@@ -585,9 +825,11 @@ class BookingController extends Controller
                 );
         }
 
-        $receipt = $request->file(
-            'payment_receipt'
-        );
+        /*
+         * Lưu ảnh hóa đơn.
+         */
+
+        $receipt = $request->file('payment_receipt');
 
         $receiptPath = $receipt->store(
             'payment_receipts',
@@ -599,6 +841,10 @@ class BookingController extends Controller
         );
 
         try {
+            /*
+             * Python và EasyOCR đang dùng trong project.
+             */
+
             $pythonPath =
                 'C:\Users\tring\AppData\Local\Programs\Python\Python312\python.exe';
 
@@ -621,7 +867,8 @@ class BookingController extends Controller
 
             if (!$result->successful()) {
                 throw new \Exception(
-                    'OCR lỗi: ' . trim($result->errorOutput())
+                    'OCR lỗi: '
+                    . trim($result->errorOutput())
                 );
             }
 
@@ -640,26 +887,29 @@ class BookingController extends Controller
             if (empty($ocr['success'])) {
                 throw new \Exception(
                     'OCR Python lỗi: '
-                    . ($ocr['message'] ?? 'Không rõ lỗi.')
+                    . (
+                        $ocr['message']
+                        ?? 'Không rõ lỗi.'
+                    )
                 );
             }
 
             $ocrText = $ocr['text'] ?? '';
 
             $normalizedText =
-                $ocr['normalized_text']
-                ?? $ocrText;
+                $ocr['normalized_text'] ?? $ocrText;
 
             $transactionCode =
-                $ocr['transaction_code']
-                ?? null;
+                $ocr['transaction_code'] ?? null;
 
-            $amounts =
-                $ocr['amounts']
-                ?? [];
+            $amounts = $ocr['amounts'] ?? [];
 
             $expectedContent =
                 'VJ ' . $booking->booking_code;
+
+            /*
+             * Chuẩn hóa nội dung chuyển khoản.
+             */
 
             $normalizedExpectedContent = strtoupper(
                 preg_replace(
@@ -677,14 +927,16 @@ class BookingController extends Controller
                 )
             );
 
+            /*
+             * Kiểm tra đúng nội dung chuyển khoản.
+             */
+
             $hasCorrectContent = str_contains(
                 $normalizedReceipt,
                 $normalizedExpectedContent
             );
 
             if (!$hasCorrectContent) {
-                // Chỉ chuẩn hóa các cặp ký tự OCR dễ nhầm: O/0 và S/5.
-                // Vẫn đối chiếu đầy đủ nội dung VJ + mã đặt vé.
                 $ocrConfusionMap = [
                     'O' => '0',
                     'S' => '5',
@@ -707,11 +959,13 @@ class BookingController extends Controller
             }
 
             if (!$hasCorrectContent) {
-                $receiptLength =
-                    strlen($normalizedReceipt);
+                $receiptLength = strlen(
+                    $normalizedReceipt
+                );
 
-                $expectedLength =
-                    strlen($normalizedExpectedContent);
+                $expectedLength = strlen(
+                    $normalizedExpectedContent
+                );
 
                 for (
                     $i = 0;
@@ -736,8 +990,13 @@ class BookingController extends Controller
                 }
             }
 
-            $expectedAmount =
-                (int) $booking->total_amount;
+            /*
+             * Kiểm tra số tiền bằng VNĐ.
+             */
+
+            $expectedAmount = (int) (
+                $booking->total_amount
+            );
 
             $hasCorrectAmount = false;
 
@@ -755,15 +1014,32 @@ class BookingController extends Controller
                 $ocr,
                 $hasCorrectContent,
                 $hasCorrectAmount,
-                $transactionCode && !Payment::where('receipt_transaction_code', $transactionCode)->exists()
+                $transactionCode
+                    && !Payment::where(
+                        'receipt_transaction_code',
+                        $transactionCode
+                    )->exists()
             );
 
+            /*
+             * Kiểm tra mã giao dịch.
+             */
+
             if (!$transactionCode) {
-                return back()->with(
-                    'error',
-                    'Không đọc được mã giao dịch trên hóa đơn. Vui lòng sử dụng ảnh hóa đơn rõ hơn.'
-                )->with('receipt_check', $receiptCheck);
+                return back()
+                    ->with(
+                        'error',
+                        'Không đọc được mã giao dịch trên hóa đơn. Vui lòng sử dụng ảnh hóa đơn rõ hơn.'
+                    )
+                    ->with(
+                        'receipt_check',
+                        $receiptCheck
+                    );
             }
+
+            /*
+             * Không cho phép dùng mã giao dịch trùng.
+             */
 
             if (
                 Payment::where(
@@ -771,25 +1047,44 @@ class BookingController extends Controller
                     $transactionCode
                 )->exists()
             ) {
-                return back()->with(
-                    'error',
-                    'Mã giao dịch này đã được sử dụng cho một thanh toán khác.'
-                )->with('receipt_check', $receiptCheck);
+                return back()
+                    ->with(
+                        'error',
+                        'Mã giao dịch này đã được sử dụng cho một thanh toán khác.'
+                    )
+                    ->with(
+                        'receipt_check',
+                        $receiptCheck
+                    );
             }
 
             if (!$hasCorrectContent) {
-                return back()->with(
-                    'error',
-                    'Hóa đơn không hợp lệ. Nội dung chuyển khoản không đúng.'
-                )->with('receipt_check', $receiptCheck);
+                return back()
+                    ->with(
+                        'error',
+                        'Hóa đơn không hợp lệ. Nội dung chuyển khoản không đúng.'
+                    )
+                    ->with(
+                        'receipt_check',
+                        $receiptCheck
+                    );
             }
 
             if (!$hasCorrectAmount) {
-                return back()->with(
-                    'error',
-                    'Hóa đơn không hợp lệ. Số tiền chuyển khoản không đúng.'
-                )->with('receipt_check', $receiptCheck);
+                return back()
+                    ->with(
+                        'error',
+                        'Hóa đơn không hợp lệ. Số tiền chuyển khoản không đúng.'
+                    )
+                    ->with(
+                        'receipt_check',
+                        $receiptCheck
+                    );
             }
+
+            /*
+             * Ghi nhận thanh toán trong transaction.
+             */
 
             DB::transaction(
                 function () use (
@@ -800,13 +1095,12 @@ class BookingController extends Controller
                     $expectedAmount,
                     $expectedContent
                 ) {
-                    $lockedBooking =
-                        Booking::where(
-                            'id',
-                            $booking->id
-                        )
-                            ->lockForUpdate()
-                            ->firstOrFail();
+                    $lockedBooking = Booking::where(
+                        'id',
+                        $booking->id
+                    )
+                        ->lockForUpdate()
+                        ->firstOrFail();
 
                     if (
                         $lockedBooking->payment_status
@@ -847,11 +1141,19 @@ class BookingController extends Controller
                         );
                     }
 
+                    /*
+                     * Đánh dấu đơn đã thanh toán.
+                     */
+
                     $lockedBooking->update([
                         'payment_status' => 'paid',
                         'booking_status' => 'confirmed',
                         'expires_at' => null,
                     ]);
+
+                    /*
+                     * Kích hoạt tất cả vé.
+                     */
 
                     Ticket::where(
                         'booking_id',
@@ -860,42 +1162,51 @@ class BookingController extends Controller
                         'ticket_status' => 'active',
                     ]);
 
+                    /*
+                     * Lưu thông tin giao dịch.
+                     */
+
                     Payment::create([
                         'booking_id' =>
                             $lockedBooking->id,
                         'payment_code' =>
-                            'PAY'
-                            . Str::upper(
+                            'PAY' . Str::upper(
                                 Str::random(10)
                             ),
-                        'amount' =>
-                            $expectedAmount,
+                        'amount' => $expectedAmount,
                         'payment_method' =>
                             'bank_transfer',
-                        'payment_status' =>
-                            'paid',
-                        'receipt_image' =>
-                            $receiptPath,
+                        'payment_status' => 'paid',
+                        'receipt_image' => $receiptPath,
                         'receipt_transaction_code' =>
                             $transactionCode,
                         'receipt_content' =>
                             $expectedContent,
                         'receipt_amount' =>
                             $expectedAmount,
-                        'ocr_text' =>
-                            $ocrText,
-                        'paid_at' =>
-                            now(),
+                        'ocr_text' => $ocrText,
+                        'paid_at' => now(),
                     ]);
 
-                    $admins = User::where('role', 'admin')->get();
+                    /*
+                     * Thông báo Admin.
+                     */
+
+                    $admins = User::where(
+                        'role',
+                        'admin'
+                    )->get();
 
                     foreach ($admins as $admin) {
                         Notification::create([
                             'user_id' => $admin->id,
-                            'ticket_id' => $lockedBooking->tickets()->first()?->id,
+                            'ticket_id' =>
+                                $lockedBooking
+                                    ->tickets()
+                                    ->first()?->id,
                             'sender_id' => auth()->id(),
-                            'title' => 'Thanh toán thành công',
+                            'title' =>
+                                'Thanh toán thành công',
                             'message' =>
                                 'Đơn '
                                 . $lockedBooking->booking_code
@@ -922,6 +1233,7 @@ class BookingController extends Controller
                     'success',
                     'Thanh toán thành công. Vé đã có hiệu lực.'
                 );
+
         } catch (\Throwable $e) {
             return redirect()
                 ->route(
@@ -931,22 +1243,35 @@ class BookingController extends Controller
                 ->with(
                     'error',
                     $e->getMessage()
-                )->with('receipt_check', isset($receiptCheck) ? $receiptCheck : [
-                    'booking_id' => $booking->id,
-                    'expected_content' => 'VJ ' . $booking->booking_code,
-                    'expected_amount' => (int) $booking->total_amount,
-                    'read_content' => null,
-                    'amounts' => [],
-                    'content_matches' => false,
-                    'amount_matches' => false,
-                    'transaction_code' => null,
-                    'transaction_unused' => false,
-                    'verified' => false,
-                    'ocr_text' => '',
-                ]);
+                )
+                ->with(
+                    'receipt_check',
+                    isset($receiptCheck)
+                        ? $receiptCheck
+                        : [
+                            'booking_id' => $booking->id,
+                            'expected_content' =>
+                                'VJ ' . $booking->booking_code,
+                            'expected_amount' =>
+                                (int) $booking->total_amount,
+                            'read_content' => null,
+                            'amounts' => [],
+                            'content_matches' => false,
+                            'amount_matches' => false,
+                            'transaction_code' => null,
+                            'transaction_unused' => false,
+                            'verified' => false,
+                            'ocr_text' => '',
+                        ]
+                );
         }
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | TẠO BÁO CÁO KIỂM TRA OCR
+    |--------------------------------------------------------------------------
+    */
 
     private function receiptCheckReport(
         Booking $booking,
@@ -956,14 +1281,20 @@ class BookingController extends Controller
         bool $transactionUnused,
         bool $verified = false
     ): array {
-        $expectedContent = $ocr['expected_content']
-            ?? ('VJ ' . $booking->booking_code);
-
-        $expectedAmount = (int) (
-            $ocr['expected_amount'] ?? $booking->total_amount
+        $expectedContent = $ocr[
+            'expected_content'
+        ] ?? (
+            'VJ ' . $booking->booking_code
         );
 
-        $text = (string) ($ocr['text'] ?? '');
+        $expectedAmount = (int) (
+            $ocr['expected_amount']
+            ?? $booking->total_amount
+        );
+
+        $text = (string) (
+            $ocr['text'] ?? ''
+        );
 
         $normalized = strtoupper(
             preg_replace(
@@ -983,23 +1314,35 @@ class BookingController extends Controller
 
         $readContent = null;
         $length = strlen($expected);
-        $map = ['O' => '0', 'S' => '5'];
 
-        // Hiển thị đoạn OCR tìm được, không lấy nội dung yêu cầu
-        // điền vào cột dữ liệu đọc từ hóa đơn.
-        if ($length > 0 && $contentMatches) {
+        $map = [
+            'O' => '0',
+            'S' => '5',
+        ];
+
+        if (
+            $length > 0
+            && $contentMatches
+        ) {
             for (
                 $i = 0;
                 $i <= strlen($normalized) - $length;
                 $i++
             ) {
-                $part = substr($normalized, $i, $length);
+                $part = substr(
+                    $normalized,
+                    $i,
+                    $length
+                );
 
                 if (
                     $part === $expected
                     || strtr($part, $map)
                         === strtr($expected, $map)
-                    || levenshtein($expected, $part) <= 1
+                    || levenshtein(
+                        $expected,
+                        $part
+                    ) <= 1
                 ) {
                     $readContent = $part;
                     break;
@@ -1007,13 +1350,21 @@ class BookingController extends Controller
             }
         }
 
-        // Khi không khớp, thử lấy nội dung theo nhãn trên bill.
+        /*
+         * Trích xuất nội dung chuyển khoản từ OCR.
+         */
+
         if ($readContent === null) {
-            $lines = preg_split('/\R/u', $text) ?: [];
+            $lines = preg_split(
+                '/\R/u',
+                $text
+            ) ?: [];
 
             foreach ($lines as $index => $line) {
                 $plain = strtoupper(
-                    trim(Str::ascii($line))
+                    trim(
+                        Str::ascii($line)
+                    )
                 );
 
                 if (
@@ -1031,8 +1382,12 @@ class BookingController extends Controller
                             $next < count($lines);
                             $next++
                         ) {
-                            if (trim($lines[$next]) !== '') {
-                                $candidate = trim($lines[$next]);
+                            if (
+                                trim($lines[$next]) !== ''
+                            ) {
+                                $candidate = trim(
+                                    $lines[$next]
+                                );
                                 break;
                             }
                         }
@@ -1061,26 +1416,34 @@ class BookingController extends Controller
 
         return [
             'booking_id' => $booking->id,
-            'receipt_path' => $ocr['receipt_path'] ?? null,
-            'expected_content' => $expectedContent,
-            'expected_amount' => $expectedAmount,
+            'receipt_path' =>
+                $ocr['receipt_path'] ?? null,
+            'expected_content' =>
+                $expectedContent,
+            'expected_amount' =>
+                $expectedAmount,
             'read_content' => $readContent,
             'amounts' => $amounts,
             'content_matches' => $contentMatches,
             'amount_matches' => $amountMatches,
-            'transaction_code' => $ocr['transaction_code'] ?? null,
-            'transaction_unused' => $transactionUnused,
+            'transaction_code' =>
+                $ocr['transaction_code'] ?? null,
+            'transaction_unused' =>
+                $transactionUnused,
             'verified' => $verified,
             'ocr_text' => $text,
         ];
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | XEM VÉ ĐIỆN TỬ
+    |--------------------------------------------------------------------------
+    */
+
     public function ticket(Booking $booking)
     {
-        if (
-            $booking->user_id
-            !== auth()->id()
-        ) {
+        if ($booking->user_id !== auth()->id()) {
             abort(403);
         }
 
@@ -1088,19 +1451,13 @@ class BookingController extends Controller
             $booking->payment_status !== 'paid'
             || $booking->booking_status !== 'confirmed'
         ) {
-            if (
-                $this->isBookingExpired(
-                    $booking
-                )
-            ) {
+            if ($this->isBookingExpired($booking)) {
                 $this->cancelExpiredBookingById(
                     $booking->id
                 );
 
                 return redirect()
-                    ->route(
-                        'flights.search.form'
-                    )
+                    ->route('flights.search.form')
                     ->with(
                         'error',
                         'Đơn đặt vé đã hết thời gian giữ ghế. Vui lòng đặt vé lại.'
@@ -1125,9 +1482,16 @@ class BookingController extends Controller
             'tickets.flightSeat',
         ]);
 
+        /*
+         * Kết quả đọc hóa đơn đã lưu.
+         */
+
         $receiptCheck = null;
 
-        $payment = Payment::where('booking_id', $booking->id)
+        $payment = Payment::where(
+            'booking_id',
+            $booking->id
+        )
             ->where('payment_status', 'paid')
             ->where('payment_method', 'bank_transfer')
             ->orderByDesc('id')
@@ -1144,13 +1508,19 @@ class BookingController extends Controller
                 $booking,
                 [
                     'text' => $payment->ocr_text,
-                    'amounts' => [(int) $payment->receipt_amount],
-                    'transaction_code' => $payment->receipt_transaction_code,
-                    'expected_content' => $payment->receipt_content,
-                    'expected_amount' => (int) $payment->amount,
+                    'amounts' => [
+                        (int) $payment->receipt_amount
+                    ],
+                    'transaction_code' =>
+                        $payment->receipt_transaction_code,
+                    'expected_content' =>
+                        $payment->receipt_content,
+                    'expected_amount' =>
+                        (int) $payment->amount,
                 ],
                 true,
-                (int) $payment->receipt_amount === (int) $payment->amount,
+                (int) $payment->receipt_amount
+                    === (int) $payment->amount,
                 true,
                 true
             );
@@ -1158,15 +1528,22 @@ class BookingController extends Controller
 
         return view(
             'user.ve-dien-tu',
-            compact('booking', 'receiptCheck')
+            compact(
+                'booking',
+                'receiptCheck'
+            )
         );
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | CHỌN CHUYẾN BAY MỚI ĐỂ ĐỔI VÉ
+    |--------------------------------------------------------------------------
+    */
+
     public function changeFlight(Ticket $ticket)
     {
-        $this->authorizeTicketChange(
-            $ticket
-        );
+        $this->authorizeTicketChange($ticket);
 
         $ticket->load([
             'booking',
@@ -1184,11 +1561,7 @@ class BookingController extends Controller
                 $ticket->flight->arrival_airport_id
             )
             ->where('status', 'open')
-            ->where(
-                'id',
-                '!=',
-                $ticket->flight_id
-            )
+            ->where('id', '!=', $ticket->flight_id)
             ->whereDate(
                 'flight_date',
                 '>=',
@@ -1221,29 +1594,28 @@ class BookingController extends Controller
         );
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | CHỌN GHẾ CHUYẾN BAY MỚI
+    |--------------------------------------------------------------------------
+    */
+
     public function changeSeat(
         Ticket $ticket,
         Flight $flight
     ) {
-        $this->authorizeTicketChange(
-            $ticket
-        );
+        $this->authorizeTicketChange($ticket);
 
         if (
             $flight->departure_airport_id
-                !== $ticket->flight
-                    ->departure_airport_id
+                !== $ticket->flight->departure_airport_id
             || $flight->arrival_airport_id
-                !== $ticket->flight
-                    ->arrival_airport_id
-            || $flight->status
-                !== 'open'
-            || $flight->id
-                === $ticket->flight_id
-            || $flight->flight_date
-                ->isBefore(
-                    now()->startOfDay()
-                )
+                !== $ticket->flight->arrival_airport_id
+            || $flight->status !== 'open'
+            || $flight->id === $ticket->flight_id
+            || $flight->flight_date->isBefore(
+                now()->startOfDay()
+            )
         ) {
             return redirect()
                 ->route(
@@ -1267,17 +1639,11 @@ class BookingController extends Controller
             'departureAirport',
             'arrivalAirport',
             'aircraft',
-            'flightSeats' =>
-                function ($query) {
-                    $query
-                        ->where(
-                            'status',
-                            'available'
-                        )
-                        ->orderBy(
-                            'seat_number'
-                        );
-                },
+            'flightSeats' => function ($query) {
+                $query
+                    ->where('status', 'available')
+                    ->orderBy('seat_number');
+            },
         ]);
 
         return view(
@@ -1289,35 +1655,42 @@ class BookingController extends Controller
         );
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | XÁC NHẬN ĐỔI VÉ
+    |--------------------------------------------------------------------------
+    |
+    | Đã sửa:
+    | Lấy phí đổi vé từ cài đặt của Admin.
+    |
+    */
+
     public function changeConfirm(
         Request $request,
         Ticket $ticket
     ) {
-        $this->authorizeTicketChange(
-            $ticket
-        );
+        $this->authorizeTicketChange($ticket);
 
-        $validated =
-            $request->validate(
-                [
-                    'flight_id' => [
-                        'required',
-                        'integer',
-                        'exists:flights,id',
-                    ],
-                    'seat_id' => [
-                        'required',
-                        'integer',
-                        'exists:flight_seats,id',
-                    ],
+        $validated = $request->validate(
+            [
+                'flight_id' => [
+                    'required',
+                    'integer',
+                    'exists:flights,id',
                 ],
-                [
-                    'flight_id.required' =>
-                        'Vui lòng chọn chuyến bay mới.',
-                    'seat_id.required' =>
-                        'Vui lòng chọn ghế mới.',
-                ]
-            );
+                'seat_id' => [
+                    'required',
+                    'integer',
+                    'exists:flight_seats,id',
+                ],
+            ],
+            [
+                'flight_id.required' =>
+                    'Vui lòng chọn chuyến bay mới.',
+                'seat_id.required' =>
+                    'Vui lòng chọn ghế mới.',
+            ]
+        );
 
         $flight = Flight::where(
             'id',
@@ -1330,33 +1703,23 @@ class BookingController extends Controller
             'id',
             $validated['seat_id']
         )
-            ->where(
-                'flight_id',
-                $flight->id
-            )
-            ->where(
-                'status',
-                'available'
-            )
+            ->where('flight_id', $flight->id)
+            ->where('status', 'available')
             ->first();
 
         if (!$seat) {
-            return back()
-                ->with(
-                    'error',
-                    'Ghế vừa chọn không còn trống. Vui lòng chọn ghế khác.'
-                );
+            return back()->with(
+                'error',
+                'Ghế vừa chọn không còn trống. Vui lòng chọn ghế khác.'
+            );
         }
 
         if (
             $flight->departure_airport_id
-                !== $ticket->flight
-                    ->departure_airport_id
+                !== $ticket->flight->departure_airport_id
             || $flight->arrival_airport_id
-                !== $ticket->flight
-                    ->arrival_airport_id
-            || $flight->id
-                === $ticket->flight_id
+                !== $ticket->flight->arrival_airport_id
+            || $flight->id === $ticket->flight_id
         ) {
             return redirect()
                 ->route(
@@ -1369,40 +1732,46 @@ class BookingController extends Controller
                 );
         }
 
-        $newPrice =
-            $this->calculateTicketPrice(
-                $flight,
-                $seat
-            );
+        $newPrice = $this->calculateTicketPrice(
+            $flight,
+            $seat
+        );
 
         $fareDifference = max(
             0,
-            $newPrice
-                - (float) $ticket->price
+            $newPrice - (float) $ticket->price
         );
 
+        /*
+         * SỬA: Lấy phí đổi vé Admin đã thiết lập.
+         */
+
+        try {
+            $changeFee = $this->getChangeFee();
+        } catch (\RuntimeException $e) {
+            return back()->with(
+                'error',
+                $e->getMessage()
+            );
+        }
+
         $amountToPay =
-            self::CHANGE_FEE
-            + $fareDifference;
+            $changeFee + $fareDifference;
+
+        /*
+         * Lưu phí chính xác vào session.
+         */
 
         session([
             'ticket_change' => [
-                'ticket_id' =>
-                    $ticket->id,
-                'flight_id' =>
-                    $flight->id,
-                'seat_id' =>
-                    $seat->id,
-                'old_price' =>
-                    (float) $ticket->price,
-                'new_price' =>
-                    $newPrice,
-                'fare_difference' =>
-                    $fareDifference,
-                'change_fee' =>
-                    self::CHANGE_FEE,
-                'amount_to_pay' =>
-                    $amountToPay,
+                'ticket_id' => $ticket->id,
+                'flight_id' => $flight->id,
+                'seat_id' => $seat->id,
+                'old_price' => (float) $ticket->price,
+                'new_price' => $newPrice,
+                'fare_difference' => $fareDifference,
+                'change_fee' => $changeFee,
+                'amount_to_pay' => $amountToPay,
             ],
         ]);
 
@@ -1431,22 +1800,30 @@ class BookingController extends Controller
         );
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | THANH TOÁN ĐỔI CHUYẾN BAY
+    |--------------------------------------------------------------------------
+    |
+    | Đã sửa:
+    | Đọc lại phí đổi vé Admin để tránh sử dụng
+    | mức giá cũ trong session.
+    |
+    | Giữ nguyên quy trình xác nhận đổi vé hiện tại.
+    |
+    */
+
     public function changePay(
         Request $request,
         Ticket $ticket
     ) {
-        $this->authorizeTicketChange(
-            $ticket
-        );
+        $this->authorizeTicketChange($ticket);
 
-        $change = session(
-            'ticket_change'
-        );
+        $change = session('ticket_change');
 
         if (
             !$change
-            || (int) $change['ticket_id']
-                !== $ticket->id
+            || (int) $change['ticket_id'] !== $ticket->id
         ) {
             return redirect()
                 ->route(
@@ -1461,54 +1838,45 @@ class BookingController extends Controller
 
         try {
             DB::transaction(
-                function () use (
-                    $ticket,
-                    $change
-                ) {
-                    $lockedTicket =
-                        Ticket::where(
-                            'id',
-                            $ticket->id
-                        )
-                            ->lockForUpdate()
-                            ->firstOrFail();
+                function () use ($ticket, $change) {
+                    /*
+                     * Khóa vé và đơn đặt vé.
+                     */
 
-                    $booking =
-                        Booking::where(
-                            'id',
-                            $lockedTicket
-                                ->booking_id
-                        )
-                            ->lockForUpdate()
-                            ->firstOrFail();
+                    $lockedTicket = Ticket::where(
+                        'id',
+                        $ticket->id
+                    )
+                        ->lockForUpdate()
+                        ->firstOrFail();
+
+                    $booking = Booking::where(
+                        'id',
+                        $lockedTicket->booking_id
+                    )
+                        ->lockForUpdate()
+                        ->firstOrFail();
 
                     if (
-                        $booking->user_id
-                            !== auth()->id()
-                        || $booking
-                            ->payment_status
-                            !== 'paid'
-                        || $lockedTicket
-                            ->ticket_status
-                            !== 'active'
+                        $booking->user_id !== auth()->id()
+                        || $booking->payment_status !== 'paid'
+                        || $lockedTicket->ticket_status !== 'active'
                     ) {
                         throw new \Exception(
                             'Vé không còn đủ điều kiện để đổi chuyến.'
                         );
                     }
 
-                    $newFlight =
-                        Flight::where(
-                            'id',
-                            $change[
-                                'flight_id'
-                            ]
-                        )
-                            ->where(
-                                'status',
-                                'open'
-                            )
-                            ->first();
+                    /*
+                     * Chuyến bay mới.
+                     */
+
+                    $newFlight = Flight::where(
+                        'id',
+                        $change['flight_id']
+                    )
+                        ->where('status', 'open')
+                        ->first();
 
                     if (!$newFlight) {
                         throw new \Exception(
@@ -1516,110 +1884,127 @@ class BookingController extends Controller
                         );
                     }
 
-                    $newSeat =
-                        FlightSeat::where(
-                            'id',
-                            $change[
-                                'seat_id'
-                            ]
-                        )
-                            ->where(
-                                'flight_id',
-                                $newFlight->id
-                            )
-                            ->lockForUpdate()
-                            ->first();
+                    /*
+                     * Ghế mới.
+                     */
+
+                    $newSeat = FlightSeat::where(
+                        'id',
+                        $change['seat_id']
+                    )
+                        ->where('flight_id', $newFlight->id)
+                        ->lockForUpdate()
+                        ->first();
 
                     if (
                         !$newSeat
-                        || $newSeat->status
-                            !== 'available'
+                        || $newSeat->status !== 'available'
                     ) {
                         throw new \Exception(
                             'Ghế mới đã được người khác đặt. Vui lòng chọn ghế khác.'
                         );
                     }
 
-                    $oldSeat =
-                        FlightSeat::where(
-                            'id',
-                            $lockedTicket
-                                ->flight_seat_id
-                        )
-                            ->lockForUpdate()
-                            ->first();
+                    /*
+                     * Ghế cũ.
+                     */
 
-                    $newPrice =
-                        $this->calculateTicketPrice(
-                            $newFlight,
-                            $newSeat
-                        );
+                    $oldSeat = FlightSeat::where(
+                        'id',
+                        $lockedTicket->flight_seat_id
+                    )
+                        ->lockForUpdate()
+                        ->first();
+
+                    /*
+                     * Tính lại giá vé.
+                     */
+
+                    $newPrice = $this->calculateTicketPrice(
+                        $newFlight,
+                        $newSeat
+                    );
 
                     $fareDifference = max(
                         0,
                         $newPrice
-                            - (float)
-                                $lockedTicket
-                                    ->price
+                            - (float) $lockedTicket->price
                     );
 
+                    /*
+                     * SỬA: Không dùng CHANGE_FEE = 100000.
+                     * Lấy phí mới nhất từ cài đặt Admin.
+                     */
+
+                    $changeFee = $this->getChangeFee();
+
                     $amountToPay =
-                        self::CHANGE_FEE
-                        + $fareDifference;
+                        $changeFee + $fareDifference;
+
+                    /*
+                     * Nếu giá thay đổi so với lúc khách
+                     * xem QR, yêu cầu chọn lại.
+                     */
 
                     if (
                         (float) $amountToPay
-                        !== (float)
-                            $change[
-                                'amount_to_pay'
-                            ]
+                        !== (float) $change['amount_to_pay']
                     ) {
                         throw new \Exception(
-                            'Giá chuyến bay đã thay đổi. Vui lòng thực hiện đổi vé lại.'
+                            'Giá vé hoặc phí đổi vé đã thay đổi. Vui lòng thực hiện đổi vé lại.'
                         );
                     }
+
+                    /*
+                     * Đánh dấu ghế mới đã đặt.
+                     */
 
                     $newSeat->update([
                         'status' => 'booked',
                     ]);
 
-                    $oldPrice =
-                        (float)
-                            $lockedTicket
-                                ->price;
+                    $oldPrice = (float) (
+                        $lockedTicket->price
+                    );
+
+                    /*
+                     * Chỉ cập nhật đúng vé đang đổi.
+                     */
 
                     $lockedTicket->update([
-                        'flight_id' =>
-                            $newFlight->id,
-                        'flight_seat_id' =>
-                            $newSeat->id,
-                        'seat_class' =>
-                            $newSeat
-                                ->seat_class,
-                        'price' =>
-                            $newPrice,
+                        'flight_id' => $newFlight->id,
+                        'flight_seat_id' => $newSeat->id,
+                        'seat_class' => $newSeat->seat_class,
+                        'price' => $newPrice,
                     ]);
+
+                    /*
+                     * Giải phóng ghế cũ.
+                     */
 
                     if ($oldSeat) {
                         $oldSeat->update([
-                            'status' =>
-                                'available',
+                            'status' => 'available',
                         ]);
                     }
+
+                    /*
+                     * Cập nhật tổng tiền trong đơn.
+                     * Sử dụng phí đổi vé thực tế từ Admin.
+                     */
 
                     $booking->update([
                         'total_amount' => max(
                             0,
-                            (float)
-                                $booking
-                                    ->total_amount
-                            - $oldPrice
-                            + $newPrice
-                            + self::CHANGE_FEE
+                            (float) $booking->total_amount
+                                - $oldPrice
+                                + $newPrice
+                                + $changeFee
                         ),
                     ]);
                 }
             );
+
         } catch (\Exception $e) {
             return redirect()
                 ->route(
@@ -1632,13 +2017,22 @@ class BookingController extends Controller
                 );
         }
 
-        session()->forget(
-            'ticket_change'
-        );
+        /*
+         * Xóa session đổi vé.
+         */
+
+        session()->forget('ticket_change');
 
         $ticket->refresh();
 
-        $admins = User::where('role', 'admin')->get();
+        /*
+         * Thông báo Admin.
+         */
+
+        $admins = User::where(
+            'role',
+            'admin'
+        )->get();
 
         foreach ($admins as $admin) {
             Notification::create([
@@ -1664,9 +2058,18 @@ class BookingController extends Controller
             );
     }
 
-    public function cancelTicket(
-        Ticket $ticket
-    ) {
+    /*
+    |--------------------------------------------------------------------------
+    | HIỂN THỊ TRANG HỦY VÉ
+    |--------------------------------------------------------------------------
+    |
+    | Giữ nguyên cơ chế hủy trực tiếp.
+    | Admin chỉ xác nhận hoàn tiền.
+    |
+    */
+
+    public function cancelTicket(Ticket $ticket)
+    {
         $ticket->load([
             'booking',
             'flight.departureAirport',
@@ -1675,21 +2078,15 @@ class BookingController extends Controller
         ]);
 
         if (
-            $ticket->booking->user_id
-            !== auth()->id()
+            $ticket->booking->user_id !== auth()->id()
         ) {
             abort(403);
         }
 
         if (
-            $ticket->booking
-                ->payment_status
-                !== 'paid'
-            || $ticket->booking
-                ->booking_status
-                !== 'confirmed'
-            || $ticket->ticket_status
-                !== 'active'
+            $ticket->booking->payment_status !== 'paid'
+            || $ticket->booking->booking_status !== 'confirmed'
+            || $ticket->ticket_status !== 'active'
         ) {
             return redirect()
                 ->route('tickets.mine')
@@ -1700,11 +2097,9 @@ class BookingController extends Controller
         }
 
         if (
-            $ticket->flight
-                ->flight_date
-                ->isBefore(
-                    now()->startOfDay()
-                )
+            $ticket->flight->flight_date->isBefore(
+                now()->startOfDay()
+            )
         ) {
             return redirect()
                 ->route('tickets.mine')
@@ -1714,14 +2109,18 @@ class BookingController extends Controller
                 );
         }
 
+        /*
+         * Tỷ lệ hoàn tiền hiện tại của controller.
+         * Phần này giữ theo file gốc bạn gửi.
+         */
+
         $refundPercentage = 60;
 
-        $refundAmount =
-            round(
-                (float) $ticket->price
-                * $refundPercentage
-                / 100
-            );
+        $refundAmount = round(
+            (float) $ticket->price
+            * $refundPercentage
+            / 100
+        );
 
         return view(
             'user.huy-ve',
@@ -1733,38 +2132,43 @@ class BookingController extends Controller
         );
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | GỬI YÊU CẦU HỦY VÉ VÀ HOÀN TIỀN
+    |--------------------------------------------------------------------------
+    */
+
     public function submitCancellation(
         Request $request,
         Ticket $ticket
     ) {
-        $validated =
-            $request->validate(
-                [
-                    'refund_bank_name' => [
-                        'required',
-                        'string',
-                        'max:100',
-                    ],
-                    'refund_account_number' => [
-                        'required',
-                        'string',
-                        'max:50',
-                    ],
-                    'refund_account_name' => [
-                        'required',
-                        'string',
-                        'max:100',
-                    ],
+        $validated = $request->validate(
+            [
+                'refund_bank_name' => [
+                    'required',
+                    'string',
+                    'max:100',
                 ],
-                [
-                    'refund_bank_name.required' =>
-                        'Vui lòng nhập tên ngân hàng.',
-                    'refund_account_number.required' =>
-                        'Vui lòng nhập số tài khoản.',
-                    'refund_account_name.required' =>
-                        'Vui lòng nhập tên chủ tài khoản.',
-                ]
-            );
+                'refund_account_number' => [
+                    'required',
+                    'string',
+                    'max:50',
+                ],
+                'refund_account_name' => [
+                    'required',
+                    'string',
+                    'max:100',
+                ],
+            ],
+            [
+                'refund_bank_name.required' =>
+                    'Vui lòng nhập tên ngân hàng.',
+                'refund_account_number.required' =>
+                    'Vui lòng nhập số tài khoản.',
+                'refund_account_name.required' =>
+                    'Vui lòng nhập tên chủ tài khoản.',
+            ]
+        );
 
         try {
             DB::transaction(
@@ -1772,137 +2176,129 @@ class BookingController extends Controller
                     $ticket,
                     $validated
                 ) {
-                    $lockedTicket =
-                        Ticket::where(
-                            'id',
-                            $ticket->id
-                        )
-                            ->lockForUpdate()
-                            ->firstOrFail();
+                    /*
+                     * Khóa vé và booking.
+                     */
 
-                    $booking =
-                        Booking::where(
-                            'id',
-                            $lockedTicket
-                                ->booking_id
-                        )
-                            ->lockForUpdate()
-                            ->firstOrFail();
+                    $lockedTicket = Ticket::where(
+                        'id',
+                        $ticket->id
+                    )
+                        ->lockForUpdate()
+                        ->firstOrFail();
+
+                    $booking = Booking::where(
+                        'id',
+                        $lockedTicket->booking_id
+                    )
+                        ->lockForUpdate()
+                        ->firstOrFail();
 
                     if (
-                        $booking->user_id
-                        !== auth()->id()
+                        $booking->user_id !== auth()->id()
                     ) {
                         abort(403);
                     }
 
                     if (
-                        $booking
-                            ->payment_status
-                            !== 'paid'
-                        || $booking
-                            ->booking_status
-                            !== 'confirmed'
-                        || $lockedTicket
-                            ->ticket_status
-                            !== 'active'
+                        $booking->payment_status !== 'paid'
+                        || $booking->booking_status !== 'confirmed'
+                        || $lockedTicket->ticket_status !== 'active'
                     ) {
                         throw new \Exception(
                             'Vé này không còn đủ điều kiện để hủy.'
                         );
                     }
 
-                    $flight =
-                        Flight::where(
-                            'id',
-                            $lockedTicket
-                                ->flight_id
-                        )
-                            ->firstOrFail();
+                    $flight = Flight::where(
+                        'id',
+                        $lockedTicket->flight_id
+                    )->firstOrFail();
 
                     if (
-                        $flight->flight_date
-                            ->isBefore(
-                                now()->startOfDay()
-                            )
+                        $flight->flight_date->isBefore(
+                            now()->startOfDay()
+                        )
                     ) {
                         throw new \Exception(
                             'Không thể hủy vé của chuyến bay đã qua ngày khởi hành.'
                         );
                     }
 
-                    $refundAmount =
-                        round(
-                            (float)
-                                $lockedTicket
-                                    ->price
-                            * 0.6
-                        );
+                    /*
+                     * Giữ nguyên cách tính hoàn tiền cũ.
+                     */
+
+                    $refundAmount = round(
+                        (float) $lockedTicket->price * 0.6
+                    );
+
+                    /*
+                     * Giải phóng ghế.
+                     */
 
                     FlightSeat::where(
                         'id',
-                        $lockedTicket
-                            ->flight_seat_id
+                        $lockedTicket->flight_seat_id
                     )
                         ->lockForUpdate()
                         ->update([
-                            'status' =>
-                                'available',
+                            'status' => 'available',
                         ]);
+
+                    /*
+                     * Đánh dấu vé đã hủy.
+                     */
 
                     Ticket::where(
                         'id',
                         $lockedTicket->id
                     )->update([
-                        'ticket_status' =>
-                            'cancelled',
-                        'refund_amount' =>
-                            $refundAmount,
+                        'ticket_status' => 'cancelled',
+                        'refund_amount' => $refundAmount,
                         'refund_status' =>
                             'waiting_confirmation',
                         'refund_bank_name' =>
-                            $validated[
-                                'refund_bank_name'
-                            ],
+                            $validated['refund_bank_name'],
                         'refund_account_number' =>
-                            $validated[
-                                'refund_account_number'
-                            ],
+                            $validated['refund_account_number'],
                         'refund_account_name' =>
-                            $validated[
-                                'refund_account_name'
-                            ],
+                            $validated['refund_account_name'],
                     ]);
 
-                    $remainingActiveTickets =
-                        Ticket::where(
-                            'booking_id',
-                            $booking->id
-                        )
-                            ->where(
-                                'ticket_status',
-                                'active'
-                            )
-                            ->count();
+                    /*
+                     * Nếu toàn bộ vé đã hủy thì hủy đơn.
+                     */
 
-                    if (
-                        $remainingActiveTickets
-                        === 0
-                    ) {
+                    $remainingActiveTickets = Ticket::where(
+                        'booking_id',
+                        $booking->id
+                    )
+                        ->where('ticket_status', 'active')
+                        ->count();
+
+                    if ($remainingActiveTickets === 0) {
                         $booking->update([
-                            'booking_status' =>
-                                'cancelled',
+                            'booking_status' => 'cancelled',
                         ]);
                     }
 
-                    $admins = User::where('role', 'admin')->get();
+                    /*
+                     * Thông báo Admin xử lý hoàn tiền.
+                     */
+
+                    $admins = User::where(
+                        'role',
+                        'admin'
+                    )->get();
 
                     foreach ($admins as $admin) {
                         Notification::create([
                             'user_id' => $admin->id,
                             'ticket_id' => $lockedTicket->id,
                             'sender_id' => auth()->id(),
-                            'title' => 'Có yêu cầu hoàn tiền mới',
+                            'title' =>
+                                'Có yêu cầu hoàn tiền mới',
                             'message' =>
                                 'Khách hàng đã hủy vé '
                                 . $lockedTicket->ticket_code
@@ -1914,11 +2310,10 @@ class BookingController extends Controller
                     }
                 }
             );
+
         } catch (\Exception $e) {
             return redirect()
-                ->route(
-                    'tickets.mine'
-                )
+                ->route('tickets.mine')
                 ->with(
                     'error',
                     $e->getMessage()
@@ -1933,6 +2328,12 @@ class BookingController extends Controller
             );
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | KIỂM TRA ĐIỀU KIỆN ĐỔI VÉ
+    |--------------------------------------------------------------------------
+    */
+
     private function authorizeTicketChange(
         Ticket $ticket
     ): void {
@@ -1942,21 +2343,15 @@ class BookingController extends Controller
         ]);
 
         if (
-            $ticket->booking->user_id
-            !== auth()->id()
+            $ticket->booking->user_id !== auth()->id()
         ) {
             abort(403);
         }
 
         if (
-            $ticket->booking
-                ->payment_status
-                !== 'paid'
-            || $ticket->booking
-                ->booking_status
-                !== 'confirmed'
-            || $ticket->ticket_status
-                !== 'active'
+            $ticket->booking->payment_status !== 'paid'
+            || $ticket->booking->booking_status !== 'confirmed'
+            || $ticket->ticket_status !== 'active'
         ) {
             abort(
                 403,
@@ -1965,11 +2360,9 @@ class BookingController extends Controller
         }
 
         if (
-            $ticket->flight
-                ->flight_date
-                ->isBefore(
-                    now()->startOfDay()
-                )
+            $ticket->flight->flight_date->isBefore(
+                now()->startOfDay()
+            )
         ) {
             abort(
                 403,
@@ -1978,13 +2371,16 @@ class BookingController extends Controller
         }
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | KIỂM TRA ĐƠN ĐÃ HẾT HẠN
+    |--------------------------------------------------------------------------
+    */
+
     private function isBookingExpired(
         Booking $booking
     ): bool {
-        if (
-            $booking->payment_status
-            === 'paid'
-        ) {
+        if ($booking->payment_status === 'paid') {
             return false;
         }
 
@@ -1992,89 +2388,94 @@ class BookingController extends Controller
             return false;
         }
 
-        return $booking
-            ->expires_at
-            ->isPast();
+        return $booking->expires_at->isPast();
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | TỰ ĐỘNG HỦY ĐƠN SAU 15 PHÚT
+    |--------------------------------------------------------------------------
+    */
 
     private function cancelExpiredBookingById(
         int $bookingId
     ): void {
         DB::transaction(
-            function () use (
-                $bookingId
-            ) {
-                $booking =
-                    Booking::where(
-                        'id',
-                        $bookingId
-                    )
-                        ->lockForUpdate()
-                        ->first();
+            function () use ($bookingId) {
+                $booking = Booking::where(
+                    'id',
+                    $bookingId
+                )
+                    ->lockForUpdate()
+                    ->first();
 
                 if (
                     !$booking
-                    || $booking
-                        ->payment_status
-                        === 'paid'
-                    || $booking
-                        ->booking_status
-                        !== 'pending'
+                    || $booking->payment_status === 'paid'
+                    || $booking->booking_status !== 'pending'
                 ) {
                     return;
                 }
 
-                if (
-                    !$this->isBookingExpired(
-                        $booking
-                    )
-                ) {
+                if (!$this->isBookingExpired($booking)) {
                     return;
                 }
 
-                $tickets =
-                    Ticket::where(
-                        'booking_id',
-                        $booking->id
-                    )
-                        ->lockForUpdate()
-                        ->get();
+                /*
+                 * Lấy tất cả vé thuộc đơn.
+                 */
 
-                foreach (
-                    $tickets
-                    as $ticket
-                ) {
+                $tickets = Ticket::where(
+                    'booking_id',
+                    $booking->id
+                )
+                    ->lockForUpdate()
+                    ->get();
+
+                /*
+                 * Giải phóng ghế.
+                 */
+
+                foreach ($tickets as $ticket) {
                     FlightSeat::where(
                         'id',
-                        $ticket
-                            ->flight_seat_id
+                        $ticket->flight_seat_id
                     )
                         ->lockForUpdate()
                         ->update([
-                            'status' =>
-                                'available',
+                            'status' => 'available',
                         ]);
                 }
+
+                /*
+                 * Hủy toàn bộ vé.
+                 */
 
                 Ticket::where(
                     'booking_id',
                     $booking->id
                 )->update([
-                    'ticket_status' =>
-                        'cancelled',
+                    'ticket_status' => 'cancelled',
                 ]);
 
                 $booking->update([
-                    'booking_status' =>
-                        'cancelled',
+                    'booking_status' => 'cancelled',
                 ]);
 
-                $admins = User::where('role', 'admin')->get();
+                /*
+                 * Gửi thông báo Admin.
+                 */
+
+                $admins = User::where(
+                    'role',
+                    'admin'
+                )->get();
 
                 foreach ($admins as $admin) {
                     Notification::create([
                         'user_id' => $admin->id,
-                        'ticket_id' => $tickets->first()?->id,
+                        'ticket_id' =>
+                            $tickets->first()?->id,
                         'sender_id' => $booking->user_id,
                         'title' => 'Đơn đã tự động hủy',
                         'message' =>
@@ -2088,24 +2489,29 @@ class BookingController extends Controller
         );
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | TÍNH GIÁ VÉ PHỔ THÔNG / VIP
+    |--------------------------------------------------------------------------
+    */
+
     private function calculateTicketPrice(
         Flight $flight,
         FlightSeat $seat
     ) {
-        if (
-            $seat->seat_class
-            === 'vip'
-        ) {
-            return (float)
-                $flight->price
-                + (float)
-                    $flight
-                        ->vip_surcharge;
+        if ($seat->seat_class === 'vip') {
+            return (float) $flight->price
+                + (float) $flight->vip_surcharge;
         }
 
-        return (float)
-            $flight->price;
+        return (float) $flight->price;
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | TẠO VÉ CHO TỪNG HÀNH KHÁCH
+    |--------------------------------------------------------------------------
+    */
 
     private function createTicket(
         Booking $booking,
@@ -2118,53 +2524,42 @@ class BookingController extends Controller
         float $baggagePrice = 0
     ) {
         return Ticket::create([
-            'booking_id' =>
-                $booking->id,
-            'flight_id' =>
-                $flight->id,
-            'flight_seat_id' =>
-                $seat->id,
-            'seat_class' =>
-                $seat->seat_class,
+            'booking_id' => $booking->id,
+            'flight_id' => $flight->id,
+            'flight_seat_id' => $seat->id,
+            'seat_class' => $seat->seat_class,
             'ticket_code' =>
                 $this->generateTicketCode(),
             'passenger_name' =>
                 $passenger['full_name'],
             'date_of_birth' =>
                 $passenger['date_of_birth'],
-            'gender' =>
-                $passenger['gender'],
+            'gender' => $passenger['gender'],
             'identity_number' =>
-                $passenger[
-                    'identity_number'
-                ],
-            'phone' =>
-                $passenger['phone'],
-            'email' =>
-                $passenger['email'],
-            'price' =>
-                $ticketPrice,
-            'baggage_weight' =>
-                $baggageWeight,
-            'baggage_price' =>
-                $baggagePrice,
-            'ticket_status' =>
-                'pending',
-            'face_image' =>
-                $faceImage,
+                $passenger['identity_number'],
+            'phone' => $passenger['phone'],
+            'email' => $passenger['email'],
+            'price' => $ticketPrice,
+            'baggage_weight' => $baggageWeight,
+            'baggage_price' => $baggagePrice,
+            'ticket_status' => 'pending',
+            'face_image' => $faceImage,
             'cccd_image' =>
                 $passenger['cccd_image'],
         ]);
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | SINH MÃ ĐẶT VÉ
+    |--------------------------------------------------------------------------
+    */
+
     private function generateBookingCode()
     {
         do {
             $code =
-                'BK'
-                . Str::upper(
-                    Str::random(8)
-                );
+                'BK' . Str::upper(Str::random(8));
         } while (
             Booking::where(
                 'booking_code',
@@ -2175,14 +2570,17 @@ class BookingController extends Controller
         return $code;
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | SINH MÃ VÉ
+    |--------------------------------------------------------------------------
+    */
+
     private function generateTicketCode()
     {
         do {
             $code =
-                'VE'
-                . Str::upper(
-                    Str::random(10)
-                );
+                'VE' . Str::upper(Str::random(10));
         } while (
             Ticket::where(
                 'ticket_code',

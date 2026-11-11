@@ -1,9 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thông tin hành khách - Vietjet</title>
+
     <style>
         * {
             margin: 0;
@@ -67,7 +69,7 @@
 
         .header {
             background: white;
-            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 3px 15px rgba(0, 0, 0, .08);
         }
 
         .navbar {
@@ -138,8 +140,8 @@
             background:
                 linear-gradient(
                     90deg,
-                    rgba(0, 31, 58, 0.94),
-                    rgba(0, 59, 112, 0.53)
+                    rgba(0, 31, 58, .94),
+                    rgba(0, 59, 112, .53)
                 ),
                 url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1800&q=85');
             background-size: cover;
@@ -246,7 +248,7 @@
             background: white;
             border-radius: 14px;
             padding: 26px;
-            box-shadow: 0 7px 28px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 7px 28px rgba(0, 0, 0, .08);
             margin-bottom: 22px;
         }
 
@@ -356,7 +358,7 @@
             color: var(--muted);
             font-size: 10px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: .5px;
             margin-bottom: 5px;
         }
 
@@ -426,7 +428,7 @@
             font-size: 13px;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: .5px;
             margin: 22px 0 17px;
         }
 
@@ -470,7 +472,7 @@
 
         .form-control:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 59, 112, 0.08);
+            box-shadow: 0 0 0 3px rgba(0, 59, 112, .08);
         }
 
         .file-control {
@@ -529,6 +531,72 @@
 
         .continue-button:hover {
             background: var(--primary-dark);
+        }
+
+        /* PHẦN MỚI: NHÓM HÀNH KHÁCH */
+
+        .passenger-card {
+            margin-bottom: 25px;
+            border: 1px solid #dce6ef;
+            border-radius: 10px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .passenger-card-heading {
+            padding: 17px 20px;
+            background: #f2f7fc;
+            border-bottom: 1px solid #dce6ef;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .passenger-card-heading h3 {
+            color: var(--primary);
+            font-size: 17px;
+        }
+
+        .passenger-card-body {
+            padding: 20px;
+        }
+
+        .passenger-seat-label {
+            display: inline-block;
+            padding: 7px 12px;
+            color: #176a53;
+            background: #e8f7f0;
+            border: 1px solid #c8ead7;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .passenger-summary {
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            background: #eef5fb;
+            border-left: 3px solid var(--primary);
+            color: var(--primary);
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .old-image-note {
+            margin-top: 10px;
+            padding: 10px 12px;
+            background: #e9f7ef;
+            border: 1px solid #c6e7d2;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #176a53;
+        }
+
+        .old-image-note a {
+            color: #005caa;
+            text-decoration: underline;
         }
 
         footer {
@@ -605,13 +673,21 @@
             .steps {
                 display: none;
             }
+
+            .passenger-card-body {
+                padding: 15px;
+            }
         }
     </style>
 </head>
+
 <body>
+
+{{-- TOP BAR --}}
 
 <div class="top-bar">
     <div class="top-bar-inner">
+
         <div class="top-group">
             <span>Website đặt vé máy bay trực tuyến</span>
             <span>Hỗ trợ: 1900 6868</span>
@@ -619,26 +695,38 @@
 
         <div class="top-group">
             @auth
-                <a href="{{ route('profile.edit') }}">Thông tin cá nhân</a>
-                <a href="{{ route('notifications.index') }}">Thông báo</a>
+                <a href="{{ route('profile.edit') }}">
+                    Thông tin cá nhân
+                </a>
+
+                <a href="{{ route('notifications.index') }}">
+                    Thông báo
+                </a>
             @endauth
-           
         </div>
+
     </div>
 </div>
 
+{{-- HEADER --}}
+
 <header class="header">
     <nav class="navbar">
+
         <a href="{{ route('trang-chu') }}" class="logo">
             Viet<span>jet</span>
         </a>
 
         <div class="nav-menu">
+
             <a href="{{ route('trang-chu') }}" class="nav-link">
                 Trang chủ
             </a>
 
-            <a href="{{ route('flights.search.form') }}" class="nav-link active">
+            <a
+                href="{{ route('flights.search.form') }}"
+                class="nav-link active"
+            >
                 Đặt vé
             </a>
 
@@ -651,18 +739,24 @@
                     Thông báo
                 </a>
             @endauth
+
             <a href="{{ route('contact') }}" class="nav-link">
                 Liên hệ
             </a>
+
         </div>
 
         <div class="nav-actions">
+
             @auth
                 <span class="user-name">
                     {{ auth()->user()->name }}
                 </span>
 
-                <form action="{{ route('dang-xuat') }}" method="POST">
+                <form
+                    action="{{ route('dang-xuat') }}"
+                    method="POST"
+                >
                     @csrf
 
                     <button type="submit" class="logout-btn">
@@ -670,30 +764,55 @@
                     </button>
                 </form>
             @endauth
+
         </div>
+
     </nav>
 </header>
 
+{{-- BANNER --}}
+
 <section class="page-banner">
+
     <div class="banner-inner">
+
         <div class="breadcrumb">
-            <a href="{{ route('trang-chu') }}">Trang chủ</a>
+
+            <a href="{{ route('trang-chu') }}">
+                Trang chủ
+            </a>
+
             <span>/</span>
-            <a href="{{ route('flights.search.form') }}">Đặt vé</a>
+
+            <a href="{{ route('flights.search.form') }}">
+                Đặt vé
+            </a>
+
             <span>/</span>
+
             <span>Thông tin hành khách</span>
+
         </div>
 
         <h1>Thông tin hành khách</h1>
 
         <p>
-            Nhập chính xác thông tin và hình ảnh CCCD của hành khách để tiếp tục bước chọn hành lý.
+            Nhập chính xác thông tin và hình ảnh CCCD
+            của từng hành khách để tiếp tục bước chọn hành lý.
         </p>
+
     </div>
+
 </section>
 
+{{-- MAIN --}}
+
 <main class="main">
+
+    {{-- THANH TIẾN TRÌNH --}}
+
     <div class="steps">
+
         <div class="step done">
             <div class="step-number">1</div>
             <div class="step-text">Chọn chuyến</div>
@@ -733,13 +852,22 @@
             <div class="step-number">6</div>
             <div class="step-text">Thanh toán</div>
         </div>
+
     </div>
 
+    {{-- THÔNG TIN HÀNH TRÌNH --}}
+
     <section class="card">
+
         <div class="card-header">
+
             <div>
                 <h2>Hành trình đã chọn</h2>
-                <p>Kiểm tra chuyến bay và ghế trước khi nhập thông tin hành khách.</p>
+
+                <p>
+                    Kiểm tra chuyến bay và các ghế
+                    trước khi nhập thông tin hành khách.
+                </p>
             </div>
 
             <div class="trip-badge">
@@ -749,7 +877,10 @@
                     MỘT CHIỀU
                 @endif
             </div>
+
         </div>
+
+        {{-- HIỂN THỊ LỖI --}}
 
         @if(session('error'))
             <div class="alert-error">
@@ -769,80 +900,171 @@
             </div>
         @endif
 
-        @if(($tripType ?? 'one_way') === 'round_trip')
-            <div class="flight-section">
-                <div class="flight-heading">
-                    <div class="direction">ĐI</div>
-                    <h3>Chuyến đi</h3>
-                </div>
+        <div class="passenger-summary">
+            Số lượng hành khách:
+            {{ $passengerCount }} người
+            — {{ $passengerCount }} vé mỗi chiều
+        </div>
 
-                <div class="flight-grid">
-                    <div class="info-box">
-                        <span class="info-label">Mã chuyến</span>
-                        <span class="info-value">{{ $outboundFlight->flight_code }}</span>
-                    </div>
+        @php
+            /*
+             * Tính tổng tiền từ tất cả ghế đã chọn.
+             * Tổng này chưa bao gồm hành lý.
+             */
+            $totalPrice = 0;
 
-                    <div class="info-box">
-                        <span class="info-label">Hành trình</span>
-                        <span class="info-value">
-                            {{ $outboundFlight->departureAirport->city }}
-                            →
-                            {{ $outboundFlight->arrivalAirport->city }}
-                        </span>
-                    </div>
+            if ($tripType === 'round_trip') {
+                foreach ($outboundSeats as $selectedSeat) {
+                    $totalPrice +=
+                        (float) $outboundFlight->price
+                        +
+                        (
+                            $selectedSeat->seat_class === 'vip'
+                                ? (float) $outboundFlight->vip_surcharge
+                                : 0
+                        );
+                }
 
-                    <div class="info-box">
-                        <span class="info-label">Ngày bay</span>
-                        <span class="info-value">
-                            {{ $outboundFlight->flight_date->format('d/m/Y') }}
-                        </span>
-                    </div>
+                foreach ($returnSeats as $selectedSeat) {
+                    $totalPrice +=
+                        (float) $returnFlight->price
+                        +
+                        (
+                            $selectedSeat->seat_class === 'vip'
+                                ? (float) $returnFlight->vip_surcharge
+                                : 0
+                        );
+                }
+            } else {
+                foreach ($seats as $selectedSeat) {
+                    $totalPrice +=
+                        (float) $flight->price
+                        +
+                        (
+                            $selectedSeat->seat_class === 'vip'
+                                ? (float) $flight->vip_surcharge
+                                : 0
+                        );
+                }
+            }
+        @endphp
 
-                    <div class="info-box">
-                        <span class="info-label">Giờ đi</span>
-                        <span class="info-value">{{ $outboundFlight->departure_time }}</span>
-                    </div>
+        {{-- CHIỀU ĐI --}}
 
-                    <div class="info-box">
-                        <span class="info-label">Ghế</span>
-                        <span class="info-value">
-                            {{ $outboundSeat->seat_number }}
-                            -
-                            {{ $outboundSeat->seat_class === 'vip' ? 'VIP' : 'Phổ thông' }}
-                        </span>
-                    </div>
+        <div class="flight-section">
 
-                    <div class="info-box">
-                        <span class="info-label">Giá vé</span>
-                        <span class="price">
-                            {{ number_format(
-                                $outboundSeat->seat_class === 'vip'
-                                    ? (float) $outboundFlight->price + (float) $outboundFlight->vip_surcharge
-                                    : (float) $outboundFlight->price,
-                                0,
-                                ',',
-                                '.'
-                            ) }}
-                            đ
-                        </span>
-                    </div>
-                </div>
+            <div class="flight-heading">
+                <div class="direction">ĐI</div>
+
+                <h3>
+                    {{ $tripType === 'round_trip'
+                        ? 'Chuyến đi'
+                        : 'Chuyến bay' }}
+                </h3>
             </div>
 
+            @php
+                $displayOutboundFlight =
+                    $tripType === 'round_trip'
+                        ? $outboundFlight
+                        : $flight;
+
+                $displayOutboundSeats =
+                    $tripType === 'round_trip'
+                        ? $outboundSeats
+                        : $seats;
+            @endphp
+
+            <div class="flight-grid">
+
+                <div class="info-box">
+                    <span class="info-label">Mã chuyến</span>
+
+                    <span class="info-value">
+                        {{ $displayOutboundFlight->flight_code }}
+                    </span>
+                </div>
+
+                <div class="info-box">
+                    <span class="info-label">Hành trình</span>
+
+                    <span class="info-value">
+                        {{ $displayOutboundFlight->departureAirport->city }}
+                        →
+                        {{ $displayOutboundFlight->arrivalAirport->city }}
+                    </span>
+                </div>
+
+                <div class="info-box">
+                    <span class="info-label">Ngày bay</span>
+
+                    <span class="info-value">
+                        {{ $displayOutboundFlight->flight_date->format('d/m/Y') }}
+                    </span>
+                </div>
+
+                <div class="info-box">
+                    <span class="info-label">Giờ đi</span>
+
+                    <span class="info-value">
+                        {{ $displayOutboundFlight->departure_time }}
+                    </span>
+                </div>
+
+                <div class="info-box">
+                    <span class="info-label">
+                        Các ghế chiều đi
+                    </span>
+
+                    <span class="info-value">
+                        {{ $displayOutboundSeats
+                            ->pluck('seat_number')
+                            ->implode(', ') }}
+                    </span>
+                </div>
+
+                <div class="info-box">
+                    <span class="info-label">
+                        Số lượng ghế
+                    </span>
+
+                    <span class="info-value">
+                        {{ $displayOutboundSeats->count() }} ghế
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+        {{-- CHIỀU VỀ --}}
+
+        @if($tripType === 'round_trip')
+
             <div class="flight-section">
+
                 <div class="flight-heading">
                     <div class="direction return">VỀ</div>
                     <h3>Chuyến về</h3>
                 </div>
 
                 <div class="flight-grid">
+
                     <div class="info-box">
-                        <span class="info-label">Mã chuyến</span>
-                        <span class="info-value">{{ $returnFlight->flight_code }}</span>
+                        <span class="info-label">
+                            Mã chuyến
+                        </span>
+
+                        <span class="info-value">
+                            {{ $returnFlight->flight_code }}
+                        </span>
                     </div>
 
                     <div class="info-box">
-                        <span class="info-label">Hành trình</span>
+                        <span class="info-label">
+                            Hành trình
+                        </span>
+
                         <span class="info-value">
                             {{ $returnFlight->departureAirport->city }}
                             →
@@ -851,135 +1073,102 @@
                     </div>
 
                     <div class="info-box">
-                        <span class="info-label">Ngày bay</span>
+                        <span class="info-label">
+                            Ngày bay
+                        </span>
+
                         <span class="info-value">
                             {{ $returnFlight->flight_date->format('d/m/Y') }}
                         </span>
                     </div>
 
                     <div class="info-box">
-                        <span class="info-label">Giờ đi</span>
-                        <span class="info-value">{{ $returnFlight->departure_time }}</span>
-                    </div>
+                        <span class="info-label">
+                            Giờ đi
+                        </span>
 
-                    <div class="info-box">
-                        <span class="info-label">Ghế</span>
                         <span class="info-value">
-                            {{ $returnSeat->seat_number }}
-                            -
-                            {{ $returnSeat->seat_class === 'vip' ? 'VIP' : 'Phổ thông' }}
+                            {{ $returnFlight->departure_time }}
                         </span>
                     </div>
 
                     <div class="info-box">
-                        <span class="info-label">Giá vé</span>
-                        <span class="price">
-                            {{ number_format(
-                                $returnSeat->seat_class === 'vip'
-                                    ? (float) $returnFlight->price + (float) $returnFlight->vip_surcharge
-                                    : (float) $returnFlight->price,
-                                0,
-                                ',',
-                                '.'
-                            ) }}
-                            đ
+                        <span class="info-label">
+                            Các ghế chiều về
+                        </span>
+
+                        <span class="info-value">
+                            {{ $returnSeats
+                                ->pluck('seat_number')
+                                ->implode(', ') }}
                         </span>
                     </div>
-                </div>
-            </div>
 
-            @php
-                $outboundPrice =
-                    $outboundSeat->seat_class === 'vip'
-                        ? (float) $outboundFlight->price + (float) $outboundFlight->vip_surcharge
-                        : (float) $outboundFlight->price;
+                    <div class="info-box">
+                        <span class="info-label">
+                            Số lượng ghế
+                        </span>
 
-                $returnPrice =
-                    $returnSeat->seat_class === 'vip'
-                        ? (float) $returnFlight->price + (float) $returnFlight->vip_surcharge
-                        : (float) $returnFlight->price;
+                        <span class="info-value">
+                            {{ $returnSeats->count() }} ghế
+                        </span>
+                    </div>
 
-                $totalPrice = $outboundPrice + $returnPrice;
-            @endphp
-
-            <div class="total-box">
-                <span>Tổng tiền dự kiến cho cả chuyến đi và chuyến về</span>
-
-                <strong class="total-price">
-                    {{ number_format($totalPrice, 0, ',', '.') }} đ
-                </strong>
-            </div>
-        @else
-            <div class="flight-section">
-                <div class="flight-heading">
-                    <div class="direction">ĐI</div>
-                    <h3>Chuyến bay</h3>
                 </div>
 
-                <div class="flight-grid">
-                    <div class="info-box">
-                        <span class="info-label">Mã chuyến</span>
-                        <span class="info-value">{{ $flight->flight_code }}</span>
-                    </div>
-
-                    <div class="info-box">
-                        <span class="info-label">Hành trình</span>
-                        <span class="info-value">
-                            {{ $flight->departureAirport->city }}
-                            →
-                            {{ $flight->arrivalAirport->city }}
-                        </span>
-                    </div>
-
-                    <div class="info-box">
-                        <span class="info-label">Ngày bay</span>
-                        <span class="info-value">{{ $flight->flight_date->format('d/m/Y') }}</span>
-                    </div>
-
-                    <div class="info-box">
-                        <span class="info-label">Giờ đi</span>
-                        <span class="info-value">{{ $flight->departure_time }}</span>
-                    </div>
-
-                    <div class="info-box">
-                        <span class="info-label">Ghế</span>
-                        <span class="info-value">
-                            {{ $seat->seat_number }}
-                            -
-                            {{ $seat->seat_class === 'vip' ? 'VIP' : 'Phổ thông' }}
-                        </span>
-                    </div>
-
-                    <div class="info-box">
-                        <span class="info-label">Giá vé</span>
-                        <span class="price">
-                            {{ number_format(
-                                $seat->seat_class === 'vip'
-                                    ? (float) $flight->price + (float) $flight->vip_surcharge
-                                    : (float) $flight->price,
-                                0,
-                                ',',
-                                '.'
-                            ) }}
-                            đ
-                        </span>
-                    </div>
-                </div>
             </div>
+
         @endif
+
+        {{-- TỔNG TIỀN --}}
+
+        <div class="total-box">
+
+            <span>
+                Tổng tiền dự kiến cho
+                {{ $passengerCount }} hành khách
+                {{ $tripType === 'round_trip'
+                    ? '(cả chiều đi và chiều về)'
+                    : '(một chiều)' }}
+            </span>
+
+            <strong class="total-price">
+                {{ number_format(
+                    $totalPrice,
+                    0,
+                    ',',
+                    '.'
+                ) }} đ
+            </strong>
+
+        </div>
+
     </section>
 
+    {{-- FORM THÔNG TIN HÀNH KHÁCH --}}
+
     <section class="card form-card">
+
         <div class="form-card-header">
+
             <h2>Thông tin hành khách</h2>
-            <p>Vui lòng nhập thông tin trùng khớp với CCCD của hành khách.</p>
+
+            <p>
+                Vui lòng nhập thông tin trùng khớp
+                với CCCD hoặc hộ chiếu của từng hành khách.
+            </p>
+
         </div>
 
         <div class="form-body">
-            @if(($tripType ?? 'one_way') === 'round_trip')
+
+            @if($tripType === 'round_trip')
                 <div class="roundtrip-note">
-                    Thông tin hành khách này sẽ được sử dụng cho
-                    <strong>cả chuyến đi và chuyến về</strong>.
+                    Mỗi hành khách sử dụng cùng một bộ
+                    thông tin cá nhân cho
+                    <strong>
+                        cả chuyến đi và chuyến về
+                    </strong>.
                 </div>
             @endif
 
@@ -990,162 +1179,302 @@
             >
                 @csrf
 
-                <div class="form-section-title">
-                    Thông tin cá nhân
-                </div>
+                {{-- HIỂN THỊ 1–5 FORM HÀNH KHÁCH --}}
 
-                <div class="form-group">
-                    <label for="full_name">
-                        Họ và tên hành khách
-                        <span class="required">*</span>
-                    </label>
+                @for($i = 0; $i < $passengerCount; $i++)
 
-                    <input
-                        type="text"
-                        id="full_name"
-                        name="full_name"
-                        class="form-control"
-                        placeholder="Ví dụ: Nguyễn Văn An"
-                        value="{{ old('full_name', $passenger['full_name'] ?? '') }}"
-                        required
-                    >
-                </div>
+                    @php
+                        $person = $passengers[$i] ?? [];
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="date_of_birth">
-                            Ngày sinh
-                            <span class="required">*</span>
-                        </label>
+                        $outboundSeatForPerson =
+                            $tripType === 'round_trip'
+                                ? $outboundSeats->values()->get($i)
+                                : $seats->values()->get($i);
 
-                        <input
-                            type="date"
-                            id="date_of_birth"
-                            name="date_of_birth"
-                            class="form-control"
-                            value="{{ old('date_of_birth', $passenger['date_of_birth'] ?? '') }}"
-                            required
-                        >
+                        $returnSeatForPerson =
+                            $tripType === 'round_trip'
+                                ? $returnSeats->values()->get($i)
+                                : null;
+
+                        $namePrefix = "passengers[{$i}]";
+                    @endphp
+
+                    <div class="passenger-card">
+
+                        {{-- TIÊU ĐỀ TỪNG HÀNH KHÁCH --}}
+
+                        <div class="passenger-card-heading">
+
+                            <h3>
+                                Hành khách {{ $i + 1 }}
+                            </h3>
+
+                            <div>
+                                <span class="passenger-seat-label">
+                                    Ghế đi:
+                                    {{ $outboundSeatForPerson->seat_number }}
+
+                                    @if($returnSeatForPerson)
+                                        | Ghế về:
+                                        {{ $returnSeatForPerson->seat_number }}
+                                    @endif
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <div class="passenger-card-body">
+
+                            {{-- THÔNG TIN CÁ NHÂN --}}
+
+                            <div class="form-section-title">
+                                Thông tin cá nhân
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="full_name_{{ $i }}">
+                                    Họ và tên hành khách
+                                    <span class="required">*</span>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="full_name_{{ $i }}"
+                                    name="{{ $namePrefix }}[full_name]"
+                                    class="form-control"
+                                    placeholder="Ví dụ: Nguyễn Văn An"
+                                    value="{{ old(
+                                        "passengers.$i.full_name",
+                                        $person['full_name'] ?? ''
+                                    ) }}"
+                                    maxlength="255"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="form-row">
+
+                                <div class="form-group">
+
+                                    <label for="date_of_birth_{{ $i }}">
+                                        Ngày sinh
+                                        <span class="required">*</span>
+                                    </label>
+
+                                    <input
+                                        type="date"
+                                        id="date_of_birth_{{ $i }}"
+                                        name="{{ $namePrefix }}[date_of_birth]"
+                                        class="form-control"
+                                        value="{{ old(
+                                            "passengers.$i.date_of_birth",
+                                            $person['date_of_birth'] ?? ''
+                                        ) }}"
+                                        max="{{ now()->subDay()->format('Y-m-d') }}"
+                                        required
+                                    >
+
+                                </div>
+
+                                <div class="form-group">
+
+                                    <label for="gender_{{ $i }}">
+                                        Giới tính
+                                        <span class="required">*</span>
+                                    </label>
+
+                                    @php
+                                        $selectedGender = old(
+                                            "passengers.$i.gender",
+                                            $person['gender'] ?? ''
+                                        );
+                                    @endphp
+
+                                    <select
+                                        id="gender_{{ $i }}"
+                                        name="{{ $namePrefix }}[gender]"
+                                        class="form-control"
+                                        required
+                                    >
+
+                                        <option value="">
+                                            Chọn giới tính
+                                        </option>
+
+                                        <option
+                                            value="nam"
+                                            @selected($selectedGender === 'nam')
+                                        >
+                                            Nam
+                                        </option>
+
+                                        <option
+                                            value="nu"
+                                            @selected($selectedGender === 'nu')
+                                        >
+                                            Nữ
+                                        </option>
+
+                                        <option
+                                            value="khac"
+                                            @selected($selectedGender === 'khac')
+                                        >
+                                            Khác
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                            {{-- SỐ CCCD --}}
+
+                            <div class="form-group">
+
+                                <label for="identity_number_{{ $i }}">
+                                    Số CCCD hoặc hộ chiếu
+                                    <span class="required">*</span>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="identity_number_{{ $i }}"
+                                    name="{{ $namePrefix }}[identity_number]"
+                                    class="form-control"
+                                    placeholder="Nhập số giấy tờ tùy thân"
+                                    value="{{ old(
+                                        "passengers.$i.identity_number",
+                                        $person['identity_number'] ?? ''
+                                    ) }}"
+                                    maxlength="30"
+                                    required
+                                >
+
+                            </div>
+
+                            {{-- HÌNH ẢNH CCCD --}}
+
+                            <div class="form-section-title">
+                                Hình ảnh CCCD
+                            </div>
+
+                            <div class="form-group upload-box">
+
+                                <strong>
+                                    Tải hình ảnh CCCD của
+                                    hành khách {{ $i + 1 }}
+                                </strong>
+
+                                <input
+                                    type="file"
+                                    id="cccd_image_{{ $i }}"
+                                    name="{{ $namePrefix }}[cccd_image]"
+                                    class="form-control file-control"
+                                    accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                                    {{ empty($person['cccd_image'])
+                                        ? 'required'
+                                        : '' }}
+                                >
+
+                                <span class="field-note">
+                                    Hỗ trợ JPG, JPEG, PNG, WEBP.
+                                    Dung lượng tối đa 5MB.
+                                </span>
+
+                                @if(!empty($person['cccd_image']))
+
+                                    <div class="old-image-note">
+
+                                        Đã có ảnh CCCD trước đó.
+
+                                        <a
+                                            href="{{ asset($person['cccd_image']) }}"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            Xem ảnh
+                                        </a>
+
+                                        — Bạn có thể chọn ảnh khác
+                                        nếu muốn thay thế.
+
+                                    </div>
+
+                                @endif
+
+                            </div>
+
+                            {{-- THÔNG TIN LIÊN HỆ --}}
+
+                            <div class="form-section-title">
+                                Thông tin liên hệ
+                            </div>
+
+                            <div class="form-row">
+
+                                <div class="form-group">
+
+                                    <label for="phone_{{ $i }}">
+                                        Số điện thoại
+                                        <span class="required">*</span>
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="phone_{{ $i }}"
+                                        name="{{ $namePrefix }}[phone]"
+                                        class="form-control"
+                                        placeholder="Nhập số điện thoại"
+                                        value="{{ old(
+                                            "passengers.$i.phone",
+                                            $person['phone'] ?? ''
+                                        ) }}"
+                                        maxlength="20"
+                                        required
+                                    >
+
+                                </div>
+
+                                <div class="form-group">
+
+                                    <label for="email_{{ $i }}">
+                                        Email
+                                        <span class="required">*</span>
+                                    </label>
+
+                                    <input
+                                        type="email"
+                                        id="email_{{ $i }}"
+                                        name="{{ $namePrefix }}[email]"
+                                        class="form-control"
+                                        placeholder="example@email.com"
+                                        value="{{ old(
+                                            "passengers.$i.email",
+                                            $person['email'] ?? ''
+                                        ) }}"
+                                        maxlength="255"
+                                        required
+                                    >
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
                     </div>
 
-                    <div class="form-group">
-                        <label for="gender">
-                            Giới tính
-                            <span class="required">*</span>
-                        </label>
+                @endfor
 
-                        <select
-                            id="gender"
-                            name="gender"
-                            class="form-control"
-                            required
-                        >
-                            <option value="">Chọn giới tính</option>
-
-                            <option
-                                value="nam"
-                                {{ old('gender', $passenger['gender'] ?? '') === 'nam' ? 'selected' : '' }}
-                            >
-                                Nam
-                            </option>
-
-                            <option
-                                value="nu"
-                                {{ old('gender', $passenger['gender'] ?? '') === 'nu' ? 'selected' : '' }}
-                            >
-                                Nữ
-                            </option>
-
-                            <option
-                                value="khac"
-                                {{ old('gender', $passenger['gender'] ?? '') === 'khac' ? 'selected' : '' }}
-                            >
-                                Khác
-                            </option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="identity_number">
-                        Số CCCD
-                        <span class="required">*</span>
-                    </label>
-
-                    <input
-                        type="text"
-                        id="identity_number"
-                        name="identity_number"
-                        class="form-control"
-                        placeholder="Nhập số CCCD"
-                        value="{{ old('identity_number', $passenger['identity_number'] ?? '') }}"
-                        required
-                    >
-                </div>
-
-                <div class="form-section-title">
-                    Hình ảnh CCCD
-                </div>
-
-                <div class="form-group upload-box">
-                    <strong>Tải hình ảnh CCCD</strong>
-
-                    <input
-                        type="file"
-                        id="cccd_image"
-                        name="cccd_image"
-                        class="form-control file-control"
-                        accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
-                        required
-                    >
-
-                    <span class="field-note">
-                        
-                    </span>
-                </div>
-
-                <div class="form-section-title">
-                    Thông tin liên hệ
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="phone">
-                            Số điện thoại
-                            <span class="required">*</span>
-                        </label>
-
-                        <input
-                            type="text"
-                            id="phone"
-                            name="phone"
-                            class="form-control"
-                            placeholder="Nhập số điện thoại"
-                            value="{{ old('phone', $passenger['phone'] ?? '') }}"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">
-                            Email
-                            <span class="required">*</span>
-                        </label>
-
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            class="form-control"
-                            placeholder="example@email.com"
-                            value="{{ old('email', $passenger['email'] ?? auth()->user()->email) }}"
-                            required
-                        >
-                    </div>
-                </div>
+                {{-- NÚT QUAY LẠI VÀ TIẾP TỤC --}}
 
                 <div class="form-actions">
-                    @if(($tripType ?? 'one_way') === 'round_trip')
+
+                    @if($tripType === 'round_trip')
+
                         <a
                             href="{{ route('seats.show', [
                                 'flight' => $returnFlight->id,
@@ -1155,13 +1484,16 @@
                         >
                             ← Quay lại chọn ghế chiều về
                         </a>
+
                     @else
+
                         <a
                             href="{{ route('seats.show', $flight->id) }}"
                             class="back-button"
                         >
                             ← Quay lại chọn ghế
                         </a>
+
                     @endif
 
                     <button
@@ -1170,13 +1502,21 @@
                     >
                         Tiếp tục chọn hành lý
                     </button>
+
                 </div>
+
             </form>
+
         </div>
+
     </section>
+
 </main>
 
+{{-- FOOTER --}}
+
 <footer>
+
     <div class="footer-logo">
         Viet<span>jet</span>
     </div>
@@ -1184,6 +1524,7 @@
     <p>
         Website đặt vé máy bay tích hợp nhận diện khuôn mặt.
     </p>
+
 </footer>
 
 </body>

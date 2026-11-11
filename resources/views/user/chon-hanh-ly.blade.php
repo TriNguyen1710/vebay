@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -109,7 +110,7 @@
             background: white;
             border: 1px solid var(--border);
             border-radius: 10px;
-            box-shadow: 0 3px 12px rgba(20, 45, 65, 0.04);
+            box-shadow: 0 3px 12px rgba(20, 45, 65, .04);
             overflow: hidden;
             margin-bottom: 22px;
         }
@@ -181,7 +182,10 @@
 
         .packages {
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(
+                3,
+                minmax(0, 1fr)
+            );
             gap: 14px;
         }
 
@@ -202,7 +206,7 @@
             border-radius: 9px;
             background: white;
             cursor: pointer;
-            transition: 0.2s;
+            transition: .2s;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -215,7 +219,7 @@
         .package-option input:checked + .package-card {
             border-color: var(--primary);
             background: var(--primary-light);
-            box-shadow: 0 0 0 3px rgba(0, 59, 112, 0.06);
+            box-shadow: 0 0 0 3px rgba(0, 59, 112, .06);
         }
 
         .package-name {
@@ -277,6 +281,7 @@
         .summary-value {
             color: #3d3520;
             font-weight: bold;
+            text-align: right;
         }
 
         .actions {
@@ -313,9 +318,107 @@
             background: var(--primary-dark);
         }
 
+        /* BỔ SUNG: THÔNG TIN TỪNG HÀNH KHÁCH */
+
+        .passenger-card-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .passenger-name {
+            color: var(--primary);
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .passenger-number {
+            display: inline-block;
+            padding: 7px 12px;
+            background: #edf5fb;
+            color: var(--primary);
+            border: 1px solid #d4e2ee;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .passenger-note {
+            padding: 13px 15px;
+            margin-bottom: 22px;
+            background: #edf5fb;
+            border-left: 3px solid var(--primary);
+            color: #435c70;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .passenger-baggage-total {
+            margin-top: 20px;
+            padding: 13px 15px;
+            background: #f8fafc;
+            border: 1px solid #e1e7eb;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            font-size: 13px;
+        }
+
+        .passenger-baggage-total strong {
+            color: #b42318;
+            font-size: 16px;
+        }
+
+        .alert-error {
+            padding: 13px 15px;
+            margin-bottom: 20px;
+            background: #fdebed;
+            border: 1px solid #efbcc2;
+            border-radius: 7px;
+            color: #842029;
+            font-size: 13px;
+        }
+
+        .alert-error ul {
+            padding-left: 20px;
+            margin-top: 7px;
+        }
+
+        .total-group-box {
+            margin-top: 22px;
+            padding: 18px;
+            border-radius: 8px;
+            background: #fff9df;
+            border: 1px solid #eadca7;
+            border-left: 4px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .total-group-box span {
+            color: #5d522e;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .total-group-box strong {
+            color: #b42318;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
         @media (max-width: 800px) {
             .packages {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
+                grid-template-columns: repeat(
+                    2,
+                    minmax(0, 1fr)
+                );
             }
         }
 
@@ -341,46 +444,102 @@
             .btn {
                 width: 100%;
             }
+
+            .passenger-baggage-total,
+            .total-group-box {
+                flex-direction: column;
+                align-items: flex-start;
+            }
         }
     </style>
 </head>
+
 <body>
 
 <div class="page">
 
+    {{-- THANH ĐIỀU HƯỚNG --}}
+
     <header class="topbar">
+
         <div class="topbar-inner">
 
-            <a href="{{ route('trang-chu') }}" class="brand">
+            <a
+                href="{{ route('trang-chu') }}"
+                class="brand"
+            >
                 Viet<span>jet</span>
             </a>
 
-            <a href="{{ route('passenger.create') }}" class="back-btn">
+            <a
+                href="{{ route('passenger.create') }}"
+                class="back-btn"
+            >
                 Quay lại
             </a>
 
         </div>
+
     </header>
 
     <main class="content">
 
+        {{-- TIÊU ĐỀ --}}
+
         <div class="page-heading">
+
             <h1>Chọn hành lý</h1>
 
             <p>
-                Chọn hành lý ký gửi phù hợp trước khi tiếp tục quét khuôn mặt.
+                Chọn hành lý ký gửi phù hợp
+                trước khi tiếp tục quét khuôn mặt.
             </p>
+
         </div>
 
+        {{-- THÔNG BÁO LỖI --}}
+
+        @if(session('error'))
+
+            <div class="alert-error">
+                {{ session('error') }}
+            </div>
+
+        @endif
+
+        @if($errors->any())
+
+            <div class="alert-error">
+
+                <strong>
+                    Vui lòng kiểm tra lại thông tin:
+                </strong>
+
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+
+            </div>
+
+        @endif
+
+        {{-- HÀNH LÝ XÁCH TAY MIỄN PHÍ --}}
+
         @if($carryOn)
+
             <section class="card">
 
                 <div class="card-header">
+
                     <h2>Hành lý xách tay</h2>
 
                     <p>
-                        Hành lý xách tay đã được bao gồm miễn phí trong vé.
+                        Hành lý xách tay đã được
+                        bao gồm miễn phí trong vé.
                     </p>
+
                 </div>
 
                 <div class="card-body">
@@ -388,13 +547,17 @@
                     <div class="carry-on-box">
 
                         <div>
+
                             <div class="carry-on-title">
                                 Hành lý xách tay miễn phí
                             </div>
 
                             <div class="carry-on-text">
-                                Bạn không cần thanh toán thêm cho phần hành lý này.
+                                Mỗi hành khách đều có
+                                hành lý xách tay miễn phí.
+                                Bạn không cần thanh toán thêm.
                             </div>
+
                         </div>
 
                         <div class="carry-on-weight">
@@ -406,107 +569,224 @@
                 </div>
 
             </section>
+
         @endif
 
-        <form action="{{ route('baggage.store') }}" method="POST">
+        {{-- FORM CHỌN HÀNH LÝ --}}
+
+        <form
+            action="{{ route('baggage.store') }}"
+            method="POST"
+            id="baggageForm"
+        >
             @csrf
 
-            <section class="card">
+            @if($passengerCount === 1)
 
-                <div class="card-header">
-                    <h2>Hành lý ký gửi</h2>
+                {{-- =====================================
+                     MỘT HÀNH KHÁCH: GIỮ LUỒNG CŨ
+                ====================================== --}}
 
-                    <p>
-                        Không bắt buộc. Bạn có thể chọn "Không mua thêm".
-                    </p>
-                </div>
+                <section class="card">
 
-                <div class="card-body">
+                    <div class="card-header">
 
-                    @if($tripType === 'round_trip')
+                        <h2>Hành lý ký gửi</h2>
 
-                        <div class="trip-section">
+                        <p>
+                            Không bắt buộc.
+                            Bạn có thể chọn "Không mua thêm".
+                        </p>
 
-                            <div class="trip-title">
-                                Chiều đi
-                            </div>
+                    </div>
 
-                            <div class="packages">
+                    <div class="card-body">
 
-                                <label class="package-option">
+                        @if($tripType === 'round_trip')
 
-                                    <input
-                                        type="radio"
-                                        name="outbound_baggage_package_id"
-                                        value=""
-                                        data-price="0"
-                                        data-summary="Không mua thêm"
-                                        checked
-                                    >
+                            {{-- CHIỀU ĐI --}}
 
-                                    <div class="package-card package-free">
+                            <div class="trip-section">
 
-                                        <div>
-                                            <div class="package-name">
-                                                Không mua thêm
-                                            </div>
+                                <div class="trip-title">
+                                    Chiều đi
+                                </div>
 
-                                            <div class="package-weight">
-                                                Không có hành lý ký gửi
-                                            </div>
-                                        </div>
-
-                                        <div class="package-price">
-                                            0đ
-                                        </div>
-
-                                    </div>
-
-                                </label>
-
-                                @foreach($checkedPackages as $package)
+                                <div class="packages">
 
                                     <label class="package-option">
 
                                         <input
                                             type="radio"
                                             name="outbound_baggage_package_id"
-                                            value="{{ $package->id }}"
-                                            data-price="{{ $package->price }}"
-                                            data-summary="{{ $package->name }} - {{ $package->weight }}kg"
+                                            value=""
+                                            data-price="0"
+                                            data-summary="Không mua thêm"
+                                            @checked(
+                                                old(
+                                                    'outbound_baggage_package_id',
+                                                    $outboundBaggage['package_id'] ?? ''
+                                                ) == ''
+                                            )
                                         >
 
-                                        <div class="package-card">
+                                        <div class="package-card package-free">
 
                                             <div>
                                                 <div class="package-name">
-                                                    {{ $package->name }}
+                                                    Không mua thêm
                                                 </div>
 
                                                 <div class="package-weight">
-                                                    {{ $package->weight }} kg ký gửi
+                                                    Không có hành lý ký gửi
                                                 </div>
                                             </div>
 
                                             <div class="package-price">
-                                                {{ number_format($package->price, 0, ',', '.') }}đ
+                                                0đ
                                             </div>
 
                                         </div>
 
                                     </label>
 
-                                @endforeach
+                                    @foreach($checkedPackages as $package)
+
+                                        <label class="package-option">
+
+                                            <input
+                                                type="radio"
+                                                name="outbound_baggage_package_id"
+                                                value="{{ $package->id }}"
+                                                data-price="{{ $package->price }}"
+                                                data-summary="{{ $package->name }} - {{ $package->weight }}kg"
+                                                @checked(
+                                                    old(
+                                                        'outbound_baggage_package_id',
+                                                        $outboundBaggage['package_id'] ?? ''
+                                                    ) == $package->id
+                                                )
+                                            >
+
+                                            <div class="package-card">
+
+                                                <div>
+                                                    <div class="package-name">
+                                                        {{ $package->name }}
+                                                    </div>
+
+                                                    <div class="package-weight">
+                                                        {{ $package->weight }} kg ký gửi
+                                                    </div>
+                                                </div>
+
+                                                <div class="package-price">
+                                                    {{ number_format($package->price, 0, ',', '.') }}đ
+                                                </div>
+
+                                            </div>
+
+                                        </label>
+
+                                    @endforeach
+
+                                </div>
 
                             </div>
 
-                        </div>
+                            {{-- CHIỀU VỀ --}}
 
-                        <div class="trip-section">
+                            <div class="trip-section">
 
-                            <div class="trip-title">
-                                Chiều về
+                                <div class="trip-title">
+                                    Chiều về
+                                </div>
+
+                                <div class="packages">
+
+                                    <label class="package-option">
+
+                                        <input
+                                            type="radio"
+                                            name="return_baggage_package_id"
+                                            value=""
+                                            data-price="0"
+                                            data-summary="Không mua thêm"
+                                            @checked(
+                                                old(
+                                                    'return_baggage_package_id',
+                                                    $returnBaggage['package_id'] ?? ''
+                                                ) == ''
+                                            )
+                                        >
+
+                                        <div class="package-card package-free">
+
+                                            <div>
+                                                <div class="package-name">
+                                                    Không mua thêm
+                                                </div>
+
+                                                <div class="package-weight">
+                                                    Không có hành lý ký gửi
+                                                </div>
+                                            </div>
+
+                                            <div class="package-price">
+                                                0đ
+                                            </div>
+
+                                        </div>
+
+                                    </label>
+
+                                    @foreach($checkedPackages as $package)
+
+                                        <label class="package-option">
+
+                                            <input
+                                                type="radio"
+                                                name="return_baggage_package_id"
+                                                value="{{ $package->id }}"
+                                                data-price="{{ $package->price }}"
+                                                data-summary="{{ $package->name }} - {{ $package->weight }}kg"
+                                                @checked(
+                                                    old(
+                                                        'return_baggage_package_id',
+                                                        $returnBaggage['package_id'] ?? ''
+                                                    ) == $package->id
+                                                )
+                                            >
+
+                                            <div class="package-card">
+
+                                                <div>
+                                                    <div class="package-name">
+                                                        {{ $package->name }}
+                                                    </div>
+
+                                                    <div class="package-weight">
+                                                        {{ $package->weight }} kg ký gửi
+                                                    </div>
+                                                </div>
+
+                                                <div class="package-price">
+                                                    {{ number_format($package->price, 0, ',', '.') }}đ
+                                                </div>
+
+                                            </div>
+
+                                        </label>
+
+                                    @endforeach
+
+                                </div>
+
                             </div>
+
+                        @else
+
+                            {{-- MỘT CHIỀU --}}
 
                             <div class="packages">
 
@@ -514,11 +794,16 @@
 
                                     <input
                                         type="radio"
-                                        name="return_baggage_package_id"
+                                        name="baggage_package_id"
                                         value=""
                                         data-price="0"
                                         data-summary="Không mua thêm"
-                                        checked
+                                        @checked(
+                                            old(
+                                                'baggage_package_id',
+                                                $singleBaggage['package_id'] ?? ''
+                                            ) == ''
+                                        )
                                     >
 
                                     <div class="package-card package-free">
@@ -547,10 +832,16 @@
 
                                         <input
                                             type="radio"
-                                            name="return_baggage_package_id"
+                                            name="baggage_package_id"
                                             value="{{ $package->id }}"
                                             data-price="{{ $package->price }}"
                                             data-summary="{{ $package->name }} - {{ $package->weight }}kg"
+                                            @checked(
+                                                old(
+                                                    'baggage_package_id',
+                                                    $singleBaggage['package_id'] ?? ''
+                                                ) == $package->id
+                                            )
                                         >
 
                                         <div class="package-card">
@@ -577,141 +868,471 @@
 
                             </div>
 
-                        </div>
+                        @endif
 
-                    @else
+                        @if($checkedPackages->isEmpty())
 
-                        <div class="packages">
+                            <div
+                                class="empty"
+                                style="margin-top:16px;"
+                            >
+                                Hiện chưa có gói hành lý ký gửi nào
+                                đang được mở bán.
 
-                            <label class="package-option">
-
-                                <input
-                                    type="radio"
-                                    name="baggage_package_id"
-                                    value=""
-                                    data-price="0"
-                                    data-summary="Không mua thêm"
-                                    checked
-                                >
-
-                                <div class="package-card package-free">
-
-                                    <div>
-                                        <div class="package-name">
-                                            Không mua thêm
-                                        </div>
-
-                                        <div class="package-weight">
-                                            Không có hành lý ký gửi
-                                        </div>
-                                    </div>
-
-                                    <div class="package-price">
-                                        0đ
-                                    </div>
-
-                                </div>
-
-                            </label>
-
-                            @foreach($checkedPackages as $package)
-
-                                <label class="package-option">
-
-                                    <input
-                                        type="radio"
-                                        name="baggage_package_id"
-                                        value="{{ $package->id }}"
-                                        data-price="{{ $package->price }}"
-                                        data-summary="{{ $package->name }} - {{ $package->weight }}kg"
-                                    >
-
-                                    <div class="package-card">
-
-                                        <div>
-                                            <div class="package-name">
-                                                {{ $package->name }}
-                                            </div>
-
-                                            <div class="package-weight">
-                                                {{ $package->weight }} kg ký gửi
-                                            </div>
-                                        </div>
-
-                                        <div class="package-price">
-                                            {{ number_format($package->price, 0, ',', '.') }}đ
-                                        </div>
-
-                                    </div>
-
-                                </label>
-
-                            @endforeach
-
-                        </div>
-
-                    @endif
-
-                    @if($checkedPackages->isEmpty())
-                        <div class="empty" style="margin-top: 16px;">
-                            Hiện chưa có gói hành lý ký gửi nào đang được mở bán.
-                            Bạn vẫn có thể tiếp tục mà không mua hành lý ký gửi.
-                        </div>
-                    @endif
-
-                    <div class="summary">
-
-                        @if($tripType === 'round_trip')
-
-                            <div class="summary-row">
-                                <span class="summary-label">
-                                    Hành lý chiều đi
-                                </span>
-
-                                <span class="summary-value" id="outboundSummary">
-                                    Không mua thêm
-                                </span>
-                            </div>
-
-                            <div class="summary-row">
-                                <span class="summary-label">
-                                    Hành lý chiều về
-                                </span>
-
-                                <span class="summary-value" id="returnSummary">
-                                    Không mua thêm
-                                </span>
-                            </div>
-
-                        @else
-
-                            <div class="summary-row">
-                                <span class="summary-label">
-                                    Hành lý ký gửi
-                                </span>
-
-                                <span class="summary-value" id="singleSummary">
-                                    Không mua thêm
-                                </span>
+                                Bạn vẫn có thể tiếp tục
+                                mà không mua hành lý ký gửi.
                             </div>
 
                         @endif
 
-                        <div class="summary-row">
-                            <span class="summary-label">
-                                Phí hành lý
-                            </span>
+                        {{-- TÓM TẮT MỘT HÀNH KHÁCH --}}
 
-                            <span class="summary-value" id="totalBaggagePrice">
-                                0đ
-                            </span>
+                        <div class="summary">
+
+                            @if($tripType === 'round_trip')
+
+                                <div class="summary-row">
+
+                                    <span class="summary-label">
+                                        Hành lý chiều đi
+                                    </span>
+
+                                    <span
+                                        class="summary-value"
+                                        id="outboundSummary"
+                                    >
+                                        Không mua thêm
+                                    </span>
+
+                                </div>
+
+                                <div class="summary-row">
+
+                                    <span class="summary-label">
+                                        Hành lý chiều về
+                                    </span>
+
+                                    <span
+                                        class="summary-value"
+                                        id="returnSummary"
+                                    >
+                                        Không mua thêm
+                                    </span>
+
+                                </div>
+
+                            @else
+
+                                <div class="summary-row">
+
+                                    <span class="summary-label">
+                                        Hành lý ký gửi
+                                    </span>
+
+                                    <span
+                                        class="summary-value"
+                                        id="singleSummary"
+                                    >
+                                        Không mua thêm
+                                    </span>
+
+                                </div>
+
+                            @endif
+
+                            <div class="summary-row">
+
+                                <span class="summary-label">
+                                    Phí hành lý
+                                </span>
+
+                                <span
+                                    class="summary-value"
+                                    id="totalBaggagePrice"
+                                >
+                                    0đ
+                                </span>
+
+                            </div>
+
                         </div>
 
                     </div>
 
+                </section>
+
+            @else
+
+                {{-- =====================================
+                     NHIỀU HÀNH KHÁCH: 2–5 NGƯỜI
+                ====================================== --}}
+
+                <div class="passenger-note">
+                    Bạn đang đặt vé cho
+                    <strong>{{ $passengerCount }} hành khách</strong>.
+
+                    Mỗi người được chọn gói hành lý ký gửi riêng.
+
+                    @if($tripType === 'round_trip')
+                        Với vé khứ hồi, hãy chọn riêng
+                        hành lý chiều đi và chiều về
+                        cho từng người.
+                    @endif
                 </div>
 
-            </section>
+                @for($i = 0; $i < $passengerCount; $i++)
+
+                    @php
+                        $person = $passengers[$i] ?? [];
+
+                        $savedBaggage =
+                            $passengerBaggage[$i] ?? [];
+
+                        $selectedOutbound = old(
+                            "baggage.$i.outbound_package_id",
+                            $savedBaggage['outbound']['package_id'] ?? ''
+                        );
+
+                        $selectedReturn = old(
+                            "baggage.$i.return_package_id",
+                            $savedBaggage['return']['package_id'] ?? ''
+                        );
+
+                        $selectedOneWay = old(
+                            "baggage.$i.package_id",
+                            $savedBaggage['one_way']['package_id'] ?? ''
+                        );
+                    @endphp
+
+                    <section class="card">
+
+                        <div class="card-header">
+
+                            <div class="passenger-card-title">
+
+                                <h2 class="passenger-name">
+                                    Hành khách {{ $i + 1 }}:
+                                    {{ $person['full_name'] ?? 'Chưa có tên' }}
+                                </h2>
+
+                                <span class="passenger-number">
+                                    Người {{ $i + 1 }}
+                                    / {{ $passengerCount }}
+                                </span>
+
+                            </div>
+
+                            <p style="margin-top:8px;">
+                                Chọn hành lý ký gửi cho hành khách này.
+                            </p>
+
+                        </div>
+
+                        <div class="card-body">
+
+                            @if($tripType === 'round_trip')
+
+                                {{-- CHIỀU ĐI CỦA HÀNH KHÁCH --}}
+
+                                <div class="trip-section">
+
+                                    <div class="trip-title">
+                                        Hành lý chiều đi
+                                    </div>
+
+                                    <div class="packages">
+
+                                        <label class="package-option">
+
+                                            <input
+                                                type="radio"
+                                                name="baggage[{{ $i }}][outbound_package_id]"
+                                                value=""
+                                                data-price="0"
+                                                data-summary="Không mua thêm"
+                                                data-passenger="{{ $i }}"
+                                                @checked($selectedOutbound == '')
+                                            >
+
+                                            <div class="package-card package-free">
+
+                                                <div>
+                                                    <div class="package-name">
+                                                        Không mua thêm
+                                                    </div>
+
+                                                    <div class="package-weight">
+                                                        Không có hành lý ký gửi
+                                                    </div>
+                                                </div>
+
+                                                <div class="package-price">
+                                                    0đ
+                                                </div>
+
+                                            </div>
+
+                                        </label>
+
+                                        @foreach($checkedPackages as $package)
+
+                                            <label class="package-option">
+
+                                                <input
+                                                    type="radio"
+                                                    name="baggage[{{ $i }}][outbound_package_id]"
+                                                    value="{{ $package->id }}"
+                                                    data-price="{{ $package->price }}"
+                                                    data-summary="{{ $package->name }} - {{ $package->weight }}kg"
+                                                    data-passenger="{{ $i }}"
+                                                    @checked($selectedOutbound == $package->id)
+                                                >
+
+                                                <div class="package-card">
+
+                                                    <div>
+                                                        <div class="package-name">
+                                                            {{ $package->name }}
+                                                        </div>
+
+                                                        <div class="package-weight">
+                                                            {{ $package->weight }} kg ký gửi
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="package-price">
+                                                        {{ number_format($package->price, 0, ',', '.') }}đ
+                                                    </div>
+
+                                                </div>
+
+                                            </label>
+
+                                        @endforeach
+
+                                    </div>
+
+                                </div>
+
+                                {{-- CHIỀU VỀ CỦA HÀNH KHÁCH --}}
+
+                                <div class="trip-section">
+
+                                    <div class="trip-title">
+                                        Hành lý chiều về
+                                    </div>
+
+                                    <div class="packages">
+
+                                        <label class="package-option">
+
+                                            <input
+                                                type="radio"
+                                                name="baggage[{{ $i }}][return_package_id]"
+                                                value=""
+                                                data-price="0"
+                                                data-summary="Không mua thêm"
+                                                data-passenger="{{ $i }}"
+                                                @checked($selectedReturn == '')
+                                            >
+
+                                            <div class="package-card package-free">
+
+                                                <div>
+                                                    <div class="package-name">
+                                                        Không mua thêm
+                                                    </div>
+
+                                                    <div class="package-weight">
+                                                        Không có hành lý ký gửi
+                                                    </div>
+                                                </div>
+
+                                                <div class="package-price">
+                                                    0đ
+                                                </div>
+
+                                            </div>
+
+                                        </label>
+
+                                        @foreach($checkedPackages as $package)
+
+                                            <label class="package-option">
+
+                                                <input
+                                                    type="radio"
+                                                    name="baggage[{{ $i }}][return_package_id]"
+                                                    value="{{ $package->id }}"
+                                                    data-price="{{ $package->price }}"
+                                                    data-summary="{{ $package->name }} - {{ $package->weight }}kg"
+                                                    data-passenger="{{ $i }}"
+                                                    @checked($selectedReturn == $package->id)
+                                                >
+
+                                                <div class="package-card">
+
+                                                    <div>
+                                                        <div class="package-name">
+                                                            {{ $package->name }}
+                                                        </div>
+
+                                                        <div class="package-weight">
+                                                            {{ $package->weight }} kg ký gửi
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="package-price">
+                                                        {{ number_format($package->price, 0, ',', '.') }}đ
+                                                    </div>
+
+                                                </div>
+
+                                            </label>
+
+                                        @endforeach
+
+                                    </div>
+
+                                </div>
+
+                            @else
+
+                                {{-- MỘT CHIỀU CỦA HÀNH KHÁCH --}}
+
+                                <div class="trip-section">
+
+                                    <div class="trip-title">
+                                        Hành lý ký gửi
+                                    </div>
+
+                                    <div class="packages">
+
+                                        <label class="package-option">
+
+                                            <input
+                                                type="radio"
+                                                name="baggage[{{ $i }}][package_id]"
+                                                value=""
+                                                data-price="0"
+                                                data-summary="Không mua thêm"
+                                                data-passenger="{{ $i }}"
+                                                @checked($selectedOneWay == '')
+                                            >
+
+                                            <div class="package-card package-free">
+
+                                                <div>
+                                                    <div class="package-name">
+                                                        Không mua thêm
+                                                    </div>
+
+                                                    <div class="package-weight">
+                                                        Không có hành lý ký gửi
+                                                    </div>
+                                                </div>
+
+                                                <div class="package-price">
+                                                    0đ
+                                                </div>
+
+                                            </div>
+
+                                        </label>
+
+                                        @foreach($checkedPackages as $package)
+
+                                            <label class="package-option">
+
+                                                <input
+                                                    type="radio"
+                                                    name="baggage[{{ $i }}][package_id]"
+                                                    value="{{ $package->id }}"
+                                                    data-price="{{ $package->price }}"
+                                                    data-summary="{{ $package->name }} - {{ $package->weight }}kg"
+                                                    data-passenger="{{ $i }}"
+                                                    @checked($selectedOneWay == $package->id)
+                                                >
+
+                                                <div class="package-card">
+
+                                                    <div>
+                                                        <div class="package-name">
+                                                            {{ $package->name }}
+                                                        </div>
+
+                                                        <div class="package-weight">
+                                                            {{ $package->weight }} kg ký gửi
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="package-price">
+                                                        {{ number_format($package->price, 0, ',', '.') }}đ
+                                                    </div>
+
+                                                </div>
+
+                                            </label>
+
+                                        @endforeach
+
+                                    </div>
+
+                                </div>
+
+                            @endif
+
+                            @if($checkedPackages->isEmpty())
+
+                                <div class="empty">
+                                    Hiện chưa có gói hành lý ký gửi
+                                    nào đang mở bán.
+
+                                    Bạn có thể tiếp tục
+                                    mà không mua thêm.
+                                </div>
+
+                            @endif
+
+                            {{-- TỔNG TIỀN HÀNH LÝ TỪNG NGƯỜI --}}
+
+                            <div class="passenger-baggage-total">
+
+                                <span>
+                                    Tổng phí hành lý
+                                    hành khách {{ $i + 1 }}
+                                </span>
+
+                                <strong id="passengerTotal{{ $i }}">
+                                    0đ
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                @endfor
+
+                {{-- TỔNG PHÍ HÀNH LÝ CẢ NHÓM --}}
+
+                <div class="total-group-box">
+
+                    <span>
+                        Tổng phí hành lý của
+                        {{ $passengerCount }} hành khách
+                    </span>
+
+                    <strong id="totalBaggagePrice">
+                        0đ
+                    </strong>
+
+                </div>
+
+            @endif
+
+            {{-- NÚT TIẾP TỤC --}}
 
             <div class="actions">
 
@@ -737,14 +1358,33 @@
 
 </div>
 
+{{-- JAVASCRIPT --}}
+
 <script>
+    /*
+    |--------------------------------------------------------------------------
+    | ĐỊNH DẠNG TIỀN
+    |--------------------------------------------------------------------------
+    */
+
     function formatMoney(value) {
-        return new Intl.NumberFormat('vi-VN').format(value) + 'đ';
+        return new Intl.NumberFormat('vi-VN')
+            .format(value) + 'đ';
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | CẬP NHẬT TỔNG TIỀN HÀNH LÝ
+    |--------------------------------------------------------------------------
+    */
+
     function updateSummary() {
+
         let total = 0;
 
+        /*
+         * LUỒNG MỘT HÀNH KHÁCH CŨ
+         */
         const single = document.querySelector(
             'input[name="baggage_package_id"]:checked'
         );
@@ -752,10 +1392,13 @@
         if (single) {
             total += Number(single.dataset.price || 0);
 
-            const summary = document.getElementById('singleSummary');
+            const summary = document.getElementById(
+                'singleSummary'
+            );
 
             if (summary) {
-                summary.textContent = single.dataset.summary;
+                summary.textContent =
+                    single.dataset.summary;
             }
         }
 
@@ -764,12 +1407,17 @@
         );
 
         if (outbound) {
-            total += Number(outbound.dataset.price || 0);
+            total += Number(
+                outbound.dataset.price || 0
+            );
 
-            const summary = document.getElementById('outboundSummary');
+            const summary = document.getElementById(
+                'outboundSummary'
+            );
 
             if (summary) {
-                summary.textContent = outbound.dataset.summary;
+                summary.textContent =
+                    outbound.dataset.summary;
             }
         }
 
@@ -778,24 +1426,101 @@
         );
 
         if (returnBaggage) {
-            total += Number(returnBaggage.dataset.price || 0);
+            total += Number(
+                returnBaggage.dataset.price || 0
+            );
 
-            const summary = document.getElementById('returnSummary');
+            const summary = document.getElementById(
+                'returnSummary'
+            );
 
             if (summary) {
-                summary.textContent = returnBaggage.dataset.summary;
+                summary.textContent =
+                    returnBaggage.dataset.summary;
             }
         }
 
-        document.getElementById('totalBaggagePrice').textContent =
-            formatMoney(total);
+        /*
+         * LUỒNG NHIỀU HÀNH KHÁCH
+         */
+        const passengerCount = @json($passengerCount);
+
+        if (passengerCount > 1) {
+
+            total = 0;
+
+            for (
+                let i = 0;
+                i < passengerCount;
+                i++
+            ) {
+
+                let passengerTotal = 0;
+
+                const selectedPackages =
+                    document.querySelectorAll(
+                        'input[data-passenger="' +
+                        i +
+                        '"]:checked'
+                    );
+
+                selectedPackages.forEach(
+                    function (input) {
+                        passengerTotal += Number(
+                            input.dataset.price || 0
+                        );
+                    }
+                );
+
+                const passengerTotalElement =
+                    document.getElementById(
+                        'passengerTotal' + i
+                    );
+
+                if (passengerTotalElement) {
+                    passengerTotalElement.textContent =
+                        formatMoney(passengerTotal);
+                }
+
+                total += passengerTotal;
+            }
+        }
+
+        /*
+         * TỔNG PHÍ HÀNH LÝ
+         */
+        const totalElement = document.getElementById(
+            'totalBaggagePrice'
+        );
+
+        if (totalElement) {
+            totalElement.textContent =
+                formatMoney(total);
+        }
     }
 
-    document
-        .querySelectorAll('input[type="radio"]')
-        .forEach(function (input) {
-            input.addEventListener('change', updateSummary);
-        });
+    /*
+    |--------------------------------------------------------------------------
+    | CẬP NHẬT KHI THAY ĐỔI GÓI HÀNH LÝ
+    |--------------------------------------------------------------------------
+    */
+
+    document.querySelectorAll(
+        'input[type="radio"]'
+    ).forEach(function (input) {
+
+        input.addEventListener(
+            'change',
+            updateSummary
+        );
+
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | KHỞI TẠO TỔNG TIỀN
+    |--------------------------------------------------------------------------
+    */
 
     updateSummary();
 </script>

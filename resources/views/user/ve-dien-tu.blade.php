@@ -1,9 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 
 <head>
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
@@ -45,9 +45,7 @@
             font-family: inherit;
         }
 
-        /* =====================================================
-           TOP BAR
-        ===================================================== */
+        /* TOP BAR */
 
         .top-bar {
             background: var(--primary-dark);
@@ -60,7 +58,6 @@
             min-height: 36px;
             margin: auto;
             padding: 0 20px;
-
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -77,9 +74,7 @@
             opacity: 0.9;
         }
 
-        /* =====================================================
-           HEADER
-        ===================================================== */
+        /* HEADER */
 
         .header {
             background: white;
@@ -91,7 +86,6 @@
             min-height: 76px;
             margin: auto;
             padding: 0 20px;
-
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -116,14 +110,10 @@
 
         .nav-link {
             padding: 27px 15px;
-
             color: #293241;
-
             font-size: 15px;
             font-weight: 600;
-
             border-bottom: 3px solid transparent;
-
             transition: 0.2s;
         }
 
@@ -147,24 +137,18 @@
 
         .logout-btn {
             border: none;
-
             background: var(--danger);
             color: white;
-
             padding: 9px 14px;
             border-radius: 6px;
-
             cursor: pointer;
             font-weight: bold;
         }
 
-        /* =====================================================
-           BANNER
-        ===================================================== */
+        /* BANNER */
 
         .page-banner {
             min-height: 230px;
-
             background:
                 linear-gradient(
                     90deg,
@@ -175,7 +159,6 @@
 
             background-size: cover;
             background-position: center;
-
             color: white;
         }
 
@@ -189,9 +172,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-
             margin-bottom: 17px;
-
             font-size: 13px;
         }
 
@@ -210,74 +191,53 @@
 
         .page-banner p {
             max-width: 650px;
-
             color: #e3ebf3;
-
             font-size: 15px;
             line-height: 1.6;
         }
 
-        /* =====================================================
-           MAIN
-        ===================================================== */
+        /* MAIN */
 
         .main {
             max-width: 1050px;
-
             margin: -48px auto 70px;
             padding: 0 20px;
-
             position: relative;
             z-index: 10;
         }
 
-        /* =====================================================
-           SUCCESS
-        ===================================================== */
+        /* SUCCESS */
 
         .success-box {
             display: flex;
             align-items: center;
             gap: 14px;
-
             padding: 18px 20px;
-
             margin-bottom: 20px;
-
             background: #edf8f2;
-
             border: 1px solid #badfc9;
             border-left: 4px solid var(--success);
-
             border-radius: 8px;
         }
 
         .success-mark {
             width: 34px;
             height: 34px;
-
             flex-shrink: 0;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             border-radius: 50%;
-
             background: var(--success);
             color: white;
-
             font-size: 17px;
             font-weight: bold;
         }
 
         .success-content strong {
             display: block;
-
             color: #17643d;
-
             font-size: 14px;
-
             margin-bottom: 3px;
         }
 
@@ -286,33 +246,23 @@
             font-size: 12px;
         }
 
-        /* =====================================================
-           BOOKING SUMMARY
-        ===================================================== */
+        /* BOOKING SUMMARY */
 
         .booking-summary {
             background: white;
-
             border-radius: 14px;
-
-            box-shadow:
-                0 7px 28px rgba(0, 0, 0, 0.08);
-
+            box-shadow: 0 7px 28px rgba(0, 0, 0, 0.08);
             overflow: hidden;
-
             margin-bottom: 22px;
         }
 
         .booking-summary-header {
             background: var(--primary);
             color: white;
-
             padding: 22px 25px;
-
             display: flex;
             align-items: center;
             justify-content: space-between;
-
             gap: 20px;
         }
 
@@ -328,28 +278,22 @@
 
         .trip-type {
             padding: 7px 12px;
-
             background: rgba(255, 255, 255, 0.13);
-
             border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 20px;
-
             font-size: 10px;
             font-weight: 800;
-
             white-space: nowrap;
         }
 
         .booking-summary-body {
             display: grid;
             grid-template-columns: 1.3fr 1fr 1fr;
-
             padding: 22px 25px;
         }
 
         .summary-item {
             padding: 3px 20px;
-
             border-right: 1px solid #e8edf1;
         }
 
@@ -363,36 +307,26 @@
 
         .summary-label {
             display: block;
-
             color: var(--muted);
-
             font-size: 10px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-
             margin-bottom: 7px;
         }
 
         .booking-code {
             color: var(--primary);
-
             font-size: 20px;
             font-weight: 800;
-
             letter-spacing: 1px;
         }
 
-        /* =====================================================
-           STATUS
-        ===================================================== */
+        /* STATUS */
 
         .status {
             display: inline-block;
-
             padding: 6px 10px;
-
             border-radius: 4px;
-
             font-size: 10px;
             font-weight: 800;
         }
@@ -400,34 +334,28 @@
         .status.success {
             background: #e9f7ef;
             color: #17643d;
-
             border: 1px solid #c5e6d2;
         }
 
         .status.pending {
             background: #fff8e4;
             color: #79641d;
-
             border: 1px solid #ebdaa1;
         }
 
         .status.cancelled {
             background: #fdebed;
             color: #842029;
-
             border: 1px solid #efc3c8;
         }
 
         .status.used {
             background: #eef0f2;
             color: #59636c;
-
             border: 1px solid #d7dde1;
         }
 
-        /* =====================================================
-           TICKET WRAPPER
-        ===================================================== */
+        /* TICKET WRAPPER */
 
         .ticket-wrapper {
             margin-bottom: 24px;
@@ -437,7 +365,6 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-
             margin-bottom: 10px;
         }
 
@@ -449,18 +376,13 @@
         .direction {
             min-width: 40px;
             height: 30px;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             padding: 0 9px;
-
             border-radius: 5px;
-
             background: var(--primary);
             color: white;
-
             font-size: 9px;
             font-weight: 800;
         }
@@ -469,22 +391,15 @@
             background: #176a53;
         }
 
-        /* =====================================================
-           BOARDING PASS
-        ===================================================== */
+        /* BOARDING PASS */
 
         .boarding-pass {
             display: grid;
             grid-template-columns: 1fr 230px;
-
             background: white;
-
             border: 1px solid #dce3e8;
             border-radius: 12px;
-
-            box-shadow:
-                0 5px 20px rgba(0, 0, 0, 0.07);
-
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
             overflow: hidden;
         }
 
@@ -494,12 +409,9 @@
 
         .ticket-brand {
             min-height: 61px;
-
             padding: 0 23px;
-
             background: var(--primary);
             color: white;
-
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -516,27 +428,20 @@
 
         .ticket-type-text {
             color: #d9e5ee;
-
             font-size: 10px;
             font-weight: bold;
-
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        /* =====================================================
-           ROUTE
-        ===================================================== */
+        /* ROUTE */
 
         .flight-route {
             display: grid;
             grid-template-columns: 1fr 150px 1fr;
-
             align-items: center;
             gap: 20px;
-
             padding: 28px 25px 24px;
-
             border-bottom: 1px solid #edf0f3;
         }
 
@@ -546,19 +451,15 @@
 
         .city {
             color: var(--primary);
-
             font-size: 24px;
             font-weight: 800;
-
             margin-bottom: 5px;
         }
 
         .time {
             color: #344657;
-
             font-size: 17px;
             font-weight: bold;
-
             margin-bottom: 4px;
         }
 
@@ -573,26 +474,19 @@
 
         .path-line {
             position: relative;
-
             height: 2px;
-
             background: #bccbd6;
-
             margin-bottom: 8px;
         }
 
         .path-line::before,
         .path-line::after {
             content: "";
-
             position: absolute;
             top: -3px;
-
             width: 8px;
             height: 8px;
-
             border-radius: 50%;
-
             background: var(--primary);
         }
 
@@ -606,20 +500,16 @@
 
         .flight-path span {
             color: #85929d;
-
             font-size: 9px;
             text-transform: uppercase;
             letter-spacing: 0.7px;
         }
 
-        /* =====================================================
-           DETAILS
-        ===================================================== */
+        /* DETAILS */
 
         .ticket-details {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-
             padding: 8px 25px 20px;
         }
 
@@ -629,22 +519,17 @@
 
         .detail-label {
             display: block;
-
             color: var(--muted);
-
             font-size: 9px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-
             margin-bottom: 5px;
         }
 
         .detail-value {
             color: #293b4b;
-
             font-size: 12px;
             font-weight: 800;
-
             word-break: break-word;
         }
 
@@ -665,19 +550,13 @@
             color: #b42318;
         }
 
-        /* =====================================================
-           TICKET SIDE
-        ===================================================== */
+        /* TICKET SIDE */
 
         .boarding-side {
             position: relative;
-
             background: #f8fafc;
-
             border-left: 1px dashed #aebbc5;
-
             padding: 22px 20px;
-
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -686,15 +565,11 @@
         .boarding-side::before,
         .boarding-side::after {
             content: "";
-
             position: absolute;
             left: -10px;
-
             width: 19px;
             height: 19px;
-
             border-radius: 50%;
-
             background: var(--light);
         }
 
@@ -708,21 +583,16 @@
 
         .side-label {
             display: block;
-
             color: var(--muted);
-
             font-size: 9px;
             text-transform: uppercase;
-
             margin-bottom: 5px;
         }
 
         .side-code {
             color: var(--primary);
-
             font-size: 18px;
             font-weight: 800;
-
             word-break: break-word;
         }
 
@@ -732,16 +602,13 @@
 
         .side-value {
             color: #344657;
-
             font-size: 12px;
             font-weight: bold;
         }
 
         .barcode {
             height: 55px;
-
             margin-top: 20px;
-
             background:
                 repeating-linear-gradient(
                     90deg,
@@ -754,93 +621,67 @@
                     transparent 6px,
                     transparent 9px
                 );
-
             opacity: 0.8;
         }
 
         .barcode-text {
             margin-top: 5px;
-
             text-align: center;
-
             color: #6e7982;
-
             font-size: 8px;
             letter-spacing: 1px;
         }
 
-        /* =====================================================
-           TOTAL
-        ===================================================== */
+        /* TOTAL */
 
         .total-card {
             display: flex;
             align-items: center;
             justify-content: space-between;
-
             gap: 20px;
-
             background: white;
-
             padding: 23px 25px;
-
             border-radius: 12px;
-
-            box-shadow:
-                0 5px 20px rgba(0, 0, 0, 0.06);
-
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
             margin-top: 26px;
         }
 
         .total-title {
             color: #344657;
-
             font-size: 13px;
             font-weight: bold;
         }
 
         .total-note {
             color: var(--muted);
-
             font-size: 10px;
-
             margin-top: 4px;
         }
 
         .total {
             color: #b42318;
-
             font-size: 26px;
             font-weight: 800;
-
             white-space: nowrap;
         }
 
-        /* =====================================================
-           ACTIONS
-        ===================================================== */
+        /* ACTIONS */
 
         .actions {
             display: flex;
             align-items: center;
             gap: 12px;
-
             margin-top: 22px;
         }
 
         .primary-button {
             display: inline-block;
-
             padding: 12px 17px;
-
             background: var(--primary);
             color: white;
-
             border-radius: 6px;
-
             font-size: 13px;
             font-weight: bold;
-
             transition: 0.2s;
         }
 
@@ -850,18 +691,13 @@
 
         .secondary-button {
             display: inline-block;
-
             padding: 11px 17px;
-
             background: white;
             color: var(--primary);
-
             border: 1px solid #b9cbd9;
             border-radius: 6px;
-
             font-size: 13px;
             font-weight: bold;
-
             transition: 0.2s;
         }
 
@@ -869,23 +705,18 @@
             background: #f1f6fa;
         }
 
-        /* =====================================================
-           FOOTER
-        ===================================================== */
+        /* FOOTER */
 
         footer {
             background: #031d33;
             color: white;
-
             padding: 35px 20px;
-
             text-align: center;
         }
 
         .footer-logo {
             font-size: 23px;
             font-weight: 800;
-
             margin-bottom: 7px;
         }
 
@@ -898,12 +729,9 @@
             font-size: 13px;
         }
 
-        /* =====================================================
-           RESPONSIVE
-        ===================================================== */
+        /* RESPONSIVE */
 
         @media (max-width: 800px) {
-
             .nav-menu {
                 display: none;
             }
@@ -928,7 +756,6 @@
 
             .summary-item {
                 padding: 13px 0;
-
                 border-right: none;
                 border-bottom: 1px solid #edf0f3;
             }
@@ -939,7 +766,6 @@
         }
 
         @media (max-width: 650px) {
-
             .top-bar {
                 display: none;
             }
@@ -994,14 +820,11 @@
         }
 
         @media (max-width: 450px) {
-
             .ticket-details {
                 grid-template-columns: 1fr;
             }
         }
-
     </style>
-
 </head>
 
 <body>
@@ -1009,20 +832,85 @@
 @php
 
     /*
-     * Một chiều:
-     * Booking có 1 Ticket.
-     *
-     * Khứ hồi:
-     * Booking có 2 Ticket.
-     */
+    |--------------------------------------------------------------------------
+    | SỬA LỖI NHẬN BIẾT VÉ MỘT CHIỀU / KHỨ HỒI
+    |--------------------------------------------------------------------------
+    |
+    | Trước đây:
+    | $booking->tickets->count() === 2
+    |
+    | Điều kiện trên sai khi mua 2 vé một chiều.
+    |
+    | Bây giờ:
+    | Kiểm tra hướng bay thực tế của từng vé.
+    |
+    | Ví dụ:
+    |
+    | Vé 1: Đà Nẵng -> Sài Gòn
+    | Vé 2: Đà Nẵng -> Sài Gòn
+    |
+    | => MỘT CHIỀU
+    |
+    | Vé 1: Đà Nẵng -> Sài Gòn
+    | Vé 2: Sài Gòn -> Đà Nẵng
+    |
+    | => KHỨ HỒI
+    |
+    */
 
-    $isRoundTrip =
-        $booking->tickets->count() === 2;
+    $firstTicket = $booking->tickets->first();
+
+    $outboundDepartureId = $firstTicket
+        ? $firstTicket->flight->departure_airport_id
+        : null;
+
+    $outboundArrivalId = $firstTicket
+        ? $firstTicket->flight->arrival_airport_id
+        : null;
+
+    $isRoundTrip = false;
+
+    if ($firstTicket) {
+
+        $isRoundTrip = $booking->tickets->contains(
+            function ($ticket) use (
+                $outboundDepartureId,
+                $outboundArrivalId
+            ) {
+
+                return
+                    (int) $ticket->flight->departure_airport_id
+                        === (int) $outboundArrivalId
+
+                    && (int) $ticket->flight->arrival_airport_id
+                        === (int) $outboundDepartureId;
+
+            }
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | HÀNH LÝ
+    |--------------------------------------------------------------------------
+    |
+    | Giữ nguyên cách lấy hành lý xách tay.
+    |
+    */
 
     $carryOn =
-        \App\Models\BaggagePackage::where('type', 'carry_on')
+        \App\Models\BaggagePackage::where(
+            'type',
+            'carry_on'
+        )
             ->where('status', true)
             ->first();
+
+    /*
+    |--------------------------------------------------------------------------
+    | GIÁ VÉ VÀ PHÍ HÀNH LÝ
+    |--------------------------------------------------------------------------
+    */
 
     $totalTicketPrice =
         (float) $booking->tickets->sum('price');
@@ -1030,8 +918,37 @@
     $totalBaggagePrice =
         (float) $booking->tickets->sum('baggage_price');
 
-@endphp
+    /*
+    |--------------------------------------------------------------------------
+    | CHỈ HIỂN THỊ BÁO CÁO OCR KHI VỪA THANH TOÁN
+    |--------------------------------------------------------------------------
+    |
+    | Khi thanh toán thành công:
+    |
+    | BookingController::pay()
+    | chuyển tới ticket.show với:
+    |
+    | ->with(
+    |     'success',
+    |     'Thanh toán thành công. Vé đã có hiệu lực.'
+    | )
+    |
+    | Khi mở vé từ lịch sử:
+    | Không có thông báo success này.
+    |
+    | Vì vậy bảng OCR sẽ không hiện lại.
+    |
+    | Dữ liệu OCR vẫn nằm trong CSDL.
+    | Không xóa bất kỳ hóa đơn nào.
+    |
+    */
 
+    $showReceiptReport =
+        session('success')
+            === 'Thanh toán thành công. Vé đã có hiệu lực.'
+        && !empty($receiptCheck);
+
+@endphp
 
 {{-- ========================================================= --}}
 {{-- TOP BAR --}}
@@ -1042,17 +959,9 @@
     <div class="top-bar-inner">
 
         <div class="top-group">
-
-            <span>
-               
-            </span>
-
-            <span>
-                
-            </span>
-
+            <span></span>
+            <span></span>
         </div>
-
 
         <div class="top-group">
 
@@ -1068,14 +977,11 @@
 
             @endauth
 
-            
-
         </div>
 
     </div>
 
 </div>
-
 
 {{-- ========================================================= --}}
 {{-- HEADER --}}
@@ -1091,7 +997,6 @@
         >
             Viet<span>Jet</span>
         </a>
-
 
         <div class="nav-menu">
 
@@ -1126,11 +1031,15 @@
                 </a>
 
             @endauth
-<a href="{{ route('contact') }}" class="nav-link">
+
+            <a
+                href="{{ route('contact') }}"
+                class="nav-link"
+            >
                 Liên hệ
             </a>
-        </div>
 
+        </div>
 
         <div class="nav-actions">
 
@@ -1140,12 +1049,10 @@
                     {{ auth()->user()->name }}
                 </span>
 
-
                 <form
                     action="{{ route('dang-xuat') }}"
                     method="POST"
                 >
-
                     @csrf
 
                     <button
@@ -1164,7 +1071,6 @@
     </nav>
 
 </header>
-
 
 {{-- ========================================================= --}}
 {{-- BANNER --}}
@@ -1188,11 +1094,9 @@
 
         </div>
 
-
         <h1>
             Vé điện tử của bạn
         </h1>
-
 
         <p>
             Đặt vé đã hoàn tất. Bạn có thể kiểm tra hành trình,
@@ -1203,16 +1107,15 @@
 
 </section>
 
-
 {{-- ========================================================= --}}
 {{-- MAIN --}}
 {{-- ========================================================= --}}
 
 <main class="main">
 
-    {{-- ========================================================= --}}
-    {{-- SUCCESS --}}
-    {{-- ========================================================= --}}
+    {{-- ===================================================== --}}
+    {{-- THÔNG BÁO THANH TOÁN THÀNH CÔNG --}}
+    {{-- ===================================================== --}}
 
     @if(session('success'))
 
@@ -1221,7 +1124,6 @@
             <div class="success-mark">
                 ✓
             </div>
-
 
             <div class="success-content">
 
@@ -1239,12 +1141,40 @@
 
     @endif
 
+    {{-- ===================================================== --}}
+    {{-- KẾT QUẢ KIỂM TRA HÓA ĐƠN OCR --}}
+    {{-- ===================================================== --}}
+
+    {{--
+    |--------------------------------------------------------------------------
+    | ĐÃ SỬA:
+    | CHỈ HIỆN BẢNG OCR SAU KHI VỪA THANH TOÁN
+    |--------------------------------------------------------------------------
+    |
+    | Sau thanh toán:
+    | -> Hiển thị kết quả kiểm tra hóa đơn.
+    |
+    | Vào lịch sử vé và xem lại:
+    | -> Không hiển thị bảng này.
+    |
+    | Không sửa file ket-qua-hoa-don.blade.php.
+    | Không sửa Python OCR.
+    | Không xóa thông tin thanh toán.
+    |
+    --}}
+
+    @if($showReceiptReport)
+
+        @include(
+            'user.partials.ket-qua-hoa-don',
+            ['receiptCheck' => $receiptCheck]
+        )
+
+    @endif
 
     {{-- ========================================================= --}}
     {{-- BOOKING SUMMARY --}}
     {{-- ========================================================= --}}
-
-    @include('user.partials.ket-qua-hoa-don')
 
     <section class="booking-summary">
 
@@ -1262,21 +1192,25 @@
 
             </div>
 
-
             <div class="trip-type">
 
                 @if($isRoundTrip)
+
                     VÉ KHỨ HỒI
+
                 @else
+
                     VÉ MỘT CHIỀU
+
                 @endif
 
             </div>
 
         </div>
 
-
         <div class="booking-summary-body">
+
+            {{-- MÃ ĐẶT VÉ --}}
 
             <div class="summary-item">
 
@@ -1290,13 +1224,13 @@
 
             </div>
 
+            {{-- TRẠNG THÁI ĐẶT VÉ --}}
 
             <div class="summary-item">
 
                 <span class="summary-label">
                     Trạng thái đặt vé
                 </span>
-
 
                 @if($booking->booking_status === 'confirmed')
 
@@ -1320,13 +1254,13 @@
 
             </div>
 
+            {{-- TRẠNG THÁI THANH TOÁN --}}
 
             <div class="summary-item">
 
                 <span class="summary-label">
                     Thanh toán
                 </span>
-
 
                 @if($booking->payment_status === 'paid')
 
@@ -1348,14 +1282,47 @@
 
     </section>
 
-
     {{-- ========================================================= --}}
-    {{-- TICKETS --}}
+    {{-- DANH SÁCH VÉ ĐIỆN TỬ --}}
     {{-- ========================================================= --}}
 
     @foreach($booking->tickets as $index => $ticket)
 
+        @php
+
+            /*
+            |--------------------------------------------------------------------------
+            | XÁC ĐỊNH CHIỀU BAY CỦA TỪNG VÉ
+            |--------------------------------------------------------------------------
+            |
+            | Không dùng $index === 0 để xác định
+            | vé chiều đi / vé chiều về.
+            |
+            | Kiểm tra sân bay đi và sân bay đến
+            | của từng chuyến bay.
+            |
+            */
+
+            $ticketIsReturn = false;
+
+            if ($isRoundTrip) {
+
+                $ticketIsReturn =
+                    (int) $ticket->flight->departure_airport_id
+                        === (int) $outboundArrivalId
+
+                    && (int) $ticket->flight->arrival_airport_id
+                        === (int) $outboundDepartureId;
+
+            }
+
+        @endphp
+
         <section class="ticket-wrapper">
+
+            {{-- =============================================== --}}
+            {{-- TIÊU ĐỀ VÉ --}}
+            {{-- =============================================== --}}
 
             <div class="ticket-label-top">
 
@@ -1363,47 +1330,68 @@
 
                     @if($isRoundTrip)
 
-                        @if($index === 0)
-                            Vé chiều đi
-                        @else
+                        @if($ticketIsReturn)
+
                             Vé chiều về
+
+                        @else
+
+                            Vé chiều đi
+
                         @endif
 
                     @else
-                        Vé máy bay
+
+                        Vé một chiều —
+                        Hành khách {{ $index + 1 }}
+
                     @endif
 
                 </h2>
 
+                {{-- =========================================== --}}
+                {{-- NHÃN CHIỀU BAY --}}
+                {{-- =========================================== --}}
 
                 @if($isRoundTrip)
 
-                    @if($index === 0)
-
-                        <div class="direction">
-                            ĐI
-                        </div>
-
-                    @else
+                    @if($ticketIsReturn)
 
                         <div class="direction return">
                             VỀ
                         </div>
 
+                    @else
+
+                        <div class="direction">
+                            ĐI
+                        </div>
+
                     @endif
+
+                @else
+
+                    <div class="direction">
+                        1 CHIỀU
+                    </div>
 
                 @endif
 
             </div>
 
+            {{-- =============================================== --}}
+            {{-- VÉ ĐIỆN TỬ --}}
+            {{-- =============================================== --}}
 
             <div class="boarding-pass">
 
-                {{-- ================================================= --}}
-                {{-- MAIN TICKET --}}
-                {{-- ================================================= --}}
+                {{-- =========================================== --}}
+                {{-- NỘI DUNG VÉ BÊN TRÁI --}}
+                {{-- =========================================== --}}
 
                 <div class="boarding-main">
+
+                    {{-- THƯƠNG HIỆU VÉ --}}
 
                     <div class="ticket-brand">
 
@@ -1417,12 +1405,13 @@
 
                     </div>
 
-
-                    {{-- ============================================= --}}
-                    {{-- ROUTE --}}
-                    {{-- ============================================= --}}
+                    {{-- ======================================= --}}
+                    {{-- HÀNH TRÌNH BAY --}}
+                    {{-- ======================================= --}}
 
                     <div class="flight-route">
+
+                        {{-- SÂN BAY ĐI --}}
 
                         <div class="route-airport">
 
@@ -1432,11 +1421,13 @@
 
                             <div class="time">
 
-                                {{ substr(
-                                    $ticket->flight->departure_time,
-                                    0,
-                                    5
-                                ) }}
+                                {{
+                                    substr(
+                                        $ticket->flight->departure_time,
+                                        0,
+                                        5
+                                    )
+                                }}
 
                             </div>
 
@@ -1446,6 +1437,7 @@
 
                         </div>
 
+                        {{-- ĐƯỜNG BAY --}}
 
                         <div class="flight-path">
 
@@ -1457,6 +1449,7 @@
 
                         </div>
 
+                        {{-- SÂN BAY ĐẾN --}}
 
                         <div class="route-airport">
 
@@ -1466,11 +1459,13 @@
 
                             <div class="time">
 
-                                {{ substr(
-                                    $ticket->flight->arrival_time,
-                                    0,
-                                    5
-                                ) }}
+                                {{
+                                    substr(
+                                        $ticket->flight->arrival_time,
+                                        0,
+                                        5
+                                    )
+                                }}
 
                             </div>
 
@@ -1482,12 +1477,13 @@
 
                     </div>
 
-
-                    {{-- ============================================= --}}
-                    {{-- DETAILS --}}
-                    {{-- ============================================= --}}
+                    {{-- ======================================= --}}
+                    {{-- THÔNG TIN VÉ --}}
+                    {{-- ======================================= --}}
 
                     <div class="ticket-details">
+
+                        {{-- HÀNH KHÁCH --}}
 
                         <div class="detail-item">
 
@@ -1501,6 +1497,7 @@
 
                         </div>
 
+                        {{-- CHUYẾN BAY --}}
 
                         <div class="detail-item">
 
@@ -1514,6 +1511,7 @@
 
                         </div>
 
+                        {{-- MÁY BAY --}}
 
                         <div class="detail-item">
 
@@ -1527,6 +1525,7 @@
 
                         </div>
 
+                        {{-- GHẾ --}}
 
                         <div class="detail-item">
 
@@ -1540,13 +1539,13 @@
 
                         </div>
 
+                        {{-- HẠNG GHẾ --}}
 
                         <div class="detail-item">
 
                             <span class="detail-label">
                                 Hạng ghế
                             </span>
-
 
                             @if($ticket->seat_class === 'vip')
 
@@ -1564,6 +1563,7 @@
 
                         </div>
 
+                        {{-- GIÁ VÉ --}}
 
                         <div class="detail-item">
 
@@ -1573,17 +1573,20 @@
 
                             <span class="detail-value price">
 
-                                {{ number_format(
-                                    $ticket->price,
-                                    0,
-                                    ',',
-                                    '.'
-                                ) }} đ
+                                {{
+                                    number_format(
+                                        $ticket->price,
+                                        0,
+                                        ',',
+                                        '.'
+                                    )
+                                }} đ
 
                             </span>
 
                         </div>
 
+                        {{-- HÀNH LÝ XÁCH TAY --}}
 
                         <div class="detail-item">
 
@@ -1592,15 +1595,22 @@
                             </span>
 
                             <span class="detail-value">
+
                                 @if($carryOn)
+
                                     {{ $carryOn->weight }} kg - Bao gồm
+
                                 @else
+
                                     Theo chính sách hiện hành
+
                                 @endif
+
                             </span>
 
                         </div>
 
+                        {{-- HÀNH LÝ KÝ GỬI --}}
 
                         <div class="detail-item">
 
@@ -1609,15 +1619,22 @@
                             </span>
 
                             <span class="detail-value">
+
                                 @if((int) $ticket->baggage_weight > 0)
+
                                     {{ (int) $ticket->baggage_weight }} kg
+
                                 @else
+
                                     Không mua thêm
+
                                 @endif
+
                             </span>
 
                         </div>
 
+                        {{-- PHÍ HÀNH LÝ --}}
 
                         <div class="detail-item">
 
@@ -1627,17 +1644,20 @@
 
                             <span class="detail-value price">
 
-                                {{ number_format(
-                                    (float) $ticket->baggage_price,
-                                    0,
-                                    ',',
-                                    '.'
-                                ) }} đ
+                                {{
+                                    number_format(
+                                        (float) $ticket->baggage_price,
+                                        0,
+                                        ',',
+                                        '.'
+                                    )
+                                }} đ
 
                             </span>
 
                         </div>
 
+                        {{-- TỔNG GIÁ TỪNG VÉ --}}
 
                         <div class="detail-item">
 
@@ -1647,13 +1667,15 @@
 
                             <span class="detail-value price">
 
-                                {{ number_format(
-                                    (float) $ticket->price
-                                    + (float) $ticket->baggage_price,
-                                    0,
-                                    ',',
-                                    '.'
-                                ) }} đ
+                                {{
+                                    number_format(
+                                        (float) $ticket->price
+                                        + (float) $ticket->baggage_price,
+                                        0,
+                                        ',',
+                                        '.'
+                                    )
+                                }} đ
 
                             </span>
 
@@ -1663,14 +1685,15 @@
 
                 </div>
 
-
-                {{-- ================================================= --}}
-                {{-- SIDE TICKET --}}
-                {{-- ================================================= --}}
+                {{-- =========================================== --}}
+                {{-- PHẦN MÃ VÉ BÊN PHẢI --}}
+                {{-- =========================================== --}}
 
                 <div class="boarding-side">
 
                     <div>
+
+                        {{-- MÃ VÉ --}}
 
                         <span class="side-label">
                             Mã vé
@@ -1680,6 +1703,7 @@
                             {{ $ticket->ticket_code }}
                         </div>
 
+                        {{-- HÀNH KHÁCH --}}
 
                         <div class="side-row">
 
@@ -1693,6 +1717,7 @@
 
                         </div>
 
+                        {{-- GHẾ --}}
 
                         <div class="side-row">
 
@@ -1706,6 +1731,7 @@
 
                         </div>
 
+                        {{-- HÀNH LÝ KÝ GỬI --}}
 
                         <div class="side-row">
 
@@ -1714,22 +1740,28 @@
                             </span>
 
                             <div class="side-value">
+
                                 @if((int) $ticket->baggage_weight > 0)
+
                                     {{ (int) $ticket->baggage_weight }} kg
+
                                 @else
+
                                     Không mua thêm
+
                                 @endif
+
                             </div>
 
                         </div>
 
+                        {{-- TRẠNG THÁI VÉ --}}
 
                         <div class="side-row">
 
                             <span class="side-label">
                                 Trạng thái vé
                             </span>
-
 
                             @if($ticket->ticket_status === 'active')
 
@@ -1761,6 +1793,7 @@
 
                     </div>
 
+                    {{-- MÃ VẠCH VÉ --}}
 
                     <div>
 
@@ -1780,9 +1813,8 @@
 
     @endforeach
 
-
     {{-- ========================================================= --}}
-    {{-- TOTAL --}}
+    {{-- TỔNG THANH TOÁN --}}
     {{-- ========================================================= --}}
 
     <section class="total-card">
@@ -1792,39 +1824,62 @@
             <div class="total-title">
 
                 @if($isRoundTrip)
+
                     Tổng thanh toán 2 chiều
+
                 @else
+
                     Tổng thanh toán
+
                 @endif
 
             </div>
 
             <div class="total-note">
+
                 Giá vé:
-                {{ number_format($totalTicketPrice, 0, ',', '.') }} đ
+
+                {{
+                    number_format(
+                        $totalTicketPrice,
+                        0,
+                        ',',
+                        '.'
+                    )
+                }} đ
+
                 · Phí hành lý:
-                {{ number_format($totalBaggagePrice, 0, ',', '.') }} đ
+
+                {{
+                    number_format(
+                        $totalBaggagePrice,
+                        0,
+                        ',',
+                        '.'
+                    )
+                }} đ
+
             </div>
 
         </div>
 
-
         <div class="total">
 
-            {{ number_format(
-                $booking->total_amount,
-                0,
-                ',',
-                '.'
-            ) }} đ
+            {{
+                number_format(
+                    $booking->total_amount,
+                    0,
+                    ',',
+                    '.'
+                )
+            }} đ
 
         </div>
 
     </section>
 
-
     {{-- ========================================================= --}}
-    {{-- ACTIONS --}}
+    {{-- NÚT ĐIỀU HƯỚNG --}}
     {{-- ========================================================= --}}
 
     <div class="actions">
@@ -1836,7 +1891,6 @@
             Xem vé của tôi
         </a>
 
-
         <a
             href="{{ route('trang-chu') }}"
             class="secondary-button"
@@ -1847,7 +1901,6 @@
     </div>
 
 </main>
-
 
 {{-- ========================================================= --}}
 {{-- FOOTER --}}
@@ -1866,5 +1919,4 @@
 </footer>
 
 </body>
-
 </html>

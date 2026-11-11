@@ -1,14 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chọn ghế - SkyGo</title>
 
     <style>
@@ -24,20 +19,15 @@
             --secondary: #f4b400;
             --danger: #dc3545;
             --success: #13795b;
-
             --white: #ffffff;
             --page: #f5f7fa;
-
             --text: #1f2937;
             --muted: #6b7280;
             --border: #dfe4ea;
-
             --economy-border: #8aa8bf;
             --economy-bg: #ffffff;
-
             --vip-border: #c9a23a;
             --vip-bg: #fffdf5;
-
             --booked-border: #c8cdd2;
             --booked-bg: #e9ecef;
         }
@@ -52,13 +42,13 @@
             text-decoration: none;
         }
 
-        button {
+        button,
+        input,
+        select {
             font-family: inherit;
         }
 
-        /* =====================================================
-           TOP BAR
-        ===================================================== */
+        /* TOP BAR */
 
         .top-bar {
             background: var(--primary-dark);
@@ -71,7 +61,6 @@
             min-height: 36px;
             margin: auto;
             padding: 0 20px;
-
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -88,15 +77,11 @@
             opacity: 0.9;
         }
 
-        /* =====================================================
-           HEADER
-        ===================================================== */
+        /* HEADER */
 
         .header {
             background: white;
-
-            box-shadow:
-                0 2px 12px rgba(0, 0, 0, 0.07);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
         }
 
         .navbar {
@@ -104,7 +89,6 @@
             min-height: 76px;
             margin: auto;
             padding: 0 20px;
-
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -113,10 +97,8 @@
 
         .logo {
             color: var(--primary);
-
             font-size: 27px;
             font-weight: 800;
-
             letter-spacing: -1px;
         }
 
@@ -131,12 +113,9 @@
 
         .nav-link {
             padding: 27px 15px;
-
             color: #293241;
-
             font-size: 15px;
             font-weight: 600;
-
             border-bottom: 3px solid transparent;
         }
 
@@ -165,6 +144,24 @@
         .login-link:hover {
             text-decoration: underline;
         }
+
+        .user-name {
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .logout-btn {
+            border: none;
+            background: var(--danger);
+            color: white;
+            padding: 9px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* ĐĂNG NHẬP / ĐĂNG KÝ TẠI CHỖ */
 
         .inline-login-overlay {
             position: fixed;
@@ -342,32 +339,10 @@
             background: var(--primary);
         }
 
-        .user-name {
-            color: var(--primary);
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .logout-btn {
-            border: none;
-
-            background: var(--danger);
-            color: white;
-
-            padding: 9px 14px;
-            border-radius: 6px;
-
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        /* =====================================================
-           BANNER
-        ===================================================== */
+        /* BANNER */
 
         .page-banner {
             min-height: 215px;
-
             background:
                 linear-gradient(
                     90deg,
@@ -378,14 +353,12 @@
 
             background-size: cover;
             background-position: center;
-
             color: white;
         }
 
         .banner-inner {
             max-width: 1240px;
             margin: auto;
-
             padding: 45px 20px 75px;
         }
 
@@ -393,9 +366,7 @@
             display: flex;
             gap: 8px;
             align-items: center;
-
             margin-bottom: 17px;
-
             font-size: 13px;
         }
 
@@ -414,39 +385,27 @@
 
         .page-banner p {
             color: #e3ebf3;
-
             font-size: 15px;
             line-height: 1.6;
         }
 
-        /* =====================================================
-           MAIN
-        ===================================================== */
+        /* MAIN */
 
         .main {
             max-width: 1120px;
-
             margin: -45px auto 70px;
             padding: 0 20px;
-
             position: relative;
             z-index: 10;
         }
 
-        /* =====================================================
-           FLIGHT CARD
-        ===================================================== */
+        /* THÔNG TIN CHUYẾN BAY */
 
         .flight-card {
             background: white;
-
             border-radius: 12px;
-
             padding: 24px 26px;
-
-            box-shadow:
-                0 8px 28px rgba(0, 0, 0, 0.09);
-
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.09);
             margin-bottom: 20px;
         }
 
@@ -455,13 +414,11 @@
             justify-content: space-between;
             align-items: center;
             gap: 20px;
-
             margin-bottom: 20px;
         }
 
         .flight-card-header h2 {
             color: var(--primary);
-
             font-size: 21px;
             margin-bottom: 4px;
         }
@@ -473,15 +430,11 @@
 
         .leg-badge {
             padding: 7px 12px;
-
             border-radius: 5px;
-
             background: var(--primary);
             color: white;
-
             font-size: 11px;
             font-weight: 800;
-
             letter-spacing: 0.4px;
         }
 
@@ -497,53 +450,41 @@
 
         .info-box {
             border: 1px solid #e4e9ee;
-
             padding: 14px 15px;
-
             background: #fafbfd;
         }
 
         .info-label {
             display: block;
-
             color: var(--muted);
             font-size: 10px;
-
             text-transform: uppercase;
             letter-spacing: 0.6px;
-
             margin-bottom: 5px;
         }
 
         .info-value {
             color: #263746;
-
             font-size: 15px;
             font-weight: bold;
         }
 
-        /* =====================================================
-           PRICE
-        ===================================================== */
+        /* GIÁ VÉ */
 
         .price-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-
             margin-top: 12px;
         }
 
         .fare-card {
             border: 1px solid #e1e6eb;
-
             padding: 14px 16px;
-
             display: flex;
             justify-content: space-between;
             align-items: center;
-
-            background: #ffffff;
+            background: white;
         }
 
         .fare-vip {
@@ -562,39 +503,27 @@
 
         .fare-price {
             color: #b42318;
-
             font-size: 17px;
             font-weight: 800;
         }
 
-        /* =====================================================
-           ERROR
-        ===================================================== */
+        /* THÔNG BÁO LỖI */
 
         .error {
             background: #fdebed;
             border: 1px solid #efbcc2;
-
             color: #842029;
-
             padding: 13px 15px;
-
             margin-bottom: 18px;
         }
 
-        /* =====================================================
-           SEAT SECTION
-        ===================================================== */
+        /* SƠ ĐỒ GHẾ */
 
         .seat-section {
             background: white;
-
             border-radius: 12px;
-
             padding: 26px;
-
-            box-shadow:
-                0 5px 22px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 5px 22px rgba(0, 0, 0, 0.06);
         }
 
         .seat-header {
@@ -602,16 +531,13 @@
             justify-content: space-between;
             align-items: flex-start;
             gap: 20px;
-
             padding-bottom: 18px;
             margin-bottom: 18px;
-
             border-bottom: 1px solid #e7ebef;
         }
 
         .seat-header h2 {
             color: var(--primary);
-
             font-size: 21px;
             margin-bottom: 5px;
         }
@@ -629,11 +555,8 @@
 
         .stat {
             border: 1px solid #e1e6eb;
-
             background: #fafbfc;
-
             padding: 6px 9px;
-
             font-size: 11px;
             color: #555f68;
         }
@@ -642,17 +565,13 @@
             color: var(--primary);
         }
 
-        /* =====================================================
-           LEGEND
-        ===================================================== */
+        /* CHÚ THÍCH GHẾ */
 
         .legend {
             display: flex;
             flex-wrap: wrap;
             gap: 22px;
-
             margin-bottom: 28px;
-
             font-size: 12px;
             color: #59636d;
         }
@@ -666,7 +585,6 @@
         .legend-seat {
             width: 20px;
             height: 20px;
-
             border: 2px solid;
             border-radius: 3px;
         }
@@ -691,9 +609,7 @@
             border-color: var(--primary);
         }
 
-        /* =====================================================
-           CABIN
-        ===================================================== */
+        /* KHOANG MÁY BAY */
 
         .cabin-container {
             max-width: 650px;
@@ -703,55 +619,37 @@
         .cabin {
             border-left: 1px solid #cfd6dd;
             border-right: 1px solid #cfd6dd;
-
             background: #fcfcfc;
-
             padding: 0 35px 35px;
         }
 
         .cabin-front {
             height: 65px;
-
             margin: 0 -35px 30px;
-
             border-top: 1px solid #cfd6dd;
             border-bottom: 1px solid #cfd6dd;
-
             background: #f2f4f6;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             color: #707a83;
-
             font-size: 11px;
             font-weight: 700;
-
             letter-spacing: 1.5px;
         }
 
         .column-header {
             display: grid;
-
             grid-template-columns:
                 46px 46px 46px
-                45px
-                34px
-                45px
+                45px 34px 45px
                 46px 46px 46px;
-
             gap: 7px;
-
             justify-content: center;
-
             margin-bottom: 12px;
-
             color: #69737d;
-
             font-size: 11px;
             font-weight: 700;
-
             text-align: center;
         }
 
@@ -759,55 +657,39 @@
             display: flex;
             align-items: center;
             gap: 12px;
-
             margin: 25px 0 15px;
-
             color: #59636d;
-
             font-size: 11px;
             font-weight: 800;
-
             text-transform: uppercase;
-
             letter-spacing: 1px;
         }
 
         .seat-zone-title::before,
         .seat-zone-title::after {
             content: "";
-
             flex: 1;
             height: 1px;
-
             background: #dfe4e9;
         }
 
         .seat-row {
             display: grid;
-
             grid-template-columns:
                 46px 46px 46px
-                45px
-                34px
-                45px
+                45px 34px 45px
                 46px 46px 46px;
-
             justify-content: center;
             align-items: center;
-
             gap: 7px;
-
             margin-bottom: 8px;
         }
 
         .row-number {
             grid-column: 5;
-
             color: #89929a;
-
             font-size: 11px;
             font-weight: bold;
-
             text-align: center;
         }
 
@@ -816,9 +698,7 @@
             height: 100%;
         }
 
-        /* =====================================================
-           SEAT
-        ===================================================== */
+        /* GHẾ */
 
         .seat-wrapper {
             position: relative;
@@ -833,58 +713,39 @@
         .seat {
             width: 46px;
             height: 42px;
-
             border: 1.5px solid;
-
             border-radius: 4px;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             position: relative;
-
             background: white;
-
             cursor: pointer;
-
             font-size: 11px;
             font-weight: 700;
-
             transition: 0.15s;
         }
 
         .seat::before {
             content: "";
-
             position: absolute;
-
             left: 5px;
             right: 5px;
             bottom: 5px;
-
             height: 3px;
-
             background: currentColor;
-
             opacity: 0.17;
-
             border-radius: 1px;
         }
 
         .seat::after {
             content: "";
-
             position: absolute;
-
             top: 5px;
             left: 7px;
             right: 7px;
-
             height: 1px;
-
             background: currentColor;
-
             opacity: 0.12;
         }
 
@@ -904,53 +765,40 @@
             background: var(--booked-bg);
             border-color: var(--booked-border);
             color: #a0a6ab;
-
             cursor: not-allowed;
         }
 
         .seat-wrapper input:not(:disabled) + .seat:hover {
             border-color: var(--primary);
-
-            box-shadow:
-                0 0 0 2px rgba(0, 59, 112, 0.08);
+            box-shadow: 0 0 0 2px rgba(0, 59, 112, 0.08);
         }
 
         .seat-wrapper input:checked + .seat {
             background: var(--primary);
             border-color: var(--primary);
             color: white;
-
-            box-shadow:
-                0 0 0 3px rgba(0, 59, 112, 0.11);
+            box-shadow: 0 0 0 3px rgba(0, 59, 112, 0.11);
         }
 
         .seat-class-text {
             display: none;
         }
 
-        /* =====================================================
-           SELECTED
-        ===================================================== */
+        /* THÔNG TIN GHẾ ĐÃ CHỌN */
 
         .selected-info {
             display: none;
-
             margin-top: 24px;
-
             border: 1px solid #ceddd5;
             border-left: 4px solid var(--success);
-
             background: #f7fbf9;
-
             padding: 17px 18px;
         }
 
         .selected-title {
             color: #17643d;
-
             font-size: 13px;
             font-weight: bold;
-
             margin-bottom: 12px;
         }
 
@@ -962,42 +810,32 @@
 
         .selected-label {
             display: block;
-
             color: #708078;
-
             font-size: 10px;
-
             text-transform: uppercase;
-
             margin-bottom: 4px;
         }
 
         .selected-value {
             color: #1d4934;
-
             font-size: 15px;
             font-weight: 800;
         }
 
-        /* =====================================================
-           ACTIONS
-        ===================================================== */
+        /* NÚT */
 
         .actions {
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 15px;
-
             margin-top: 25px;
             padding-top: 20px;
-
             border-top: 1px solid #e7ebef;
         }
 
         .back-button {
             color: var(--primary);
-
             font-size: 14px;
             font-weight: bold;
         }
@@ -1008,42 +846,37 @@
 
         .continue-button {
             min-width: 270px;
-
             border: 0;
             border-radius: 6px;
-
             background: var(--primary);
             color: white;
-
             padding: 13px 20px;
-
             cursor: pointer;
-
             font-size: 14px;
             font-weight: bold;
         }
 
-        .continue-button:hover {
+        .continue-button:hover:not(:disabled) {
             background: var(--primary-dark);
         }
 
-        /* =====================================================
-           FOOTER
-        ===================================================== */
+        .continue-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* FOOTER */
 
         footer {
             background: #031d33;
             color: white;
-
             padding: 34px 20px;
-
             text-align: center;
         }
 
         .footer-logo {
             font-size: 23px;
             font-weight: 800;
-
             margin-bottom: 7px;
         }
 
@@ -1056,12 +889,9 @@
             font-size: 13px;
         }
 
-        /* =====================================================
-           RESPONSIVE
-        ===================================================== */
+        /* RESPONSIVE */
 
         @media (max-width: 850px) {
-
             .nav-menu {
                 display: none;
             }
@@ -1077,7 +907,6 @@
         }
 
         @media (max-width: 700px) {
-
             .top-bar {
                 display: none;
             }
@@ -1108,18 +937,14 @@
             .seat-row {
                 grid-template-columns:
                     38px 38px 38px
-                    20px
-                    25px
-                    20px
+                    20px 25px 20px
                     38px 38px 38px;
-
                 gap: 4px;
             }
 
             .seat {
                 width: 38px;
                 height: 38px;
-
                 font-size: 9px;
             }
 
@@ -1146,16 +971,12 @@
 
 <body>
 
-{{-- ========================================================= --}}
 {{-- TOP BAR --}}
-{{-- ========================================================= --}}
 
 <div class="top-bar">
-
     <div class="top-bar-inner">
 
         <div class="top-group">
-
             <span>
                 Website đặt vé máy bay trực tuyến
             </span>
@@ -1163,14 +984,10 @@
             <span>
                 Hỗ trợ: 1900 6868
             </span>
-
         </div>
 
-
         <div class="top-group">
-
             @auth
-
                 <a href="{{ route('profile.edit') }}">
                     Thông tin cá nhân
                 </a>
@@ -1178,24 +995,15 @@
                 <a href="{{ route('notifications.index') }}">
                     Thông báo
                 </a>
-
             @endauth
-
-            
-
         </div>
 
     </div>
-
 </div>
 
-
-{{-- ========================================================= --}}
 {{-- HEADER --}}
-{{-- ========================================================= --}}
 
 <header class="header">
-
     <nav class="navbar">
 
         <a
@@ -1204,7 +1012,6 @@
         >
             Viet<span>Jet</span>
         </a>
-
 
         <div class="nav-menu">
 
@@ -1223,7 +1030,6 @@
             </a>
 
             @auth
-
                 <a
                     href="{{ route('tickets.mine') }}"
                     class="nav-link"
@@ -1237,16 +1043,13 @@
                 >
                     Thông báo
                 </a>
-
             @endauth
 
         </div>
 
-
         <div class="nav-actions">
 
             @guest
-
                 <button
                     type="button"
                     class="login-link inline-login-open"
@@ -1254,9 +1057,7 @@
                 >
                     Đăng nhập
                 </button>
-
             @else
-
                 <span class="user-name">
                     {{ auth()->user()->name }}
                 </span>
@@ -1265,7 +1066,6 @@
                     action="{{ route('dang-xuat') }}"
                     method="POST"
                 >
-
                     @csrf
 
                     <button
@@ -1274,28 +1074,19 @@
                     >
                         Đăng xuất
                     </button>
-
                 </form>
-
             @endguest
 
         </div>
-
     </nav>
-
 </header>
 
-
-{{-- ========================================================= --}}
 {{-- BANNER --}}
-{{-- ========================================================= --}}
 
 <section class="page-banner">
-
     <div class="banner-inner">
 
         <div class="breadcrumb">
-
             <a href="{{ route('trang-chu') }}">
                 Trang chủ
             </a>
@@ -1311,34 +1102,20 @@
             <span>
                 Chọn ghế
             </span>
-
         </div>
 
-
         <h1>
-
             @if(
                 ($tripType ?? 'one_way') === 'round_trip'
-                &&
-                ($leg ?? 'outbound') === 'return'
+                && ($leg ?? 'outbound') === 'return'
             )
-
                 Chọn ghế chiều về
-
-            @elseif(
-                ($tripType ?? 'one_way') === 'round_trip'
-            )
-
+            @elseif(($tripType ?? 'one_way') === 'round_trip')
                 Chọn ghế chiều đi
-
             @else
-
                 Chọn ghế của bạn
-
             @endif
-
         </h1>
-
 
         <p>
             Chọn vị trí ghế phù hợp trước khi tiếp tục
@@ -1346,94 +1123,65 @@
         </p>
 
     </div>
-
 </section>
 
-
-{{-- ========================================================= --}}
 {{-- MAIN --}}
-{{-- ========================================================= --}}
 
 <main class="main">
 
-    {{-- ========================================================= --}}
     {{-- THÔNG TIN CHUYẾN BAY --}}
-    {{-- ========================================================= --}}
 
     <div class="flight-card">
 
         <div class="flight-card-header">
 
             <div>
-
-                <h2>
-                    Thông tin chuyến bay
-                </h2>
+                <h2>Thông tin chuyến bay</h2>
 
                 <p>
                     Kiểm tra lại hành trình trước khi chọn ghế.
                 </p>
-
             </div>
-
 
             @if(($tripType ?? 'one_way') === 'round_trip')
 
                 @if(($leg ?? 'outbound') === 'return')
-
                     <div class="leg-badge return">
                         KHỨ HỒI - CHIỀU VỀ
                     </div>
-
                 @else
-
                     <div class="leg-badge">
                         KHỨ HỒI - CHIỀU ĐI
                     </div>
-
                 @endif
 
             @else
-
                 <div class="leg-badge">
                     MỘT CHIỀU
                 </div>
-
             @endif
 
         </div>
 
+        {{-- LỖI --}}
 
         @if(session('error'))
-
             <div class="error">
                 {{ session('error') }}
             </div>
-
         @endif
-
 
         @if($errors->any())
-
             <div class="error">
-
                 @foreach($errors->all() as $error)
-
-                    <div>
-                        {{ $error }}
-                    </div>
-
+                    <div>{{ $error }}</div>
                 @endforeach
-
             </div>
-
         @endif
-
 
         <div class="flight-summary">
 
             <div class="info-box">
-
                 <span class="info-label">
                     Chuyến bay
                 </span>
@@ -1441,29 +1189,21 @@
                 <span class="info-value">
                     {{ $flight->flight_code }}
                 </span>
-
             </div>
 
-
             <div class="info-box">
-
                 <span class="info-label">
                     Hành trình
                 </span>
 
                 <span class="info-value">
-
                     {{ $flight->departureAirport->city }}
                     →
                     {{ $flight->arrivalAirport->city }}
-
                 </span>
-
             </div>
 
-
             <div class="info-box">
-
                 <span class="info-label">
                     Ngày bay
                 </span>
@@ -1471,11 +1211,9 @@
                 <span class="info-value">
                     {{ $flight->flight_date->format('d/m/Y') }}
                 </span>
-
             </div>
 
         </div>
-
 
         <div class="price-grid">
 
@@ -1486,18 +1224,15 @@
                 </span>
 
                 <span class="fare-price">
-
                     {{ number_format(
                         $economyPrice,
                         0,
                         ',',
                         '.'
                     ) }} đ
-
                 </span>
 
             </div>
-
 
             <div class="fare-card fare-vip">
 
@@ -1506,14 +1241,12 @@
                 </span>
 
                 <span class="fare-price">
-
                     {{ number_format(
                         $vipPrice,
                         0,
                         ',',
                         '.'
                     ) }} đ
-
                 </span>
 
             </div>
@@ -1522,28 +1255,20 @@
 
     </div>
 
-
-    {{-- ========================================================= --}}
     {{-- SƠ ĐỒ GHẾ --}}
-    {{-- ========================================================= --}}
 
     <section class="seat-section">
 
         <div class="seat-header">
 
             <div>
-
-                <h2>
-                    Chọn vị trí ghế
-                </h2>
+                <h2>Chọn vị trí ghế</h2>
 
                 <p>
                     Ghế VIP nằm ở các hàng đầu tiên.
                     Ghế màu xám là ghế đã được đặt.
                 </p>
-
             </div>
-
 
             <div class="seat-stats">
 
@@ -1566,54 +1291,40 @@
 
         </div>
 
+        {{-- CHÚ THÍCH --}}
 
         <div class="legend">
 
             <div class="legend-item">
-
                 <div class="legend-seat legend-vip"></div>
-
                 VIP
-
             </div>
 
-
             <div class="legend-item">
-
                 <div class="legend-seat legend-economy"></div>
-
                 Phổ thông
-
             </div>
 
-
             <div class="legend-item">
-
                 <div class="legend-seat legend-booked"></div>
-
                 Đã đặt
-
             </div>
 
-
             <div class="legend-item">
-
                 <div class="legend-seat legend-selected"></div>
-
                 Ghế đang chọn
-
             </div>
 
         </div>
 
+        {{-- FORM CHỌN GHẾ --}}
 
         <form
+            id="seatSelectionForm"
             action="{{ route('seats.select', $flight->id) }}"
             method="POST"
         >
-
             @csrf
-
 
             <input
                 type="hidden"
@@ -1621,12 +1332,31 @@
                 value="{{ $leg ?? 'one_way' }}"
             >
 
+            {{-- SỐ GHẾ CẦN CHỌN --}}
+
+            <div
+                style="
+                    padding: 14px 18px;
+                    margin: 0 0 20px;
+                    background: #eef5fb;
+                    border: 1px solid #c7dce9;
+                    border-radius: 8px;
+                    color: #003b70;
+                    font-weight: 700;
+                "
+            >
+                Vui lòng chọn đúng {{ $passengerCount }} ghế.
+
+                Đã chọn:
+                <span id="selectedCount">0</span>
+                / {{ $passengerCount }}
+            </div>
+
+            {{-- NHÓM GHẾ THEO HÀNG --}}
 
             @php
-
                 $groupedSeats = $seats->groupBy(
                     function ($seat) {
-
                         preg_match(
                             '/(\d+)/',
                             $seat->seat_number,
@@ -1638,9 +1368,7 @@
                             : 0;
                     }
                 );
-
             @endphp
-
 
             <div class="cabin-container">
 
@@ -1649,7 +1377,6 @@
                     <div class="cabin-front">
                         PHÍA TRƯỚC MÁY BAY
                     </div>
-
 
                     <div class="column-header">
 
@@ -1669,64 +1396,42 @@
 
                     </div>
 
-
-                    @foreach(
-                        $groupedSeats
-                        as $rowNumber => $rowSeats
-                    )
+                    @foreach($groupedSeats as $rowNumber => $rowSeats)
 
                         @if($rowNumber == 1)
-
                             <div class="seat-zone-title">
                                 Hạng VIP
                             </div>
-
                         @endif
 
-
                         @if($rowNumber == 4)
-
                             <div class="seat-zone-title">
                                 Hạng Phổ thông
                             </div>
-
                         @endif
-
 
                         @php
                             $leftSeats = $rowSeats->take(3);
                             $rightSeats = $rowSeats->slice(3);
                         @endphp
 
-
                         <div class="seat-row">
 
-                            {{-- A B C --}}
+                            {{-- GHẾ A B C --}}
 
                             @foreach($leftSeats as $seat)
 
                                 <div class="seat-wrapper">
 
-                                    @if(
-                                        $seat->status
-                                        ===
-                                        'available'
-                                    )
+                                    @if($seat->status === 'available')
 
                                         <input
-                                            type="radio"
-                                            name="seat_id"
+                                            type="checkbox"
+                                            name="seat_ids[]"
                                             id="seat{{ $seat->id }}"
                                             value="{{ $seat->id }}"
-
-                                            data-number="{{
-                                                $seat->seat_number
-                                            }}"
-
-                                            data-class="{{
-                                                $seat->seat_class
-                                            }}"
-
+                                            data-number="{{ $seat->seat_number }}"
+                                            data-class="{{ $seat->seat_class }}"
                                             data-price="{{
                                                 $seat->seat_class === 'vip'
                                                     ? $vipPrice
@@ -1736,24 +1441,19 @@
 
                                         <label
                                             for="seat{{ $seat->id }}"
-
                                             class="seat {{
                                                 $seat->seat_class === 'vip'
                                                     ? 'seat-vip'
                                                     : 'seat-economy'
                                             }}"
                                         >
-
                                             {{ $seat->seat_number }}
-
                                         </label>
 
                                     @else
 
                                         <div class="seat seat-booked">
-
                                             {{ $seat->seat_number }}
-
                                         </div>
 
                                     @endif
@@ -1762,11 +1462,9 @@
 
                             @endforeach
 
-
                             {{-- LỐI ĐI TRÁI --}}
 
                             <div class="aisle-left"></div>
-
 
                             {{-- SỐ HÀNG --}}
 
@@ -1774,38 +1472,25 @@
                                 {{ $rowNumber }}
                             </div>
 
-
                             {{-- LỐI ĐI PHẢI --}}
 
                             <div class="aisle-right"></div>
 
-
-                            {{-- D E F --}}
+                            {{-- GHẾ D E F --}}
 
                             @foreach($rightSeats as $seat)
 
                                 <div class="seat-wrapper">
 
-                                    @if(
-                                        $seat->status
-                                        ===
-                                        'available'
-                                    )
+                                    @if($seat->status === 'available')
 
                                         <input
-                                            type="radio"
-                                            name="seat_id"
+                                            type="checkbox"
+                                            name="seat_ids[]"
                                             id="seat{{ $seat->id }}"
                                             value="{{ $seat->id }}"
-
-                                            data-number="{{
-                                                $seat->seat_number
-                                            }}"
-
-                                            data-class="{{
-                                                $seat->seat_class
-                                            }}"
-
+                                            data-number="{{ $seat->seat_number }}"
+                                            data-class="{{ $seat->seat_class }}"
                                             data-price="{{
                                                 $seat->seat_class === 'vip'
                                                     ? $vipPrice
@@ -1815,24 +1500,19 @@
 
                                         <label
                                             for="seat{{ $seat->id }}"
-
                                             class="seat {{
                                                 $seat->seat_class === 'vip'
                                                     ? 'seat-vip'
                                                     : 'seat-economy'
                                             }}"
                                         >
-
                                             {{ $seat->seat_number }}
-
                                         </label>
 
                                     @else
 
                                         <div class="seat seat-booked">
-
                                             {{ $seat->seat_number }}
-
                                         </div>
 
                                     @endif
@@ -1849,10 +1529,7 @@
 
             </div>
 
-
-            {{-- ================================================= --}}
-            {{-- GHẾ ĐÃ CHỌN --}}
-            {{-- ================================================= --}}
+            {{-- THÔNG TIN GHẾ ĐÃ CHỌN --}}
 
             <div
                 id="selectedInfo"
@@ -1863,11 +1540,9 @@
                     Ghế đã chọn
                 </div>
 
-
                 <div class="selected-grid">
 
                     <div>
-
                         <span class="selected-label">
                             Số ghế
                         </span>
@@ -1876,12 +1551,9 @@
                             id="selectedSeat"
                             class="selected-value"
                         ></span>
-
                     </div>
 
-
                     <div>
-
                         <span class="selected-label">
                             Hạng ghế
                         </span>
@@ -1890,31 +1562,24 @@
                             id="selectedClass"
                             class="selected-value"
                         ></span>
-
                     </div>
 
-
                     <div>
-
                         <span class="selected-label">
-                            Giá vé
+                            Tổng giá vé
                         </span>
 
                         <span
                             id="selectedPrice"
                             class="selected-value"
                         ></span>
-
                     </div>
 
                 </div>
 
             </div>
 
-
-            {{-- ================================================= --}}
-            {{-- BUTTON --}}
-            {{-- ================================================= --}}
+            {{-- NÚT TIẾP TỤC --}}
 
             <div class="actions">
 
@@ -1925,24 +1590,23 @@
                     ← Quay lại tìm chuyến bay
                 </a>
 
-
                 <button
                     type="submit"
                     class="continue-button"
+                    id="continueSeatButton"
+                    disabled
                 >
 
                     @if(
                         ($tripType ?? 'one_way') === 'round_trip'
-                        &&
-                        ($leg ?? 'outbound') === 'outbound'
+                        && ($leg ?? 'outbound') === 'outbound'
                     )
 
                         Tiếp tục chọn chuyến về
 
                     @elseif(
                         ($tripType ?? 'one_way') === 'round_trip'
-                        &&
-                        ($leg ?? '') === 'return'
+                        && ($leg ?? '') === 'return'
                     )
 
                         Tiếp tục nhập thông tin hành khách
@@ -1963,9 +1627,10 @@
 
 </main>
 
-
+{{-- ĐĂNG NHẬP / ĐĂNG KÝ TẠI CHỖ --}}
 
 @guest
+
 <div
     class="inline-login-overlay"
     id="inlineLoginOverlay"
@@ -1976,12 +1641,17 @@
     id="inlineLoginPanel"
     aria-hidden="true"
 >
+
     <div class="inline-login-header">
+
         <div>
-            <h3 id="inlineAuthTitle">Đăng nhập để tiếp tục</h3>
+            <h3 id="inlineAuthTitle">
+                Đăng nhập để tiếp tục
+            </h3>
+
             <p>
-                Đăng nhập hoặc đăng ký ngay tại đây. Chuyến bay và ghế bạn đã chọn
-                vẫn được giữ nguyên.
+                Đăng nhập hoặc đăng ký ngay tại đây.
+                Chuyến bay và ghế bạn đã chọn vẫn được giữ nguyên.
             </p>
         </div>
 
@@ -1993,158 +1663,341 @@
         >
             ×
         </button>
+
     </div>
 
     <div class="inline-login-body">
+
         <div class="inline-login-note">
-            Sau khi đăng nhập hoặc đăng ký thành công, hệ thống sẽ tiếp tục sang bước
-            nhập thông tin hành khách mà không yêu cầu bạn chọn lại chuyến bay.
+            Sau khi đăng nhập hoặc đăng ký thành công,
+            hệ thống sẽ tiếp tục sang bước nhập thông tin
+            hành khách mà không yêu cầu bạn chọn lại chuyến bay.
         </div>
 
-        <div class="inline-auth-switch" role="group" aria-label="Chọn đăng nhập hoặc đăng ký">
-            <button type="button" data-inline-auth="login" aria-pressed="true" aria-controls="inlineLoginContent">Đăng nhập</button>
-            <button type="button" data-inline-auth="register" aria-pressed="false" aria-controls="inlineRegisterContent">Đăng ký</button>
-        </div>
-
-        <div id="inlineLoginContent">
-        @if($errors->inlineLogin->any())
-            <div class="inline-login-error">
-                @foreach($errors->inlineLogin->all() as $error)
-                    <div>{{ $error }}</div>
-                @endforeach
-            </div>
-        @endif
-
-        <form
-            action="{{ route('dang-nhap.tai-cho') }}"
-            method="POST"
+        <div
+            class="inline-auth-switch"
+            role="group"
+            aria-label="Chọn đăng nhập hoặc đăng ký"
         >
-            @csrf
-
-            <div class="inline-form-group">
-                <label for="inline_email">
-                    Email
-                </label>
-
-                <input
-                    type="email"
-                    id="inline_email"
-                    name="email"
-                    class="inline-form-control"
-                    value="{{ old('email') }}"
-                    placeholder="Nhập email"
-                    autocomplete="email"
-                    required
-                >
-            </div>
-
-            <div class="inline-form-group">
-                <label for="inline_password">
-                    Mật khẩu
-                </label>
-
-                <input
-                    type="password"
-                    id="inline_password"
-                    name="password"
-                    class="inline-form-control"
-                    placeholder="Nhập mật khẩu"
-                    autocomplete="current-password"
-                    required
-                >
-            </div>
 
             <button
-                type="submit"
-                class="inline-login-submit"
+                type="button"
+                data-inline-auth="login"
+                aria-pressed="true"
+                aria-controls="inlineLoginContent"
             >
-                Đăng nhập và tiếp tục
+                Đăng nhập
             </button>
-        </form>
 
-        <div class="inline-register-box">
-            Chưa có tài khoản?
-            <button type="button" data-inline-auth="register">Đăng ký ngay</button>
-        </div>
+            <button
+                type="button"
+                data-inline-auth="register"
+                aria-pressed="false"
+                aria-controls="inlineRegisterContent"
+            >
+                Đăng ký
+            </button>
+
         </div>
 
-        <div id="inlineRegisterContent" hidden>
+        {{-- FORM ĐĂNG NHẬP --}}
+
+        <div id="inlineLoginContent">
+
+            @if($errors->inlineLogin->any())
+
+                <div class="inline-login-error">
+
+                    @foreach($errors->inlineLogin->all() as $error)
+                        <div>{{ $error }}</div>
+                    @endforeach
+
+                </div>
+
+            @endif
+
+            <form
+                action="{{ route('dang-nhap.tai-cho') }}"
+                method="POST"
+            >
+                @csrf
+
+                <div class="inline-form-group">
+
+                    <label for="inline_email">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="inline_email"
+                        name="email"
+                        class="inline-form-control"
+                        value="{{ old('email') }}"
+                        placeholder="Nhập email"
+                        autocomplete="email"
+                        required
+                    >
+
+                </div>
+
+                <div class="inline-form-group">
+
+                    <label for="inline_password">
+                        Mật khẩu
+                    </label>
+
+                    <input
+                        type="password"
+                        id="inline_password"
+                        name="password"
+                        class="inline-form-control"
+                        placeholder="Nhập mật khẩu"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="inline-login-submit"
+                >
+                    Đăng nhập và tiếp tục
+                </button>
+
+            </form>
+
+            <div class="inline-register-box">
+                Chưa có tài khoản?
+
+                <button
+                    type="button"
+                    data-inline-auth="register"
+                >
+                    Đăng ký ngay
+                </button>
+            </div>
+
+        </div>
+
+        {{-- FORM ĐĂNG KÝ --}}
+
+        <div
+            id="inlineRegisterContent"
+            hidden
+        >
+
             @if($errors->inlineRegister->any())
-                <div class="inline-login-error" role="alert">
+
+                <div
+                    class="inline-login-error"
+                    role="alert"
+                >
+
                     @foreach($errors->inlineRegister->all() as $error)
                         <div>{{ $error }}</div>
                     @endforeach
+
                 </div>
+
             @endif
 
-            <form action="{{ route('dang-ky.store') }}" method="POST">
+            <form
+                action="{{ route('dang-ky.store') }}"
+                method="POST"
+            >
                 @csrf
-                <input type="hidden" name="inline_register" value="1">
+
+                <input
+                    type="hidden"
+                    name="inline_register"
+                    value="1"
+                >
 
                 <div class="inline-form-group">
-                    <label for="inline_register_name">Họ và tên</label>
-                    <input type="text" id="inline_register_name" name="name" class="inline-form-control"
-                        value="{{ old('name') }}" autocomplete="name" maxlength="255" required>
+
+                    <label for="inline_register_name">
+                        Họ và tên
+                    </label>
+
+                    <input
+                        type="text"
+                        id="inline_register_name"
+                        name="name"
+                        class="inline-form-control"
+                        value="{{ old('name') }}"
+                        autocomplete="name"
+                        maxlength="255"
+                        required
+                    >
+
                 </div>
 
                 <div class="inline-form-group">
-                    <label for="inline_register_email">Email</label>
-                    <input type="email" id="inline_register_email" name="email" class="inline-form-control"
-                        value="{{ old('email') }}" autocomplete="email" required>
+
+                    <label for="inline_register_email">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="inline_register_email"
+                        name="email"
+                        class="inline-form-control"
+                        value="{{ old('email') }}"
+                        autocomplete="email"
+                        required
+                    >
+
                 </div>
 
                 <div class="inline-form-group">
-                    <label for="inline_register_date_of_birth">Ngày sinh</label>
-                    <input type="date" id="inline_register_date_of_birth" name="date_of_birth" class="inline-form-control"
-                        value="{{ old('date_of_birth') }}" max="{{ now()->subDay()->toDateString() }}" autocomplete="bday" required>
+
+                    <label for="inline_register_date_of_birth">
+                        Ngày sinh
+                    </label>
+
+                    <input
+                        type="date"
+                        id="inline_register_date_of_birth"
+                        name="date_of_birth"
+                        class="inline-form-control"
+                        value="{{ old('date_of_birth') }}"
+                        max="{{ now()->subDay()->toDateString() }}"
+                        autocomplete="bday"
+                        required
+                    >
+
                 </div>
 
                 <div class="inline-form-group">
-                    <label for="inline_register_gender">Giới tính</label>
-                    <select id="inline_register_gender" name="gender" class="inline-form-control" required>
-                        <option value="">Chọn giới tính</option>
-                        <option value="nam" @selected(old('gender') === 'nam')>Nam</option>
-                        <option value="nu" @selected(old('gender') === 'nu')>Nữ</option>
-                        <option value="khac" @selected(old('gender') === 'khac')>Khác</option>
+
+                    <label for="inline_register_gender">
+                        Giới tính
+                    </label>
+
+                    <select
+                        id="inline_register_gender"
+                        name="gender"
+                        class="inline-form-control"
+                        required
+                    >
+                        <option value="">
+                            Chọn giới tính
+                        </option>
+
+                        <option
+                            value="nam"
+                            @selected(old('gender') === 'nam')
+                        >
+                            Nam
+                        </option>
+
+                        <option
+                            value="nu"
+                            @selected(old('gender') === 'nu')
+                        >
+                            Nữ
+                        </option>
+
+                        <option
+                            value="khac"
+                            @selected(old('gender') === 'khac')
+                        >
+                            Khác
+                        </option>
                     </select>
+
                 </div>
 
                 <div class="inline-form-group">
-                    <label for="inline_register_phone">Số điện thoại</label>
-                    <input type="tel" id="inline_register_phone" name="phone" class="inline-form-control"
-                        value="{{ old('phone') }}" autocomplete="tel" maxlength="20" required>
+
+                    <label for="inline_register_phone">
+                        Số điện thoại
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="inline_register_phone"
+                        name="phone"
+                        class="inline-form-control"
+                        value="{{ old('phone') }}"
+                        autocomplete="tel"
+                        maxlength="20"
+                        required
+                    >
+
                 </div>
 
                 <div class="inline-form-group">
-                    <label for="inline_register_password">Mật khẩu</label>
-                    <input type="password" id="inline_register_password" name="password" class="inline-form-control"
-                        autocomplete="new-password" minlength="4" placeholder="Ít nhất 4 ký tự" required>
+
+                    <label for="inline_register_password">
+                        Mật khẩu
+                    </label>
+
+                    <input
+                        type="password"
+                        id="inline_register_password"
+                        name="password"
+                        class="inline-form-control"
+                        autocomplete="new-password"
+                        minlength="4"
+                        placeholder="Ít nhất 4 ký tự"
+                        required
+                    >
+
                 </div>
 
                 <div class="inline-form-group">
-                    <label for="inline_register_password_confirmation">Xác nhận mật khẩu</label>
-                    <input type="password" id="inline_register_password_confirmation" name="password_confirmation"
-                        class="inline-form-control" autocomplete="new-password" minlength="4" required>
+
+                    <label for="inline_register_password_confirmation">
+                        Xác nhận mật khẩu
+                    </label>
+
+                    <input
+                        type="password"
+                        id="inline_register_password_confirmation"
+                        name="password_confirmation"
+                        class="inline-form-control"
+                        autocomplete="new-password"
+                        minlength="4"
+                        required
+                    >
+
                 </div>
 
-                <button type="submit" class="inline-login-submit">Đăng ký và tiếp tục</button>
+                <button
+                    type="submit"
+                    class="inline-login-submit"
+                >
+                    Đăng ký và tiếp tục
+                </button>
+
             </form>
 
             <div class="inline-register-box">
                 Đã có tài khoản?
-                <button type="button" data-inline-auth="login">Đăng nhập</button>
+
+                <button
+                    type="button"
+                    data-inline-auth="login"
+                >
+                    Đăng nhập
+                </button>
             </div>
+
         </div>
+
     </div>
+
 </aside>
+
 @endguest
 
-{{-- ========================================================= --}}
 {{-- FOOTER --}}
-{{-- ========================================================= --}}
 
 <footer>
-
     <div class="footer-logo">
         Viet<span>Jet</span>
     </div>
@@ -2152,189 +2005,391 @@
     <p>
         Website đặt vé máy bay tích hợp nhận diện khuôn mặt.
     </p>
-
 </footer>
 
-
-{{-- ========================================================= --}}
 {{-- JAVASCRIPT --}}
-{{-- ========================================================= --}}
 
 <script>
+    /*
+    |--------------------------------------------------------------------------
+    | CHỌN TỪ 1 ĐẾN 5 GHẾ
+    |--------------------------------------------------------------------------
+    */
 
-    const seats =
-        document.querySelectorAll(
-            'input[name="seat_id"]'
+    const seats = document.querySelectorAll(
+        'input[name="seat_ids[]"]'
+    );
+
+    const selectedInfo = document.getElementById(
+        'selectedInfo'
+    );
+
+    const selectedSeat = document.getElementById(
+        'selectedSeat'
+    );
+
+    const selectedClass = document.getElementById(
+        'selectedClass'
+    );
+
+    const selectedPrice = document.getElementById(
+        'selectedPrice'
+    );
+
+    const selectedCount = document.getElementById(
+        'selectedCount'
+    );
+
+    const requiredSeats = @json($passengerCount);
+
+    const seatSelectionForm = document.getElementById(
+        'seatSelectionForm'
+    );
+
+    const continueSeatButton = document.getElementById(
+        'continueSeatButton'
+    );
+
+    const numberFormat = new Intl.NumberFormat('vi-VN');
+
+    /*
+     * Lưu thứ tự nhấp chọn ghế.
+     * Thứ tự này dùng để ghép ghế với từng hành khách.
+     */
+    const selectionOrder = [];
+
+    function updateSelectedSeats() {
+
+        const chosen = selectionOrder
+            .map(function (id) {
+                return document.getElementById(
+                    'seat' + id
+                );
+            })
+            .filter(function (input) {
+                return input && input.checked;
+            });
+
+        selectedCount.textContent = chosen.length;
+
+        continueSeatButton.disabled =
+            chosen.length !== requiredSeats;
+
+        if (chosen.length === 0) {
+
+            selectedInfo.style.display = 'none';
+
+            return;
+        }
+
+        /*
+         * Hiển thị toàn bộ số ghế đã chọn.
+         */
+        selectedSeat.textContent = chosen
+            .map(function (input) {
+                return input.dataset.number;
+            })
+            .join(', ');
+
+        /*
+         * Hiển thị hạng từng ghế.
+         */
+        selectedClass.textContent = chosen
+            .map(function (input) {
+                return input.dataset.class === 'vip'
+                    ? 'VIP'
+                    : 'Phổ thông';
+            })
+            .join(', ');
+
+        /*
+         * Tính tổng giá các ghế.
+         */
+        const total = chosen.reduce(
+            function (sum, input) {
+                return sum + Number(
+                    input.dataset.price || 0
+                );
+            },
+            0
         );
 
-    const selectedInfo =
-        document.getElementById(
-            'selectedInfo'
-        );
+        selectedPrice.textContent =
+            numberFormat.format(total)
+            + ' đ (tổng '
+            + chosen.length
+            + ' ghế)';
 
-    const selectedSeat =
-        document.getElementById(
-            'selectedSeat'
-        );
+        selectedInfo.style.display = 'block';
+    }
 
-    const selectedClass =
-        document.getElementById(
-            'selectedClass'
-        );
-
-    const selectedPrice =
-        document.getElementById(
-            'selectedPrice'
-        );
-
+    /*
+    |--------------------------------------------------------------------------
+    | KIỂM TRA MỖI KHI CHỌN HOẶC BỎ CHỌN GHẾ
+    |--------------------------------------------------------------------------
+    */
 
     seats.forEach(function (seat) {
 
-        seat.addEventListener(
-            'change',
+        seat.addEventListener('change', function () {
+
+            if (seat.checked) {
+
+                if (selectionOrder.length >= requiredSeats) {
+
+                    seat.checked = false;
+
+                    alert(
+                        'Bạn chỉ được chọn đúng '
+                        + requiredSeats
+                        + ' ghế.'
+                    );
+
+                    return;
+                }
+
+                selectionOrder.push(seat.value);
+
+            } else {
+
+                const index = selectionOrder.indexOf(
+                    seat.value
+                );
+
+                if (index !== -1) {
+                    selectionOrder.splice(index, 1);
+                }
+            }
+
+            updateSelectedSeats();
+        });
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | KHÔNG CHO TIẾP TỤC NẾU CHƯA ĐỦ GHẾ
+    |--------------------------------------------------------------------------
+    */
+
+    seatSelectionForm.addEventListener(
+        'submit',
+        function (event) {
+
+            if (selectionOrder.length !== requiredSeats) {
+
+                event.preventDefault();
+
+                alert(
+                    'Vui lòng chọn đúng '
+                    + requiredSeats
+                    + ' ghế trước khi tiếp tục.'
+                );
+            }
+
+        }
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | GIỮ THỨ TỰ CHỌN GHẾ KHI GỬI FORM
+    |--------------------------------------------------------------------------
+    */
+
+    seatSelectionForm.addEventListener(
+        'formdata',
+        function (event) {
+
+            event.formData.delete('seat_ids[]');
+
+            selectionOrder.forEach(function (id) {
+                event.formData.append(
+                    'seat_ids[]',
+                    id
+                );
+            });
+
+        }
+    );
+
+    updateSelectedSeats();
+
+    /*
+    |--------------------------------------------------------------------------
+    | ĐĂNG NHẬP / ĐĂNG KÝ TẠI CHỖ - GIỮ CHỨC NĂNG CŨ
+    |--------------------------------------------------------------------------
+    */
+
+    const openInlineLogin = document.getElementById(
+        'openInlineLogin'
+    );
+
+    const closeInlineLogin = document.getElementById(
+        'closeInlineLogin'
+    );
+
+    const inlineLoginPanel = document.getElementById(
+        'inlineLoginPanel'
+    );
+
+    const inlineLoginOverlay = document.getElementById(
+        'inlineLoginOverlay'
+    );
+
+    let inlineAuthMode =
+        @json($errors->inlineRegister->any() ? 'register' : 'login');
+
+    function setInlineAuthMode(
+        mode,
+        focusInput = true
+    ) {
+
+        if (!inlineLoginPanel) {
+            return;
+        }
+
+        inlineAuthMode =
+            mode === 'register'
+                ? 'register'
+                : 'login';
+
+        const registering =
+            inlineAuthMode === 'register';
+
+        document.getElementById(
+            'inlineLoginContent'
+        ).hidden = registering;
+
+        document.getElementById(
+            'inlineRegisterContent'
+        ).hidden = !registering;
+
+        document.getElementById(
+            'inlineAuthTitle'
+        ).textContent = registering
+            ? 'Đăng ký để tiếp tục'
+            : 'Đăng nhập để tiếp tục';
+
+        document.querySelectorAll(
+            '.inline-auth-switch button'
+        ).forEach(function (button) {
+
+            button.setAttribute(
+                'aria-pressed',
+                String(
+                    button.dataset.inlineAuth
+                    === inlineAuthMode
+                )
+            );
+
+        });
+
+        if (focusInput) {
+
+            document.getElementById(
+                registering
+                    ? 'inline_register_name'
+                    : 'inline_email'
+            ).focus();
+
+        }
+    }
+
+    document.querySelectorAll(
+        '[data-inline-auth]'
+    ).forEach(function (button) {
+
+        button.addEventListener(
+            'click',
             function () {
-
-                const seatNumber =
-                    this.dataset.number;
-
-                const seatClass =
-                    this.dataset.class;
-
-                const price =
-                    parseInt(
-                        this.dataset.price
-                    ) || 0;
-
-
-                selectedSeat.textContent =
-                    seatNumber;
-
-
-                selectedClass.textContent =
-                    seatClass === 'vip'
-                        ? 'VIP'
-                        : 'Phổ thông';
-
-
-                selectedPrice.textContent =
-                    new Intl.NumberFormat(
-                        'vi-VN'
-                    ).format(price)
-                    + ' đ';
-
-
-                selectedInfo.style.display =
-                    'block';
-
+                setInlineAuthMode(
+                    button.dataset.inlineAuth
+                );
             }
         );
 
     });
 
-
-    const openInlineLogin =
-        document.getElementById('openInlineLogin');
-
-    const closeInlineLogin =
-        document.getElementById('closeInlineLogin');
-
-    const inlineLoginPanel =
-        document.getElementById('inlineLoginPanel');
-
-    const inlineLoginOverlay =
-        document.getElementById('inlineLoginOverlay');
-
-
-    let inlineAuthMode = @json($errors->inlineRegister->any() ? 'register' : 'login');
-
-    function setInlineAuthMode(mode, focusInput = true) {
-        if (!inlineLoginPanel) {
-            return;
-        }
-
-        inlineAuthMode = mode === 'register' ? 'register' : 'login';
-        const registering = inlineAuthMode === 'register';
-
-        document.getElementById('inlineLoginContent').hidden = registering;
-        document.getElementById('inlineRegisterContent').hidden = !registering;
-        document.getElementById('inlineAuthTitle').textContent = registering
-            ? 'Đăng ký để tiếp tục'
-            : 'Đăng nhập để tiếp tục';
-
-        document.querySelectorAll('.inline-auth-switch button').forEach(function (button) {
-            button.setAttribute('aria-pressed', String(button.dataset.inlineAuth === inlineAuthMode));
-        });
-
-        if (focusInput) {
-            document.getElementById(registering ? 'inline_register_name' : 'inline_email').focus();
-        }
-    }
-
-    document.querySelectorAll('[data-inline-auth]').forEach(function (button) {
-        button.addEventListener('click', function () {
-            setInlineAuthMode(button.dataset.inlineAuth);
-        });
-    });
-
-    setInlineAuthMode(inlineAuthMode, false);
+    setInlineAuthMode(
+        inlineAuthMode,
+        false
+    );
 
     function showInlineLogin() {
 
-        if (!inlineLoginPanel || !inlineLoginOverlay) {
+        if (
+            !inlineLoginPanel ||
+            !inlineLoginOverlay
+        ) {
             return;
         }
 
         inlineLoginPanel.classList.add('show');
         inlineLoginOverlay.classList.add('show');
-        inlineLoginPanel.setAttribute('aria-hidden', 'false');
+
+        inlineLoginPanel.setAttribute(
+            'aria-hidden',
+            'false'
+        );
 
         const emailInput = document.getElementById(
-            inlineAuthMode === 'register' ? 'inline_register_name' : 'inline_email'
+            inlineAuthMode === 'register'
+                ? 'inline_register_name'
+                : 'inline_email'
         );
 
         if (emailInput) {
+
             setTimeout(function () {
                 emailInput.focus();
             }, 200);
+
         }
     }
 
-
     function hideInlineLogin() {
 
-        if (!inlineLoginPanel || !inlineLoginOverlay) {
+        if (
+            !inlineLoginPanel ||
+            !inlineLoginOverlay
+        ) {
             return;
         }
 
         inlineLoginPanel.classList.remove('show');
         inlineLoginOverlay.classList.remove('show');
-        inlineLoginPanel.setAttribute('aria-hidden', 'true');
+
+        inlineLoginPanel.setAttribute(
+            'aria-hidden',
+            'true'
+        );
     }
 
-
     if (openInlineLogin) {
+
         openInlineLogin.addEventListener(
             'click',
             showInlineLogin
         );
+
     }
 
-
     if (closeInlineLogin) {
+
         closeInlineLogin.addEventListener(
             'click',
             hideInlineLogin
         );
+
     }
 
-
     if (inlineLoginOverlay) {
+
         inlineLoginOverlay.addEventListener(
             'click',
             hideInlineLogin
         );
-    }
 
+    }
 
     document.addEventListener(
         'keydown',
@@ -2347,6 +2402,11 @@
         }
     );
 
+    /*
+    |--------------------------------------------------------------------------
+    | HIỂN THỊ ĐĂNG NHẬP KHI HỆ THỐNG YÊU CẦU
+    |--------------------------------------------------------------------------
+    */
 
     @if(
         session('show_inline_login')
@@ -2369,5 +2429,4 @@
 </script>
 
 </body>
-
 </html>

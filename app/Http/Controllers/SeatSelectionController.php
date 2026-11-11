@@ -9,13 +9,79 @@ use Illuminate\Support\Facades\Auth;
 
 class SeatSelectionController extends Controller
 {
+    private function passengerCount(): int
+    {
+        return max(
+            1,
+            min(
+                5,
+                (int) session(
+                    'flight_search.passenger_count',
+                    1
+                )
+            )
+        );
+    }
+
+    private function tripLeg(?string $requestedLeg): array
+    {
+        $tripType = session(
+            'flight_search.trip_type',
+            'one_way'
+        );
+
+        $leg = $tripType === 'round_trip'
+            ? (
+                in_array(
+                    $requestedLeg,
+                    ['outbound', 'return'],
+                    true
+                )
+                    ? $requestedLeg
+                    : 'outbound'
+            )
+            : 'one_way';
+
+        return [$tripType, $leg];
+    }
+
+    private function validTripFlight(
+        Flight $flight,
+        string $tripType,
+        string $leg
+    ): bool {
+        if ($tripType !== 'round_trip') {
+            return true;
+        }
+
+        $departure = (int) session(
+            'flight_search.departure_airport_id'
+        );
+
+        $arrival = (int) session(
+            'flight_search.arrival_airport_id'
+        );
+
+        $date = $leg === 'return'
+            ? session('flight_search.return_date')
+            : session('flight_search.flight_date');
+
+        if (!$departure || !$arrival || !$date) {
+            return false;
+        }
+
+        return (int) $flight->departure_airport_id
+                === ($leg === 'return' ? $arrival : $departure)
+            && (int) $flight->arrival_airport_id
+                === ($leg === 'return' ? $departure : $arrival)
+            && $flight->flight_date->format('Y-m-d') === $date;
+    }
+
     /**
-     * Hiển thị sơ đồ ghế.
+     * Hiển thị sơ đồ ghế của chặng đang chọn.
      */
-    public function show(
-        Request $request,
-        Flight $flight
-    ) {
+    public function show(Request $request, Flight $flight)
+    {
         $flight->load([
             'aircraft',
             'departureAirport',
@@ -31,96 +97,24 @@ class SeatSelectionController extends Controller
                 );
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | XÁC ĐỊNH CHẶNG BAY
-        |--------------------------------------------------------------------------
-        |
-        | one_way  : vé một chiều
-        | outbound : chiều đi của vé khứ hồi
-        | return   : chiều về của vé khứ hồi
-        |
-        */
-
-        $tripType = session(
-            'flight_search.trip_type',
-            'one_way'
+        [$tripType, $leg] = $this->tripLeg(
+            $request->query('leg')
         );
 
-        $leg = $request->query('leg');
-
-        if ($tripType === 'round_trip') {
-            $leg = in_array(
-                $leg,
-                ['outbound', 'return'],
-                true
-            )
-                ? $leg
-                : 'outbound';
-        } else {
-            $leg = 'one_way';
+        if (!$this->validTripFlight(
+            $flight,
+            $tripType,
+            $leg
+        )) {
+            return redirect()
+                ->route('flights.search.form')
+                ->with(
+                    'error',
+                    'Chuyến bay không thuộc hành trình đã tìm kiếm.'
+                );
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | KIỂM TRA CHUYẾN BAY CÓ ĐÚNG HÀNH TRÌNH KHÔNG
-        |--------------------------------------------------------------------------
-        */
-
-        if ($tripType === 'round_trip') {
-            $departureAirportId = (int) session(
-                'flight_search.departure_airport_id'
-            );
-
-            $arrivalAirportId = (int) session(
-                'flight_search.arrival_airport_id'
-            );
-
-            $flightDate = session(
-                'flight_search.flight_date'
-            );
-
-            $returnDate = session(
-                'flight_search.return_date'
-            );
-
-            if ($leg === 'outbound') {
-                $validFlight =
-                    (int) $flight->departure_airport_id
-                        === $departureAirportId
-                    &&
-                    (int) $flight->arrival_airport_id
-                        === $arrivalAirportId
-                    &&
-                    $flight->flight_date->format('Y-m-d')
-                        === $flightDate;
-            } else {
-                $validFlight =
-                    (int) $flight->departure_airport_id
-                        === $arrivalAirportId
-                    &&
-                    (int) $flight->arrival_airport_id
-                        === $departureAirportId
-                    &&
-                    $flight->flight_date->format('Y-m-d')
-                        === $returnDate;
-            }
-
-            if (!$validFlight) {
-                return redirect()
-                    ->route('flights.search.form')
-                    ->with(
-                        'error',
-                        'Chuyến bay không thuộc hành trình đã tìm kiếm.'
-                    );
-            }
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | LẤY DANH SÁCH GHẾ
-        |--------------------------------------------------------------------------
-        */
+        $passengerCount = $this->passengerCount();
 
         $seats = $flight->flightSeats()
             ->get()
@@ -131,16 +125,10 @@ class SeatSelectionController extends Controller
                     $matches
                 );
 
-                $row = isset($matches[1])
-                    ? (int) $matches[1]
-                    : 0;
-
-                $letter = $matches[2] ?? '';
-
                 return sprintf(
                     '%05d-%s',
-                    $row,
-                    $letter
+                    (int) ($matches[1] ?? 0),
+                    $matches[2] ?? ''
                 );
             });
 
@@ -154,25 +142,18 @@ class SeatSelectionController extends Controller
             ->where('status', 'available')
             ->count();
 
-        if ($availableSeats <= 0) {
+        if ($availableSeats < $passengerCount) {
             return redirect()
                 ->route('flights.search.form')
                 ->with(
                     'error',
-                    'Chuyến bay đã hết ghế.'
+                    "Chuyến bay chỉ còn {$availableSeats} ghế, không đủ {$passengerCount} vé bạn đã chọn."
                 );
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | GIÁ VÉ
-        |--------------------------------------------------------------------------
-        */
-
         $economyPrice = (float) $flight->price;
 
-        $vipPrice =
-            (float) $flight->price
+        $vipPrice = $economyPrice
             + (float) $flight->vip_surcharge;
 
         return view(
@@ -186,24 +167,31 @@ class SeatSelectionController extends Controller
                 'economyPrice',
                 'vipPrice',
                 'tripType',
-                'leg'
+                'leg',
+                'passengerCount'
             )
         );
     }
 
-
     /**
-     * Xử lý chọn ghế.
+     * Kiểm tra và lưu chính xác 1–5 ghế được chọn.
      */
-    public function select(
-        Request $request,
-        Flight $flight
-    ) {
-        $request->validate(
+    public function select(Request $request, Flight $flight)
+    {
+        $passengerCount = $this->passengerCount();
+
+        $validated = $request->validate(
             [
-                'seat_id' => [
+                'seat_ids' => [
+                    'required',
+                    'array',
+                    'size:' . $passengerCount,
+                ],
+
+                'seat_ids.*' => [
                     'required',
                     'integer',
+                    'distinct',
                 ],
 
                 'leg' => [
@@ -212,14 +200,20 @@ class SeatSelectionController extends Controller
                 ],
             ],
             [
-                'seat_id.required'
-                    => 'Vui lòng chọn ghế.',
+                'seat_ids.required'
+                    => 'Vui lòng chọn đủ số ghế.',
 
-                'seat_id.integer'
-                    => 'Ghế không hợp lệ.',
+                'seat_ids.array'
+                    => 'Danh sách ghế không hợp lệ.',
 
-                'leg.in'
-                    => 'Chặng bay không hợp lệ.',
+                'seat_ids.size'
+                    => "Vui lòng chọn đúng {$passengerCount} ghế.",
+
+                'seat_ids.*.integer'
+                    => 'Mã ghế không hợp lệ.',
+
+                'seat_ids.*.distinct'
+                    => 'Không được chọn trùng ghế.',
             ]
         );
 
@@ -232,57 +226,70 @@ class SeatSelectionController extends Controller
                 );
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | KIỂM TRA GHẾ
-        |--------------------------------------------------------------------------
-        */
-
-        $seat = FlightSeat::where(
-            'id',
-            $request->seat_id
-        )
-            ->where(
-                'flight_id',
-                $flight->id
-            )
-            ->first();
-
-        if (!$seat) {
-            return back()
-                ->with(
-                    'error',
-                    'Ghế không tồn tại.'
-                );
-        }
-
-        if ($seat->status !== 'available') {
-            return back()
-                ->with(
-                    'error',
-                    'Ghế này đã được đặt. Vui lòng chọn ghế khác.'
-                );
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | XÁC ĐỊNH LOẠI HÀNH TRÌNH
-        |--------------------------------------------------------------------------
-        */
-
-        $tripType = session(
-            'flight_search.trip_type',
-            'one_way'
+        [$tripType, $leg] = $this->tripLeg(
+            $validated['leg'] ?? null
         );
 
+        if (
+            $tripType === 'round_trip'
+            && ($validated['leg'] ?? null) !== $leg
+        ) {
+            return back()->with(
+                'error',
+                'Chặng bay không hợp lệ.'
+            );
+        }
+
+        if (!$this->validTripFlight(
+            $flight,
+            $tripType,
+            $leg
+        )) {
+            return redirect()
+                ->route('flights.search.form')
+                ->with(
+                    'error',
+                    'Chuyến bay không thuộc hành trình đã tìm kiếm.'
+                );
+        }
+
+        $selectedIds = array_map(
+            'intval',
+            $validated['seat_ids']
+        );
+
+        $selectedSeats = FlightSeat::where(
+            'flight_id',
+            $flight->id
+        )
+            ->whereIn('id', $selectedIds)
+            ->where('status', 'available')
+            ->get();
+
+        if ($selectedSeats->count() !== $passengerCount) {
+            return back()->with(
+                'error',
+                'Có ghế không tồn tại hoặc đã được đặt. Vui lòng chọn lại.'
+            );
+        }
+
         /*
         |--------------------------------------------------------------------------
-        | MỘT CHIỀU
+        | GIỮ THỨ TỰ GHẾ ĐƯỢC CHỌN
         |--------------------------------------------------------------------------
-        |
-        | Giữ nguyên session cũ để không ảnh hưởng
-        | luồng đặt vé một chiều đang hoạt động.
-        |
+        */
+
+        $seatsById = $selectedSeats->keyBy('id');
+
+        $orderedSeats = collect($selectedIds)
+            ->map(fn ($id) => $seatsById[$id]);
+
+        $firstSeat = $orderedSeats->first();
+
+        /*
+        |--------------------------------------------------------------------------
+        | ĐẶT VÉ MỘT CHIỀU
+        |--------------------------------------------------------------------------
         */
 
         if ($tripType !== 'round_trip') {
@@ -290,16 +297,21 @@ class SeatSelectionController extends Controller
                 'booking.flight_id'
                     => $flight->id,
 
+                'booking.seat_ids'
+                    => $selectedIds,
+
+                /*
+                 * Giữ biến cũ cho luồng đặt 1 vé.
+                 */
                 'booking.seat_id'
-                    => $seat->id,
+                    => $firstSeat->id,
             ]);
 
             if (!Auth::check()) {
-                return back()
-                    ->with(
-                        'error',
-                        'Bạn cần đăng nhập để tiếp tục nhập thông tin hành khách.'
-                    );
+                return back()->with(
+                    'error',
+                    'Bạn cần đăng nhập để tiếp tục nhập thông tin hành khách.'
+                );
             }
 
             return redirect()
@@ -308,30 +320,7 @@ class SeatSelectionController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | KHỨ HỒI
-        |--------------------------------------------------------------------------
-        */
-
-        $leg = $request->input(
-            'leg',
-            'outbound'
-        );
-
-        if (!in_array(
-            $leg,
-            ['outbound', 'return'],
-            true
-        )) {
-            return back()
-                ->with(
-                    'error',
-                    'Chặng bay không hợp lệ.'
-                );
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | CHỌN GHẾ CHIỀU ĐI
+        | ĐẶT VÉ KHỨ HỒI
         |--------------------------------------------------------------------------
         */
 
@@ -340,26 +329,21 @@ class SeatSelectionController extends Controller
                 'booking.outbound.flight_id'
                     => $flight->id,
 
+                'booking.outbound.seat_ids'
+                    => $selectedIds,
+
                 'booking.outbound.seat_id'
-                    => $seat->id,
+                    => $firstSeat->id,
             ]);
 
             /*
-            |--------------------------------------------------------------------------
-            | XÓA CHIỀU VỀ CŨ NẾU KHÁCH CHỌN LẠI CHIỀU ĐI
-            |--------------------------------------------------------------------------
-            */
-
+             * Xóa chiều về cũ nếu chọn lại chiều đi.
+             */
             session()->forget([
                 'booking.return.flight_id',
                 'booking.return.seat_id',
+                'booking.return.seat_ids',
             ]);
-
-            /*
-            |--------------------------------------------------------------------------
-            | TÌM CÁC CHUYẾN VỀ
-            |--------------------------------------------------------------------------
-            */
 
             $departureAirportId = session(
                 'flight_search.departure_airport_id'
@@ -413,57 +397,69 @@ class SeatSelectionController extends Controller
                 )
                 ->get();
 
+            /*
+             * Giữ biến $seat để tương thích
+             * với giao diện chọn chuyến về cũ.
+             */
+            $seat = $firstSeat;
+
             return view(
                 'user.chon-chuyen-ve',
                 compact(
                     'flight',
                     'seat',
                     'returnFlights',
-                    'returnDate'
+                    'returnDate',
+                    'passengerCount'
                 )
             );
         }
 
         /*
         |--------------------------------------------------------------------------
-        | CHỌN GHẾ CHIỀU VỀ
+        | KIỂM TRA GHẾ CHIỀU ĐI TRƯỚC KHI CHỌN CHIỀU VỀ
         |--------------------------------------------------------------------------
         */
 
-        $outboundFlightId = session(
-            'booking.outbound.flight_id'
-        );
-
-        $outboundSeatId = session(
-            'booking.outbound.seat_id'
+        $outboundIds = session(
+            'booking.outbound.seat_ids',
+            []
         );
 
         if (
-            !$outboundFlightId
-            || !$outboundSeatId
+            !session('booking.outbound.flight_id')
+            || count($outboundIds) !== $passengerCount
         ) {
             return redirect()
                 ->route('flights.search.form')
                 ->with(
                     'error',
-                    'Vui lòng chọn chuyến đi trước.'
+                    'Vui lòng chọn đủ ghế chiều đi trước.'
                 );
         }
+
+        /*
+        |--------------------------------------------------------------------------
+        | LƯU DANH SÁCH GHẾ CHIỀU VỀ
+        |--------------------------------------------------------------------------
+        */
 
         session([
             'booking.return.flight_id'
                 => $flight->id,
 
+            'booking.return.seat_ids'
+                => $selectedIds,
+
             'booking.return.seat_id'
-                => $seat->id,
+                => $firstSeat->id,
         ]);
 
         if (!Auth::check()) {
-            return back()
-                ->with(
-                    'error',
-                    'Bạn cần đăng nhập để tiếp tục nhập thông tin hành khách.'
-                );
+            return back()->with(
+                'error',
+                'Bạn cần đăng nhập để tiếp tục nhập thông tin hành khách.'
+            );
         }
 
         return redirect()

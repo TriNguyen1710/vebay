@@ -17,21 +17,46 @@ class FlightSearchController extends Controller
             ->orderBy('city')
             ->get();
 
+        /*
+        |--------------------------------------------------------------------------
+        | SỐ LƯỢNG HÀNH KHÁCH
+        |--------------------------------------------------------------------------
+        |
+        | Nếu chưa chọn thì mặc định là 1.
+        | Cho phép đặt từ 1 đến 5 vé trong một lần.
+        |
+        */
+
+        $passengerCount = (int) session(
+            'flight_search.passenger_count',
+            1
+        );
+
+        if ($passengerCount < 1 || $passengerCount > 5) {
+            $passengerCount = 1;
+        }
+
         return view(
             'user.tim-chuyen-bay',
-            compact('airports')
+            compact(
+                'airports',
+                'passengerCount'
+            )
         );
     }
-
 
     /**
      * Xử lý tìm chuyến bay một chiều / khứ hồi.
      */
     public function search(Request $request)
     {
-        
+        /*
+        |--------------------------------------------------------------------------
+        | KIỂM TRA DỮ LIỆU NHẬP
+        |--------------------------------------------------------------------------
+        */
 
-        $request->validate(
+        $validated = $request->validate(
             [
                 'trip_type' => [
                     'required',
@@ -59,6 +84,19 @@ class FlightSearchController extends Controller
                     'required_if:trip_type,round_trip',
                     'date',
                     'after_or_equal:flight_date',
+                ],
+
+                /*
+                |--------------------------------------------------------------------------
+                | SỐ LƯỢNG VÉ: 1 ĐẾN 5
+                |--------------------------------------------------------------------------
+                */
+
+                'passenger_count' => [
+                    'nullable',
+                    'integer',
+                    'min:1',
+                    'max:5',
                 ],
             ],
             [
@@ -97,9 +135,17 @@ class FlightSearchController extends Controller
 
                 'return_date.after_or_equal'
                     => 'Ngày về phải bằng hoặc sau ngày đi.',
+
+                'passenger_count.integer'
+                    => 'Số lượng hành khách phải là số nguyên.',
+
+                'passenger_count.min'
+                    => 'Phải có ít nhất 1 hành khách.',
+
+                'passenger_count.max'
+                    => 'Mỗi lần chỉ được đặt tối đa 5 vé.',
             ]
         );
-
 
         /*
         |--------------------------------------------------------------------------
@@ -107,8 +153,21 @@ class FlightSearchController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $tripType = $request->trip_type;
+        $tripType = $validated['trip_type'];
 
+        /*
+        |--------------------------------------------------------------------------
+        | SỐ LƯỢNG HÀNH KHÁCH
+        |--------------------------------------------------------------------------
+        |
+        | Giữ tương thích với form cũ:
+        | Nếu form chưa có passenger_count thì mặc định 1.
+        |
+        */
+
+        $passengerCount = (int) (
+            $validated['passenger_count'] ?? 1
+        );
 
         /*
         |--------------------------------------------------------------------------
@@ -124,15 +183,15 @@ class FlightSearchController extends Controller
         ])
             ->where(
                 'departure_airport_id',
-                $request->departure_airport_id
+                $validated['departure_airport_id']
             )
             ->where(
                 'arrival_airport_id',
-                $request->arrival_airport_id
+                $validated['arrival_airport_id']
             )
             ->whereDate(
                 'flight_date',
-                $request->flight_date
+                $validated['flight_date']
             )
             ->where(
                 'status',
@@ -143,7 +202,6 @@ class FlightSearchController extends Controller
             )
             ->get();
 
-
         /*
         |--------------------------------------------------------------------------
         | CHUYẾN VỀ
@@ -153,7 +211,6 @@ class FlightSearchController extends Controller
         $returnFlights = collect();
 
         if ($tripType === 'round_trip') {
-
             $returnFlights = Flight::with([
                 'aircraft',
                 'departureAirport',
@@ -162,15 +219,15 @@ class FlightSearchController extends Controller
             ])
                 ->where(
                     'departure_airport_id',
-                    $request->arrival_airport_id
+                    $validated['arrival_airport_id']
                 )
                 ->where(
                     'arrival_airport_id',
-                    $request->departure_airport_id
+                    $validated['departure_airport_id']
                 )
                 ->whereDate(
                     'flight_date',
-                    $request->return_date
+                    $validated['return_date']
                 )
                 ->where(
                     'status',
@@ -182,6 +239,32 @@ class FlightSearchController extends Controller
                 ->get();
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | ĐẾM GHẾ TRỐNG
+        |--------------------------------------------------------------------------
+        |
+        | Giữ nguyên danh sách chuyến bay hiện tại.
+        | Đồng thời tính số ghế trống để bước chọn
+        | chuyến bay kiểm tra đủ chỗ cho cả nhóm.
+        |
+        | Chưa tự động đặt hoặc giữ ghế tại bước này.
+        |
+        */
+
+        $outboundFlights->each(function ($flight) {
+            $flight->available_seats_count = $flight
+                ->flightSeats
+                ->where('status', 'available')
+                ->count();
+        });
+
+        $returnFlights->each(function ($flight) {
+            $flight->available_seats_count = $flight
+                ->flightSeats
+                ->where('status', 'available')
+                ->count();
+        });
 
         /*
         |--------------------------------------------------------------------------
@@ -194,24 +277,32 @@ class FlightSearchController extends Controller
                 => $tripType,
 
             'flight_search.departure_airport_id'
-                => $request->departure_airport_id,
+                => $validated['departure_airport_id'],
 
             'flight_search.arrival_airport_id'
-                => $request->arrival_airport_id,
+                => $validated['arrival_airport_id'],
 
             'flight_search.flight_date'
-                => $request->flight_date,
+                => $validated['flight_date'],
 
             'flight_search.return_date'
                 => $tripType === 'round_trip'
-                    ? $request->return_date
+                    ? $validated['return_date']
                     : null,
-        ]);
 
+            /*
+            |--------------------------------------------------------------------------
+            | LƯU SỐ LƯỢNG VÉ
+            |--------------------------------------------------------------------------
+            */
+
+            'flight_search.passenger_count'
+                => $passengerCount,
+        ]);
 
         /*
         |--------------------------------------------------------------------------
-        | TRẢ KẾT QUẢ
+        | TRẢ KẾT QUẢ TÌM CHUYẾN BAY
         |--------------------------------------------------------------------------
         */
 
@@ -232,8 +323,8 @@ class FlightSearchController extends Controller
                 | GIỮ BIẾN CŨ
                 |--------------------------------------------------------------------------
                 |
-                | Biến $flights vẫn được truyền để tránh làm hỏng
-                | view cũ nếu hiện tại view đang dùng $flights.
+                | Giữ biến $flights để không ảnh hưởng
+                | giao diện kết quả đang sử dụng.
                 |
                 */
 
@@ -241,10 +332,21 @@ class FlightSearchController extends Controller
                     => $outboundFlights,
 
                 'flightDate'
-                    => $request->flight_date,
+                    => $validated['flight_date'],
 
                 'returnDate'
-                    => $request->return_date,
+                    => $tripType === 'round_trip'
+                        ? $validated['return_date']
+                        : null,
+
+                /*
+                |--------------------------------------------------------------------------
+                | TRUYỀN SỐ LƯỢNG HÀNH KHÁCH SANG VIEW
+                |--------------------------------------------------------------------------
+                */
+
+                'passengerCount'
+                    => $passengerCount,
             ]
         );
     }

@@ -1,15 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Kết quả chuyến bay - SkyGo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kết quả chuyến bay - Vietjet</title>
 
     <style>
         * {
@@ -22,29 +17,32 @@
             --primary: #003b70;
             --primary-dark: #00294f;
             --secondary: #f4b400;
-            --danger: #dc3545;
+            --danger: #e2231a;
             --success: #198754;
             --warning: #d97706;
-            --white: #ffffff;
             --light: #f4f7fb;
             --text: #1f2937;
             --muted: #6b7280;
-            --border: #e1e7ee;
+            --border: #dfe7f0;
         }
 
         body {
             font-family: Arial, Helvetica, sans-serif;
             background: var(--light);
             color: var(--text);
+            line-height: 1.5;
         }
 
         a {
             text-decoration: none;
         }
 
-        /* =====================================================
-           TOP BAR
-        ===================================================== */
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        /* TOP BAR */
 
         .top-bar {
             background: var(--primary-dark);
@@ -53,14 +51,14 @@
         }
 
         .top-bar-inner {
-            max-width: 1240px;
+            max-width: 1380px;
             min-height: 36px;
             margin: auto;
-            padding: 0 20px;
-
+            padding: 0 24px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            gap: 20px;
         }
 
         .top-bar-group {
@@ -71,34 +69,26 @@
 
         .top-bar a {
             color: white;
-            opacity: 0.9;
         }
 
-        .top-bar a:hover {
-            opacity: 1;
-        }
-
-        /* =====================================================
-           HEADER
-        ===================================================== */
+        /* HEADER */
 
         .header {
             background: white;
-
-            box-shadow:
-                0 3px 15px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 3px 15px rgba(0,0,0,.08);
+            position: relative;
+            z-index: 30;
         }
 
         .navbar {
-            max-width: 1240px;
+            max-width: 1380px;
             min-height: 76px;
             margin: auto;
-            padding: 0 20px;
-
+            padding: 0 24px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            gap: 30px;
+            justify-content: space-between;
+            gap: 24px;
         }
 
         .logo {
@@ -106,6 +96,7 @@
             font-size: 27px;
             font-weight: 800;
             letter-spacing: -1px;
+            white-space: nowrap;
         }
 
         .logo span {
@@ -115,19 +106,15 @@
         .nav-menu {
             display: flex;
             align-items: center;
+            gap: 3px;
         }
 
         .nav-link {
-            padding: 27px 15px;
-
+            padding: 27px 14px;
             color: #293241;
-
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
-
             border-bottom: 3px solid transparent;
-
-            transition: 0.2s;
         }
 
         .nav-link:hover,
@@ -142,12 +129,7 @@
             gap: 12px;
         }
 
-        .login-link {
-            color: var(--primary);
-            font-size: 14px;
-            font-weight: bold;
-        }
-
+        .login-link,
         .user-name {
             color: var(--primary);
             font-size: 14px;
@@ -155,53 +137,44 @@
         }
 
         .logout-btn {
+            padding: 9px 14px;
             border: none;
-
+            border-radius: 7px;
             background: var(--danger);
             color: white;
-
-            padding: 9px 14px;
-            border-radius: 6px;
-
-            cursor: pointer;
+            font-size: 13px;
             font-weight: bold;
         }
 
-        /* =====================================================
-           BANNER
-        ===================================================== */
+        /* BANNER */
 
         .page-banner {
-            min-height: 250px;
-
+            min-height: 265px;
             background:
                 linear-gradient(
                     90deg,
-                    rgba(0, 31, 58, 0.91),
-                    rgba(0, 59, 112, 0.46)
+                    rgba(0,31,58,.93),
+                    rgba(0,59,112,.48)
                 ),
                 url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1800&q=85');
-
             background-size: cover;
             background-position: center;
-
             color: white;
         }
 
         .banner-inner {
-            max-width: 1240px;
+            max-width: 1380px;
             margin: auto;
-            padding: 55px 20px 95px;
+            padding: 47px 24px 110px;
         }
 
         .breadcrumb {
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
             gap: 8px;
-
-            margin-bottom: 20px;
-
-            font-size: 14px;
+            margin-bottom: 18px;
+            font-size: 13px;
         }
 
         .breadcrumb a {
@@ -215,45 +188,35 @@
         .page-banner h1 {
             font-size: 38px;
             margin-bottom: 10px;
+            font-weight: 800;
         }
 
         .page-banner p {
-            max-width: 620px;
-
+            max-width: 650px;
             color: #e5edf5;
-
-            line-height: 1.6;
-            font-size: 16px;
+            font-size: 15px;
+            line-height: 1.65;
         }
 
-        /* =====================================================
-           MAIN
-        ===================================================== */
+        /* MAIN */
 
         .main {
-            max-width: 1180px;
-
-            margin: -58px auto 70px;
-            padding: 0 20px;
-
+            width: 100%;
+            max-width: 1360px;
+            margin: -64px auto 70px;
+            padding: 0 24px;
             position: relative;
             z-index: 10;
         }
 
-        /* =====================================================
-           SEARCH SUMMARY
-        ===================================================== */
+        /* THÔNG TIN HÀNH TRÌNH */
 
         .summary-card {
             background: white;
-
-            border-radius: 15px;
-
-            padding: 25px 28px;
-
-            box-shadow:
-                0 10px 35px rgba(0, 0, 0, 0.11);
-
+            border: 1px solid #ebeff4;
+            border-radius: 16px;
+            padding: 26px 30px;
+            box-shadow: 0 12px 35px rgba(0,33,72,.10);
             margin-bottom: 24px;
         }
 
@@ -262,33 +225,33 @@
             align-items: center;
             justify-content: space-between;
             gap: 20px;
-
-            margin-bottom: 20px;
+            margin-bottom: 22px;
         }
 
         .summary-title h2 {
             color: var(--primary);
-            font-size: 22px;
+            font-size: 23px;
             margin-bottom: 5px;
         }
 
         .summary-title p {
             color: var(--muted);
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .change-search {
-            padding: 10px 16px;
-
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 41px;
+            padding: 0 16px;
             border: 1px solid var(--primary);
-            border-radius: 7px;
-
+            border-radius: 8px;
             color: var(--primary);
-
-            font-size: 14px;
+            background: white;
+            font-size: 13px;
             font-weight: bold;
-
-            transition: 0.2s;
+            white-space: nowrap;
         }
 
         .change-search:hover {
@@ -298,96 +261,83 @@
 
         .trip-summary {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
         }
 
         .summary-item {
+            min-height: 82px;
+            padding: 16px 18px;
             background: #f7faff;
-
             border: 1px solid #e2ebf4;
-            border-radius: 10px;
-
-            padding: 15px;
+            border-radius: 11px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .summary-label {
             display: block;
-
+            margin-bottom: 7px;
             color: var(--muted);
             font-size: 12px;
-
-            margin-bottom: 5px;
         }
 
         .summary-value {
             display: block;
-
             color: var(--primary);
-
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 800;
         }
 
-        /* =====================================================
-           FLIGHT SECTION
-        ===================================================== */
+        /* DANH SÁCH CHUYẾN BAY */
 
         .flight-section {
             background: white;
-
-            border-radius: 15px;
-
-            padding: 26px;
-
-            box-shadow:
-                0 7px 25px rgba(0, 0, 0, 0.07);
-
-            margin-bottom: 25px;
+            border: 1px solid #e9eef5;
+            border-radius: 16px;
+            padding: 27px 30px 30px;
+            box-shadow: 0 7px 26px rgba(0,33,72,.06);
+            margin-bottom: 24px;
         }
 
         .section-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 15px;
-
+            gap: 16px;
+            padding-bottom: 18px;
             margin-bottom: 22px;
-
-            padding-bottom: 17px;
-
-            border-bottom: 1px solid #edf0f3;
+            border-bottom: 1px solid #e9eef3;
         }
 
         .section-heading {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 13px;
         }
 
         .direction-badge {
-            min-width: 38px;
-            height: 38px;
-
-            padding: 0 10px;
-
+            width: 43px;
+            height: 43px;
+            min-width: 43px;
+            border-radius: 10px;
+            background: var(--primary);
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-
-            border-radius: 8px;
-
-            background: var(--primary);
-            color: white;
-
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 800;
+        }
+
+        .direction-badge.return-badge {
+            background: #0068ad;
         }
 
         .section-heading h2 {
             color: var(--primary);
-
-            font-size: 21px;
+            font-size: 23px;
             margin-bottom: 3px;
         }
 
@@ -396,21 +346,15 @@
             font-size: 13px;
         }
 
-        .date-label {
-            padding: 8px 12px;
-
-            border-radius: 7px;
-
+        .section-date {
+            padding: 9px 14px;
+            border-radius: 8px;
             background: #eef5fb;
             color: var(--primary);
-
             font-size: 13px;
             font-weight: bold;
+            white-space: nowrap;
         }
-
-        /* =====================================================
-           FLIGHT CARDS
-        ===================================================== */
 
         .flight-list {
             display: grid;
@@ -418,54 +362,50 @@
         }
 
         .flight-card {
-            border: 1px solid var(--border);
-            border-radius: 13px;
-
-            padding: 20px;
-
             display: grid;
             grid-template-columns:
-                120px
-                1fr
-                170px
-                145px;
-
-            gap: 20px;
+                minmax(100px, .8fr)
+                minmax(280px, 2.5fr)
+                minmax(110px, .9fr)
+                minmax(135px, 1fr)
+                minmax(155px, 1.2fr);
+            gap: 18px;
             align-items: center;
-
-            transition: 0.2s;
+            padding: 22px 24px;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: white;
+            transition: .2s;
         }
 
         .flight-card:hover {
             border-color: #b9cfe1;
-
-            box-shadow:
-                0 7px 22px rgba(0, 59, 112, 0.08);
-
+            box-shadow: 0 8px 25px rgba(0,59,112,.09);
             transform: translateY(-2px);
         }
 
         .flight-code {
             color: var(--primary);
-
-            font-size: 17px;
+            font-size: 18px;
             font-weight: 800;
+            white-space: nowrap;
         }
 
         .flight-code small {
             display: block;
-
-            margin-top: 4px;
-
+            margin-top: 5px;
             color: var(--muted);
-
             font-size: 11px;
             font-weight: normal;
         }
 
         .route-info {
+            min-width: 0;
             display: grid;
-            grid-template-columns: 1fr 80px 1fr;
+            grid-template-columns:
+                minmax(0,1fr)
+                70px
+                minmax(0,1fr);
             gap: 12px;
             align-items: center;
         }
@@ -480,25 +420,20 @@
 
         .flight-time {
             display: block;
-
             color: #111827;
-
-            font-size: 23px;
+            font-size: 21px;
             font-weight: 800;
-
-            margin-bottom: 3px;
+            margin-bottom: 4px;
+            white-space: nowrap;
         }
 
         .airport-name {
             display: block;
-
             color: var(--muted);
-
-            font-size: 13px;
-
+            font-size: 12px;
             overflow: hidden;
-            white-space: nowrap;
             text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .route-line {
@@ -508,25 +443,18 @@
         .route-line-bar {
             width: 100%;
             height: 2px;
-
-            background: #cbd5df;
-
             position: relative;
-
-            margin-bottom: 6px;
+            background: #cbd5df;
+            margin-bottom: 8px;
         }
 
         .route-line-bar::before,
         .route-line-bar::after {
             content: "";
-
             width: 7px;
             height: 7px;
-
             border-radius: 50%;
-
             background: var(--primary);
-
             position: absolute;
             top: -3px;
         }
@@ -541,27 +469,27 @@
 
         .route-line span {
             color: var(--muted);
-            font-size: 11px;
+            font-size: 10px;
+            white-space: nowrap;
         }
 
-        .price-box {
+        .price-box,
+        .seat-box {
             text-align: right;
         }
 
         .price-label {
             display: block;
-
             color: var(--muted);
             font-size: 12px;
-
-            margin-bottom: 4px;
+            margin-bottom: 5px;
         }
 
         .price {
             color: var(--danger);
-
             font-size: 20px;
             font-weight: 800;
+            white-space: nowrap;
         }
 
         .price small {
@@ -569,127 +497,131 @@
             font-weight: normal;
         }
 
-        .seat-box {
-            text-align: right;
-        }
-
         .seat-count {
-            font-size: 14px;
+            color: #24364b;
+            font-size: 12px;
             font-weight: bold;
-
-            margin-bottom: 6px;
+            margin-bottom: 7px;
+            white-space: nowrap;
         }
 
         .status {
             display: inline-block;
-
             padding: 5px 9px;
             border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
 
+        .status.available {
+            color: var(--success);
+            background: #e7f7ef;
+        }
+
+        .status.warning {
+            color: var(--warning);
+            background: #fff4dc;
+        }
+
+        .status.full {
+            color: var(--danger);
+            background: #fde9eb;
+        }
+
+        .action-box {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            min-width: 0;
+        }
+
+        .select-button {
+            min-height: 43px;
+            width: 100%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary), #006ac1);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .select-button:hover {
+            background: linear-gradient(135deg, var(--primary-dark), #00549a);
+        }
+
+        .disabled {
+            color: #87929e;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .not-enough-seats {
+            display: inline-block;
+            padding: 9px 10px;
+            border-radius: 8px;
+            background: #fde9eb;
+            border: 1px solid #f3c4ca;
+            color: var(--danger);
             font-size: 11px;
             font-weight: bold;
         }
 
-        .status.available {
-            background: #e7f7ef;
-            color: var(--success);
+        /* ===================================
+           CHUYẾN VỀ: CHỈ XEM, CHƯA ĐƯỢC CHỌN
+        =================================== */
+
+        .return-preview .flight-card {
+            grid-template-columns:
+                minmax(100px, .8fr)
+                minmax(280px, 2.5fr)
+                minmax(110px, .9fr)
+                minmax(135px, 1fr);
         }
 
-        .status.warning {
-            background: #fff4dc;
-            color: var(--warning);
+        .return-preview .action-box {
+            display: none !important;
         }
 
-        .status.full {
-            background: #fde9eb;
-            color: var(--danger);
-        }
-
-        .action-box {
-            grid-column: 1 / -1;
-
-            display: flex;
-            justify-content: flex-end;
-
-            padding-top: 16px;
-
-            border-top: 1px solid #edf0f3;
-        }
-
-        .select-button {
-            min-width: 165px;
-
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-
-            padding: 11px 18px;
-
-            border-radius: 7px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--primary),
-                    #006ac1
-                );
-
-            color: white;
-
-            font-size: 14px;
-            font-weight: bold;
-
-            transition: 0.2s;
-        }
-
-        .select-button:hover {
-            transform: translateY(-1px);
-
-            box-shadow:
-                0 6px 16px rgba(0, 59, 112, 0.2);
-        }
-
-        .disabled {
-            color: #8a949f;
-
+        .return-info {
+            margin: -4px 0 18px;
+            padding: 12px 15px;
+            border: 1px solid #dbe7f5;
+            border-radius: 9px;
+            background: #f3f8fe;
+            color: #174a76;
             font-size: 13px;
-            font-weight: bold;
+            font-weight: 600;
         }
 
-        /* =====================================================
-           EMPTY
-        ===================================================== */
+        /* EMPTY */
 
         .empty {
+            padding: 28px;
             border: 1px dashed #e1b94c;
-
-            background: #fff9e9;
-
-            padding: 24px;
-
             border-radius: 10px;
-
+            background: #fff9e9;
             text-align: center;
-
             color: #725a17;
             font-size: 14px;
         }
 
-        /* =====================================================
-           BOTTOM
-        ===================================================== */
-
         .bottom-actions {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-
-            margin-top: 15px;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 20px;
         }
 
         .back-home {
             color: var(--primary);
-
             font-size: 14px;
             font-weight: bold;
         }
@@ -698,24 +630,19 @@
             text-decoration: underline;
         }
 
-        /* =====================================================
-           FOOTER
-        ===================================================== */
+        /* FOOTER */
 
         footer {
+            padding: 36px 20px;
             background: #031d33;
             color: white;
-
-            padding: 35px 20px;
-
             text-align: center;
         }
 
         .footer-logo {
+            margin-bottom: 8px;
             font-size: 23px;
             font-weight: 800;
-
-            margin-bottom: 8px;
         }
 
         .footer-logo span {
@@ -727,33 +654,63 @@
             font-size: 13px;
         }
 
-        /* =====================================================
-           RESPONSIVE
-        ===================================================== */
+        /* RESPONSIVE */
 
-        @media (max-width: 1000px) {
+        @media (max-width: 1200px) {
+            .flight-card,
+            .return-preview .flight-card {
+                grid-template-columns:
+                    105px minmax(240px,1fr) 120px 135px;
+            }
 
+            .action-box {
+                grid-column: 1 / -1;
+                padding-top: 14px;
+                border-top: 1px solid #edf0f3;
+            }
+
+            .select-button {
+                width: auto;
+                min-width: 175px;
+            }
+        }
+
+        @media (max-width: 950px) {
             .nav-menu {
                 display: none;
             }
 
-            .flight-card {
-                grid-template-columns: 100px 1fr 150px;
+            .trip-summary {
+                grid-template-columns: repeat(2,minmax(0,1fr));
+            }
+
+            .flight-card,
+            .return-preview .flight-card {
+                grid-template-columns:
+                    minmax(100px,.7fr)
+                    minmax(240px,2fr)
+                    minmax(120px,1fr);
             }
 
             .seat-box {
-                grid-column: 1 / -1;
-
+                grid-column: 1 / span 2;
                 text-align: left;
-
                 padding-top: 12px;
-
                 border-top: 1px solid #edf0f3;
+            }
+
+            .action-box {
+                grid-column: 3;
+                padding-top: 12px;
+            }
+
+            .select-button {
+                width: 100%;
+                min-width: 0;
             }
         }
 
-        @media (max-width: 760px) {
-
+        @media (max-width: 700px) {
             .top-bar {
                 display: none;
             }
@@ -767,7 +724,20 @@
             }
 
             .page-banner h1 {
-                font-size: 31px;
+                font-size: 30px;
+            }
+
+            .banner-inner {
+                padding: 40px 18px 95px;
+            }
+
+            .main {
+                padding: 0 12px;
+                margin-top: -55px;
+            }
+
+            .summary-card {
+                padding: 20px 16px;
             }
 
             .summary-top,
@@ -777,23 +747,45 @@
             }
 
             .trip-summary {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2,minmax(0,1fr));
+                gap: 10px;
             }
 
-            .flight-card {
+            .summary-item {
+                padding: 12px;
+                min-height: 75px;
+            }
+
+            .summary-value {
+                font-size: 13px;
+            }
+
+            .flight-section {
+                padding: 20px 14px;
+            }
+
+            .flight-card,
+            .return-preview .flight-card {
                 grid-template-columns: 1fr;
+                gap: 15px;
+                padding: 18px;
+            }
+
+            .flight-code,
+            .route-info,
+            .price-box,
+            .seat-box,
+            .action-box {
+                grid-column: 1 / -1;
             }
 
             .route-info {
-                grid-template-columns: 1fr;
+                grid-template-columns:
+                    minmax(0,1fr) 50px minmax(0,1fr);
             }
 
-            .airport:last-child {
-                text-align: left;
-            }
-
-            .route-line {
-                display: none;
+            .flight-time {
+                font-size: 19px;
             }
 
             .price-box,
@@ -802,11 +794,13 @@
             }
 
             .seat-box {
-                grid-column: auto;
+                border-top: 0;
+                padding-top: 0;
             }
 
             .action-box {
-                grid-column: auto;
+                padding-top: 14px;
+                border-top: 1px solid #edf0f3;
             }
 
             .select-button {
@@ -816,40 +810,35 @@
             .bottom-actions {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 12px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .trip-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .change-search {
+                width: 100%;
             }
         }
     </style>
-
 </head>
 
 <body>
 
-{{-- ========================================================= --}}
 {{-- TOP BAR --}}
-{{-- ========================================================= --}}
 
 <div class="top-bar">
-
     <div class="top-bar-inner">
 
         <div class="top-bar-group">
-
-            <span>
-                Website đặt vé máy bay trực tuyến
-            </span>
-
-            <span>
-                Hỗ trợ: 1900 6868
-            </span>
-
+            <span>Website đặt vé máy bay trực tuyến</span>
+            <span>Hỗ trợ: 1900 6868</span>
         </div>
 
-
         <div class="top-bar-group">
-
             @auth
-
                 <a href="{{ route('profile.edit') }}">
                     Thông tin cá nhân
                 </a>
@@ -857,310 +846,192 @@
                 <a href="{{ route('notifications.index') }}">
                     Thông báo
                 </a>
-
             @endauth
-
-           
-
         </div>
 
     </div>
-
 </div>
 
-
-{{-- ========================================================= --}}
 {{-- HEADER --}}
-{{-- ========================================================= --}}
 
 <header class="header">
-
     <nav class="navbar">
 
-        <a
-            href="{{ route('trang-chu') }}"
-            class="logo"
-        >
-            Viet<span>Jet</span>
+        <a href="{{ route('trang-chu') }}" class="logo">
+            Viet<span>jet</span>
         </a>
 
-
         <div class="nav-menu">
-
-            <a
-                href="{{ route('trang-chu') }}"
-                class="nav-link"
-            >
+            <a href="{{ route('trang-chu') }}" class="nav-link">
                 Trang chủ
             </a>
 
-            <a
-                href="{{ route('flights.search.form') }}"
-                class="nav-link active"
-            >
+            <a href="{{ route('flights.search.form') }}"
+               class="nav-link active">
                 Đặt vé
             </a>
 
             @auth
-
-                <a
-                    href="{{ route('tickets.mine') }}"
-                    class="nav-link"
-                >
+                <a href="{{ route('tickets.mine') }}" class="nav-link">
                     Lịch sử vé
                 </a>
 
-                <a
-                    href="{{ route('notifications.index') }}"
-                    class="nav-link"
-                >
+                <a href="{{ route('notifications.index') }}"
+                   class="nav-link">
                     Thông báo
                 </a>
-
             @endauth
-<a href="{{ route('contact') }}" class="nav-link">
+
+            <a href="{{ route('contact') }}" class="nav-link">
                 Liên hệ
             </a>
         </div>
 
-
         <div class="nav-actions">
-
             @guest
-
-                <a
-                    href="{{ route('dang-nhap') }}"
-                    class="login-link"
-                >
+                <a href="{{ route('dang-nhap') }}" class="login-link">
                     Đăng nhập
                 </a>
-
             @else
-
                 <span class="user-name">
                     {{ auth()->user()->name }}
                 </span>
 
-                <form
-                    action="{{ route('dang-xuat') }}"
-                    method="POST"
-                >
+                <form action="{{ route('dang-xuat') }}" method="POST">
                     @csrf
-
-                    <button
-                        type="submit"
-                        class="logout-btn"
-                    >
+                    <button type="submit" class="logout-btn">
                         Đăng xuất
                     </button>
-
                 </form>
-
             @endguest
-
         </div>
 
     </nav>
-
 </header>
 
-
-{{-- ========================================================= --}}
 {{-- BANNER --}}
-{{-- ========================================================= --}}
 
 <section class="page-banner">
-
     <div class="banner-inner">
 
         <div class="breadcrumb">
-
-            <a href="{{ route('trang-chu') }}">
-                Trang chủ
-            </a>
-
+            <a href="{{ route('trang-chu') }}">Trang chủ</a>
             <span>/</span>
-
-            <a href="{{ route('flights.search.form') }}">
-                Đặt vé
-            </a>
-
+            <a href="{{ route('flights.search.form') }}">Đặt vé</a>
             <span>/</span>
-
-            <span>
-                Kết quả chuyến bay
-            </span>
-
+            <span>Kết quả chuyến bay</span>
         </div>
 
-
-        <h1>
-            Chọn chuyến bay
-        </h1>
+        <h1>Chọn chuyến bay</h1>
 
         <p>
-            Xem các chuyến bay phù hợp với hành trình
-            và lựa chọn chuyến bạn muốn tiếp tục đặt vé.
+            Xem các chuyến bay phù hợp với hành trình của bạn.
+            Chọn chuyến đi trước, sau đó hoàn tất ghế
+            để tiếp tục chọn chuyến về.
         </p>
 
     </div>
-
 </section>
 
-
-{{-- ========================================================= --}}
 {{-- MAIN --}}
-{{-- ========================================================= --}}
 
 <main class="main">
 
-    {{-- ========================================================= --}}
-    {{-- THÔNG TIN TÌM KIẾM --}}
-    {{-- ========================================================= --}}
+    @php
+        $requiredSeats = (int) (
+            $passengerCount
+            ?? session('flight_search.passenger_count', 1)
+        );
+
+        $requiredSeats = max(1, min(5, $requiredSeats));
+
+        $isRoundTrip = ($tripType ?? 'one_way') === 'round_trip';
+
+        /*
+         * Chỉ được true nếu Controller xác nhận
+         * đã hoàn tất chọn ghế chuyến đi.
+         */
+        $canSelectReturn = (bool) ($canSelectReturn ?? false);
+    @endphp
+
+    {{-- THÔNG TIN HÀNH TRÌNH --}}
 
     <div class="summary-card">
 
         <div class="summary-top">
 
             <div class="summary-title">
-
-                <h2>
-                    Thông tin hành trình
-                </h2>
-
+                <h2>Thông tin hành trình</h2>
                 <p>
                     Kiểm tra lại thông tin trước khi chọn chuyến bay.
                 </p>
-
             </div>
 
-
-            <a
-                href="{{ route('flights.search.form') }}"
-                class="change-search"
-            >
+            <a href="{{ route('flights.search.form') }}"
+               class="change-search">
                 Thay đổi tìm kiếm
             </a>
 
         </div>
 
-
         <div class="trip-summary">
 
             <div class="summary-item">
-
-                <span class="summary-label">
-                    Hành trình
-                </span>
-
+                <span class="summary-label">Hành trình</span>
                 <span class="summary-value">
-
-                    @if(($tripType ?? 'one_way') === 'round_trip')
-                        Khứ hồi
-                    @else
-                        Một chiều
-                    @endif
-
+                    {{ $isRoundTrip ? 'Khứ hồi' : 'Một chiều' }}
                 </span>
-
             </div>
-
 
             <div class="summary-item">
-
-                <span class="summary-label">
-                    Ngày đi
-                </span>
-
+                <span class="summary-label">Ngày đi</span>
                 <span class="summary-value">
-
-                    {{ \Carbon\Carbon::parse(
-                        $flightDate
-                    )->format('d/m/Y') }}
-
+                    {{ \Carbon\Carbon::parse($flightDate)->format('d/m/Y') }}
                 </span>
-
             </div>
 
-
-            @if(($tripType ?? 'one_way') === 'round_trip')
-
-                <div class="summary-item">
-
-                    <span class="summary-label">
-                        Ngày về
-                    </span>
-
+            <div class="summary-item">
+                @if($isRoundTrip)
+                    <span class="summary-label">Ngày về</span>
                     <span class="summary-value">
-
-                        {{ \Carbon\Carbon::parse(
-                            $returnDate
-                        )->format('d/m/Y') }}
-
+                        {{ \Carbon\Carbon::parse($returnDate)->format('d/m/Y') }}
                     </span>
+                @else
+                    <span class="summary-label">Trạng thái</span>
+                    <span class="summary-value">Sẵn sàng chọn chuyến</span>
+                @endif
+            </div>
 
-                </div>
-
-            @else
-
-                <div class="summary-item">
-
-                    <span class="summary-label">
-                        Trạng thái
-                    </span>
-
-                    <span class="summary-value">
-                        Sẵn sàng chọn chuyến
-                    </span>
-
-                </div>
-
-            @endif
+            <div class="summary-item">
+                <span class="summary-label">Số lượng vé</span>
+                <span class="summary-value">{{ $requiredSeats }} vé</span>
+            </div>
 
         </div>
-
     </div>
 
-
-    {{-- ========================================================= --}}
-    {{-- CHUYẾN ĐI --}}
-    {{-- ========================================================= --}}
+    {{-- ===================================
+         BƯỚC 1: CHỌN CHUYẾN ĐI
+    =================================== --}}
 
     <section class="flight-section">
 
         <div class="section-header">
-
             <div class="section-heading">
 
-                <div class="direction-badge">
-                    ĐI
-                </div>
+                <div class="direction-badge">ĐI</div>
 
                 <div>
-
-                    <h2>
-                        Chuyến đi
-                    </h2>
-
-                    <p>
-                        Chọn chuyến bay cho chiều khởi hành.
-                    </p>
-
+                    <h2>Chuyến đi</h2>
+                    <p>Chọn chuyến bay cho chiều khởi hành.</p>
                 </div>
 
             </div>
 
-
-            <div class="date-label">
-
-                {{ \Carbon\Carbon::parse(
-                    $flightDate
-                )->format('d/m/Y') }}
-
+            <div class="section-date">
+                {{ \Carbon\Carbon::parse($flightDate)->format('d/m/Y') }}
             </div>
-
         </div>
-
 
         @if($outboundFlights->count() > 0)
 
@@ -1169,45 +1040,30 @@
                 @foreach($outboundFlights as $flight)
 
                     @php
+                        $totalSeats = $flight->flightSeats->count();
 
-                        $totalSeats =
-                            $flight->flightSeats->count();
+                        $availableSeats = $flight->flightSeats
+                            ->where('status', 'available')
+                            ->count();
 
-                        $bookedSeats =
-                            $flight->flightSeats
-                                ->where(
-                                    'status',
-                                    'booked'
-                                )
-                                ->count();
-
-                        $availableSeats =
-                            $totalSeats - $bookedSeats;
-
+                        $hasEnoughSeats =
+                            $availableSeats >= $requiredSeats;
                     @endphp
-
 
                     <div class="flight-card">
 
                         {{-- MÃ CHUYẾN --}}
 
                         <div class="flight-code">
-
                             {{ $flight->flight_code }}
-
-                            <small>
-                                Mã chuyến bay
-                            </small>
-
+                            <small>Mã chuyến bay</small>
                         </div>
 
-
-                        {{-- HÀNH TRÌNH --}}
+                        {{-- THỜI GIAN VÀ ĐƯỜNG BAY --}}
 
                         <div class="route-info">
 
                             <div class="airport">
-
                                 <span class="flight-time">
                                     {{ $flight->departure_time }}
                                 </span>
@@ -1215,23 +1071,14 @@
                                 <span class="airport-name">
                                     {{ $flight->departureAirport->city }}
                                 </span>
-
                             </div>
-
 
                             <div class="route-line">
-
                                 <div class="route-line-bar"></div>
-
-                                <span>
-                                    Bay thẳng
-                                </span>
-
+                                <span>Bay thẳng</span>
                             </div>
 
-
                             <div class="airport">
-
                                 <span class="flight-time">
                                     {{ $flight->arrival_time }}
                                 </span>
@@ -1239,94 +1086,68 @@
                                 <span class="airport-name">
                                     {{ $flight->arrivalAirport->city }}
                                 </span>
-
                             </div>
 
                         </div>
-
 
                         {{-- GIÁ --}}
 
                         <div class="price-box">
-
-                            <span class="price-label">
-                                Giá từ
-                            </span>
-
+                            <span class="price-label">Giá từ</span>
                             <div class="price">
-
-                                {{ number_format(
-                                    $flight->price,
-                                    0,
-                                    ',',
-                                    '.'
-                                ) }}
-
+                                {{ number_format($flight->price, 0, ',', '.') }}
                                 <small>đ</small>
-
                             </div>
-
                         </div>
 
-
-                        {{-- GHẾ --}}
+                        {{-- GHẾ TRỐNG --}}
 
                         <div class="seat-box">
 
                             <div class="seat-count">
-
                                 Còn {{ $availableSeats }}
                                 / {{ $totalSeats }} ghế
-
                             </div>
 
-
-                            @if($availableSeats == 0)
-
-                                <span class="status full">
-                                    Hết ghế
-                                </span>
-
+                            @if($availableSeats === 0)
+                                <span class="status full">Hết ghế</span>
+                            @elseif(!$hasEnoughSeats)
+                                <span class="status full">Không đủ ghế</span>
                             @elseif($availableSeats <= 20)
-
-                                <span class="status warning">
-                                    Sắp hết ghế
-                                </span>
-
+                                <span class="status warning">Sắp hết ghế</span>
                             @else
-
-                                <span class="status available">
-                                    Còn ghế
-                                </span>
-
+                                <span class="status available">Còn ghế</span>
                             @endif
 
                         </div>
 
-
-                        {{-- BUTTON --}}
+                        {{-- NÚT CHỌN CHUYẾN ĐI VẪN HIỆN --}}
 
                         <div class="action-box">
 
-                            @if($availableSeats > 0)
+                            @if($hasEnoughSeats)
 
                                 <a
-                                    href="{{ route(
-                                        'seats.show',
-                                        [
-                                            'flight' => $flight->id,
-                                            'leg' => 'outbound',
-                                        ]
-                                    ) }}"
+                                    href="{{ route('seats.show', [
+                                        'flight' => $flight->id,
+                                        'leg' => 'outbound'
+                                    ]) }}"
                                     class="select-button"
                                 >
                                     Chọn chuyến đi
                                 </a>
 
-                            @else
+                            @elseif($availableSeats === 0)
 
                                 <span class="disabled">
-                                    Chuyến bay hiện đã hết ghế
+                                    Chuyến bay đã hết ghế
+                                </span>
+
+                            @else
+
+                                <span class="not-enough-seats">
+                                    Không đủ {{ $requiredSeats }} ghế
+                                    (chỉ còn {{ $availableSeats }})
                                 </span>
 
                             @endif
@@ -1342,58 +1163,55 @@
         @else
 
             <div class="empty">
-
                 Không tìm thấy chuyến đi phù hợp với ngày
                 và hành trình bạn đã chọn.
-
             </div>
 
         @endif
 
     </section>
 
+    {{-- ===================================
+         BƯỚC 2: CHUYẾN VỀ
+         CHỈ HIỆN NÚT KHI ĐƯỢC CHO PHÉP
+    =================================== --}}
 
-    {{-- ========================================================= --}}
-    {{-- CHUYẾN VỀ --}}
-    {{-- ========================================================= --}}
+    @if($isRoundTrip)
 
-    @if(($tripType ?? 'one_way') === 'round_trip')
-
-        <section class="flight-section">
+        <section class="flight-section {{ !$canSelectReturn ? 'return-preview' : '' }}">
 
             <div class="section-header">
 
                 <div class="section-heading">
 
-                    <div class="direction-badge">
+                    <div class="direction-badge return-badge">
                         VỀ
                     </div>
 
                     <div>
-
-                        <h2>
-                            Chuyến về
-                        </h2>
-
+                        <h2>Chuyến về</h2>
                         <p>
-                            Chọn chuyến bay cho chiều trở về.
+                            Xem các chuyến bay cho chiều trở về.
                         </p>
-
                     </div>
 
                 </div>
 
-
-                <div class="date-label">
-
-                    {{ \Carbon\Carbon::parse(
-                        $returnDate
-                    )->format('d/m/Y') }}
-
+                <div class="section-date">
+                    {{ \Carbon\Carbon::parse($returnDate)->format('d/m/Y') }}
                 </div>
 
             </div>
 
+            {{-- THÔNG BÁO KHI CHƯA CHỌN XONG CHIỀU ĐI --}}
+
+            @if(!$canSelectReturn)
+                <div class="return-info">
+                    Chuyến về chỉ để tham khảo.
+                    Vui lòng chọn chuyến đi và hoàn tất chọn ghế
+                    chiều đi trước khi chọn chuyến về.
+                </div>
+            @endif
 
             @if($returnFlights->count() > 0)
 
@@ -1402,41 +1220,30 @@
                     @foreach($returnFlights as $flight)
 
                         @php
+                            $totalSeats = $flight->flightSeats->count();
 
-                            $totalSeats =
-                                $flight->flightSeats->count();
+                            $availableSeats = $flight->flightSeats
+                                ->where('status', 'available')
+                                ->count();
 
-                            $bookedSeats =
-                                $flight->flightSeats
-                                    ->where(
-                                        'status',
-                                        'booked'
-                                    )
-                                    ->count();
-
-                            $availableSeats =
-                                $totalSeats - $bookedSeats;
-
+                            $hasEnoughSeats =
+                                $availableSeats >= $requiredSeats;
                         @endphp
-
 
                         <div class="flight-card">
 
+                            {{-- MÃ CHUYẾN --}}
+
                             <div class="flight-code">
-
                                 {{ $flight->flight_code }}
-
-                                <small>
-                                    Mã chuyến bay
-                                </small>
-
+                                <small>Mã chuyến bay</small>
                             </div>
 
+                            {{-- GIỜ BAY --}}
 
                             <div class="route-info">
 
                                 <div class="airport">
-
                                     <span class="flight-time">
                                         {{ $flight->departure_time }}
                                     </span>
@@ -1444,23 +1251,14 @@
                                     <span class="airport-name">
                                         {{ $flight->departureAirport->city }}
                                     </span>
-
                                 </div>
-
 
                                 <div class="route-line">
-
                                     <div class="route-line-bar"></div>
-
-                                    <span>
-                                        Bay thẳng
-                                    </span>
-
+                                    <span>Bay thẳng</span>
                                 </div>
 
-
                                 <div class="airport">
-
                                     <span class="flight-time">
                                         {{ $flight->arrival_time }}
                                     </span>
@@ -1468,93 +1266,81 @@
                                     <span class="airport-name">
                                         {{ $flight->arrivalAirport->city }}
                                     </span>
-
                                 </div>
 
                             </div>
 
+                            {{-- GIÁ VÉ --}}
 
                             <div class="price-box">
-
-                                <span class="price-label">
-                                    Giá từ
-                                </span>
+                                <span class="price-label">Giá từ</span>
 
                                 <div class="price">
-
-                                    {{ number_format(
-                                        $flight->price,
-                                        0,
-                                        ',',
-                                        '.'
-                                    ) }}
-
+                                    {{ number_format($flight->price, 0, ',', '.') }}
                                     <small>đ</small>
-
                                 </div>
-
                             </div>
 
+                            {{-- SỐ GHẾ TRỐNG --}}
 
                             <div class="seat-box">
 
                                 <div class="seat-count">
-
                                     Còn {{ $availableSeats }}
                                     / {{ $totalSeats }} ghế
+                                </div>
+
+                                @if($availableSeats === 0)
+                                    <span class="status full">Hết ghế</span>
+                                @elseif(!$hasEnoughSeats)
+                                    <span class="status full">Không đủ ghế</span>
+                                @elseif($availableSeats <= 20)
+                                    <span class="status warning">Sắp hết ghế</span>
+                                @else
+                                    <span class="status available">Còn ghế</span>
+                                @endif
+
+                            </div>
+
+                            {{-- ======================================
+                                 QUAN TRỌNG:
+                                 CHƯA XONG CHUYẾN ĐI => KHÔNG CÓ NÚT
+                            ====================================== --}}
+
+                            @if($canSelectReturn)
+
+                                <div class="action-box">
+
+                                    @if($hasEnoughSeats)
+
+                                        <a
+                                            href="{{ route('seats.show', [
+                                                'flight' => $flight->id,
+                                                'leg' => 'return'
+                                            ]) }}"
+                                            class="select-button"
+                                        >
+                                            Chọn chuyến về
+                                        </a>
+
+                                    @elseif($availableSeats === 0)
+
+                                        <span class="disabled">
+                                            Chuyến bay đã hết ghế
+                                        </span>
+
+                                    @else
+
+                                        <span class="not-enough-seats">
+                                            Không đủ {{ $requiredSeats }} ghế
+                                            (chỉ còn {{ $availableSeats }})
+                                        </span>
+
+                                    @endif
 
                                 </div>
 
-
-                                @if($availableSeats == 0)
-
-                                    <span class="status full">
-                                        Hết ghế
-                                    </span>
-
-                                @elseif($availableSeats <= 20)
-
-                                    <span class="status warning">
-                                        Sắp hết ghế
-                                    </span>
-
-                                @else
-
-                                    <span class="status available">
-                                        Còn ghế
-                                    </span>
-
-                                @endif
-
-                            </div>
-
-
-                            <div class="action-box">
-
-                                @if($availableSeats > 0)
-
-                                    <a
-                                        href="{{ route(
-                                            'seats.show',
-                                            [
-                                                'flight' => $flight->id,
-                                                'leg' => 'return',
-                                            ]
-                                        ) }}"
-                                        class="select-button"
-                                    >
-                                        Chọn chuyến về
-                                    </a>
-
-                                @else
-
-                                    <span class="disabled">
-                                        Chuyến bay hiện đã hết ghế
-                                    </span>
-
-                                @endif
-
-                            </div>
+                            @endif
 
                         </div>
 
@@ -1565,10 +1351,8 @@
             @else
 
                 <div class="empty">
-
                     Không tìm thấy chuyến về phù hợp với ngày
                     và hành trình bạn đã chọn.
-
                 </div>
 
             @endif
@@ -1577,25 +1361,17 @@
 
     @endif
 
-
-    {{-- ========================================================= --}}
     {{-- QUAY LẠI --}}
-    {{-- ========================================================= --}}
 
     <div class="bottom-actions">
 
-        <a
-            href="{{ route('flights.search.form') }}"
-            class="back-home"
-        >
+        <a href="{{ route('flights.search.form') }}"
+           class="back-home">
             ← Quay lại tìm chuyến
         </a>
 
-
-        <a
-            href="{{ route('trang-chu') }}"
-            class="back-home"
-        >
+        <a href="{{ route('trang-chu') }}"
+           class="back-home">
             Trang chủ
         </a>
 
@@ -1603,23 +1379,17 @@
 
 </main>
 
-
-{{-- ========================================================= --}}
 {{-- FOOTER --}}
-{{-- ========================================================= --}}
 
 <footer>
-
     <div class="footer-logo">
-        Viet<span>Jet</span>
+        Viet<span>jet</span>
     </div>
 
     <p>
         Website đặt vé máy bay tích hợp nhận diện khuôn mặt.
     </p>
-
 </footer>
 
 </body>
-
 </html>
